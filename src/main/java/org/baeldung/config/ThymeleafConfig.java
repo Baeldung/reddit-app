@@ -16,7 +16,7 @@ public class ThymeleafConfig {
         final ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
         templateResolver.setPrefix("/WEB-INF/jsp/");
         templateResolver.setSuffix(".jsp");
-
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 
