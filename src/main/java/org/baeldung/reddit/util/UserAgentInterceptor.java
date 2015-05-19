@@ -12,9 +12,12 @@ public class UserAgentInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-
         final HttpHeaders headers = request.getHeaders();
         headers.add("User-Agent", "Schedule with Reddit");
-        return execution.execute(request, body);
+
+        final ClientHttpResponse response = execution.execute(request, body);
+         // System.out.println(response.getHeaders());
+        // System.out.println(response.getHeaders().getFirst("X-Ratelimit-Used"));
+        return response;
     }
 }
