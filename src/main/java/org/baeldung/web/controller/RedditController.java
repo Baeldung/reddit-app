@@ -6,7 +6,7 @@ import java.util.Map;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.RedditApiConstants;
-import org.baeldung.web.RedditTemplateWrapper;
+import org.baeldung.web.RedditTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +31,15 @@ public class RedditController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private RedditTemplateWrapper redditWrapper;
+    private RedditTemplate redditTemplate;
 
     @Autowired
     private UserRepository userReopsitory;
 
     @RequestMapping("/login")
     public final String redditLogin() {
-        final JsonNode node = redditWrapper.getUserInfo();
-        loadAuthentication(node.get("name").asText(), redditWrapper.getAccessToken());
+        final JsonNode node = redditTemplate.getUserInfo();
+        loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
         return "redirect:home.html";
     }
 
@@ -48,7 +48,7 @@ public class RedditController {
         final MultiValueMap<String, String> param1 = constructParams(formParams);
 
         logger.info("Submitting Link with these parameters: " + param1);
-        final JsonNode node = redditWrapper.submitPost(param1);
+        final JsonNode node = redditTemplate.submitPost(param1);
         logger.info("Submitted Link - Full Response from Reddit: " + node.toString());
         final String responseMsg = parseResponse(node);
         model.addAttribute("msg", responseMsg);
@@ -59,7 +59,7 @@ public class RedditController {
     public final String showSubmissionForm(final Model model) {
         final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
         if (isCaptchaNeeded) {
-            final String iden = redditWrapper.getNewCaptcha();
+            final String iden = redditTemplate.getNewCaptcha();
             model.addAttribute("iden", iden);
         }
         return "submissionForm";
@@ -69,7 +69,7 @@ public class RedditController {
     @ResponseBody
     public String checkIfAlreadySubmitted(@RequestParam("url") final String url, @RequestParam("sr") final String sr) {
         logger.info("check if already submitted");
-        final JsonNode node = redditWrapper.searchForLink(url, sr);
+        final JsonNode node = redditTemplate.searchForLink(url, sr);
         logger.info(node.toString());
         return node.get("data").get("children").toString();
     }
@@ -79,7 +79,7 @@ public class RedditController {
     public String subredditAutoComplete(@RequestParam("term") final String term) {
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("query", term);
-        final JsonNode node = redditWrapper.subredditNameSearch(term);
+        final JsonNode node = redditTemplate.subredditNameSearch(term);
         return node.get("names").toString();
     }
 
@@ -125,7 +125,7 @@ public class RedditController {
             user.setUsername(name);
         }
 
-        if (redditWrapper.needsCaptcha().equalsIgnoreCase("true")) {
+        if (redditTemplate.needsCaptcha().equalsIgnoreCase("true")) {
             user.setNeedCaptcha(true);
         } else {
             user.setNeedCaptcha(false);
