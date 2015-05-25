@@ -26,7 +26,11 @@ border-color: #ddd;
 <div th:include="header"/>
 
 <div class="container">
-<h1>Schedule Post to Reddit</h1>
+<h1>Schedule Post to Reddit 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Load from My Sites
+</button>
+</h1>
 <form action="schedule" method="post" role="form" data-toggle="validator">
 <div class="row">
 <div class="form-group">
@@ -106,7 +110,45 @@ border-color: #ddd;
    </div>
 </form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Load from My Sites</h4>
+      </div>
+      <div class="modal-body">
+        <div class="dropdown col-sm-6">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Choose Site <span class="caret"></span>
+		  </button>
+		  <ul id="siteList" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		  </ul>
+		</div>
+		
+        <div class="dropdown col-sm-6">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
+            Choose Article <span class="caret"></span>
+          </button>
+          <ul id="articleList" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+          </ul>
+        </div>
+        
+        <br/>
+        <br/>
+       <button class="btn btn-primary" onclick="load()" data-dismiss="modal">Load</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script>
+/*<![CDATA[*/
   $(function() {
     $( "#sr" ).autocomplete({
       source: "subredditAutoComplete"
@@ -117,6 +159,42 @@ border-color: #ddd;
     });
     
   });
+  
+  $('#myModal').on('shown.bs.modal', function () {
+	  if($("#siteList").children().length > 0)
+		  return;
+	  $.get("mysites/list", function(data){
+		 $.each(data, function( index, site ) {
+			  $("#siteList").append('<li><a href="#" onclick="loadArticles('+site.id+',\''+site.name+'\')">'+site.name+'</a></li>')
+		 });
+	  });
+  });
+  
+  
+  function loadArticles(siteID,siteName){
+	  $("#dropdownMenu1").html(siteName);
+	  $.get("mysites/articles?id="+siteID, function(data){
+		  $("#articleList").html('');
+	      $.each(data, function( index, article ) {
+	          $("#articleList").append('<li><a href="#" onclick="chooseArticle(\''+article.title+'\',\''+article.link+'\')"><b>'+article.title+'</b> <small>'+new Date(article.publishDate).toUTCString()+'</small></li>')
+	      });
+	 });
+  }
+  
+  var title = "";
+  var link = "";
+  
+  function chooseArticle(selectedTitle,selectedLink){
+	  $("#dropdownMenu2").html(selectedTitle);
+	  title=selectedTitle;
+	  link = selectedLink;
+  }
+  
+  function load(){
+      $("input[name='title']").val(title);
+      $("input[name='url']").val(link);
+  }
+  /*]]>*/ 
 </script>
   
 <script>
