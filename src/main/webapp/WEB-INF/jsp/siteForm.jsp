@@ -33,15 +33,34 @@ border-color: #ddd;
 <br/><br/>
 <div class="form-group">
     <label class="col-sm-3">Feed Url</label>
-    <span class="col-sm-9"><input name="url" type="url" placeholder="e.g. (http://www.baeldung.com/feed/)" class="form-control" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input id="url" name="url" type="url" placeholder="e.g. (http://www.baeldung.com/feed/)" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>  
 
 <br/><br/>
-    <button type="submit" class="btn btn-primary">Add Site</button>
+    <button type="submit" id="submitBut" class="btn btn-primary">Add Site</button>
 </div>
 </form>
 </div>
+<script>
+$("#submitBut").click(function(event) {
+	event.preventDefault();
+	addSite();
+});
 
+function addSite(){
+	console.log("checking url");
+	$.get("sites/isValidUrl?url="+$("#url").val(), function(data){
+		console.log(data);
+		if(data == true){
+			console.log("yes");
+			$("form").submit();
+		}
+		else{
+			alert("Invalid Feed Url");
+		}
+	});
+}
+</script>
 </body>
 </html>

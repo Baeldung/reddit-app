@@ -39,11 +39,6 @@ public class SiteController {
     public final String addSite(final Model model, @RequestParam("url") final String url, @RequestParam("name") final String name) throws ParseException {
         logger.info("User adding Site with these parameters: Url = " + url + ", name = " + name);
 
-        if (!service.isValidFeedUrl(url)) {
-            model.addAttribute("msg", "Invalid Feed Url");
-            return "submissionResponse";
-        }
-
         final Site site = new Site();
         site.setName(name);
         site.setUrl(url);
@@ -53,6 +48,12 @@ public class SiteController {
         final List<Site> sites = service.getSitesByUser(getCurrentUser());
         model.addAttribute("sites", sites);
         return "siteListView";
+    }
+
+    @RequestMapping(value = "/sites/isValidUrl")
+    @ResponseBody
+    public boolean isValidUrl(@RequestParam("url") final String url) {
+        return service.isValidFeedUrl(url);
     }
 
     @RequestMapping(value = "/sites/list")
