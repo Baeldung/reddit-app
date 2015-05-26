@@ -75,7 +75,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(final ViewControllerRegistry registry) {
         super.addViewControllers(registry);
         registry.addViewController("/home.html");
-        registry.addViewController("/mySiteForm");
+        registry.addViewController("/siteForm");
     }
 
     @Bean

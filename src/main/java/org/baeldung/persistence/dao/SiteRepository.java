@@ -2,12 +2,12 @@ package org.baeldung.persistence.dao;
 
 import java.util.List;
 
-import org.baeldung.persistence.model.MySite;
+import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MySiteRepository extends JpaRepository<MySite, Long> {
+public interface SiteRepository extends JpaRepository<Site, Long> {
 
-    List<MySite> findByUser(User user);
+    List<Site> findByUser(User user);
 
 }

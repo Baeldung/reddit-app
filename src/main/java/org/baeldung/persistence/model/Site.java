@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class MySite {
+public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,8 +24,13 @@ public class MySite {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public MySite() {
+    public Site() {
         super();
+    }
+
+    public Site(String url) {
+        super();
+        this.url = url;
     }
 
     public Long getId() {
@@ -63,7 +68,7 @@ public class MySite {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("MySite [id=").append(id).append(", name=").append(name).append(", url=").append(url).append(", user=").append(user).append("]");
+        builder.append("Site [id=").append(id).append(", name=").append(name).append(", url=").append(url).append(", user=").append(user).append("]");
         return builder.toString();
     }
 

@@ -11,7 +11,7 @@
 <div class="container">
 <h1>My Sites</h1>
 <br/>
-<a th:href="@{/mySiteForm}" class="btn btn-primary">Add New Site</a>
+<a th:href="@{/siteForm}" class="btn btn-primary">Add New Site</a>
 <br/>
 <br/>
 <table class="table table-bordered">
@@ -42,10 +42,10 @@ function confirmDelete(id) {
 
 function deletePost(id){
     $.ajax({
-        url: 'mysites/'+id,
+        url: 'sites/'+id,
         type: 'DELETE',
         success: function(result) {
-            window.location.href="mysites"
+            window.location.href="sites"
         }
     });
 }

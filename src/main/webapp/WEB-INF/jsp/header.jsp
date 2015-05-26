@@ -12,7 +12,7 @@
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a th:href="@{/mysites}">My Sites</a></li>
+        <li><a th:href="@{/sites}">My Sites</a></li>
         <li><a th:href="@{/posts}">My Scheduled Posts</a></li>
         <li><a th:href="@{/post}">Post to Reddit</a></li>
         <li><a th:href="@{/postSchedule}">Schedule Post to Reddit</a></li>
@@ -22,15 +22,17 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<div id="loading-image" style="position:absolute;left:45%;top:45%;display:none;z-index:2000;">
+<div id="loading-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;background-color:rgba(230,230,230,0.5);display:none;z-index:2000;">
+<div id="loading-image" style="position:absolute;left:45%;top:45%;">
 <img th:src="@{/resources/spin.gif}"/>
+</div>
 </div>
 <script>
 $(document).ajaxStart(function() {
-    $("#loading-image").show();
+    $("#loading-layer").show();
 });
 $(document).ajaxComplete(function() {
-	$("#loading-image").hide();
+	$("#loading-layer").hide();
 });
 </script>
 </div>

@@ -163,7 +163,7 @@ border-color: #ddd;
   $('#myModal').on('shown.bs.modal', function () {
 	  if($("#siteList").children().length > 0)
 		  return;
-	  $.get("mysites/list", function(data){
+	  $.get("sites/list", function(data){
 		 $.each(data, function( index, site ) {
 			  $("#siteList").append('<li><a href="#" onclick="loadArticles('+site.id+',\''+site.name+'\')">'+site.name+'</a></li>')
 		 });
@@ -173,8 +173,13 @@ border-color: #ddd;
   
   function loadArticles(siteID,siteName){
 	  $("#dropdownMenu1").html(siteName);
-	  $.get("mysites/articles?id="+siteID, function(data){
+	  $.get("sites/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
+		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
+		  if(data == ''){
+			  alert("Error occurred while parsing feed");
+			  return;
+		  }
 	      $.each(data, function( index, article ) {
 	          $("#articleList").append('<li><a href="#" onclick="chooseArticle(\''+article.title+'\',\''+article.link+'\')"><b>'+article.title+'</b> <small>'+new Date(article.publishDate).toUTCString()+'</small></li>')
 	      });

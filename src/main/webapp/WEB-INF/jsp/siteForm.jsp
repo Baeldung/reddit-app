@@ -24,7 +24,7 @@ border-color: #ddd;
 <div class="container">
 <h1>Add new Site</h1>
 <br/>
-<form th:action="@{/mysites}" method="post" role="form" data-toggle="validator">
+<form th:action="@{/sites}" method="post" role="form" data-toggle="validator">
 <div class="row">
 <div class="form-group">
     <label class="col-sm-3">Site Name</label>
@@ -33,7 +33,7 @@ border-color: #ddd;
 <br/><br/>
 <div class="form-group">
     <label class="col-sm-3">Feed Url</label>
-    <span class="col-sm-9"><input name="url" type="url" placeholder="url" class="form-control" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input name="url" type="url" placeholder="e.g. (http://www.baeldung.com/feed/)" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>  
 
