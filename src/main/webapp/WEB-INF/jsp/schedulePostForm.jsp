@@ -176,7 +176,7 @@ border-color: #ddd;
 	  $.get("sites/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
 		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
-		  if(data == ''){
+		  if(data.length == 0){
 			  alert("Error occurred while parsing feed");
 			  return;
 		  }

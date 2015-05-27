@@ -3,6 +3,7 @@ package org.baeldung.persistence.service;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.baeldung.persistence.dao.SiteRepository;
@@ -63,7 +64,7 @@ public class SiteService implements ISiteService {
             entries = getFeedEntries(site.getUrl());
         } catch (final Exception e) {
             logger.error("Error Occurred while parsing feed", e);
-            return null;
+            return Collections.emptyList();
         }
         return parseFeed(entries);
     }
