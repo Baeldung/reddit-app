@@ -176,13 +176,12 @@ border-color: #ddd;
 	  $.get("sites/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
 		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
-		  if(data.length == 0){
-			  alert("Error occurred while parsing feed");
-			  return;
-		  }
 	      $.each(data, function( index, article ) {
 	          $("#articleList").append('<li><a href="#" onclick="chooseArticle(\''+article.title+'\',\''+article.link+'\')"><b>'+article.title+'</b> <small>'+new Date(article.publishDate).toUTCString()+'</small></li>')
 	      });
+	 }).fail(function(error){
+		 console.log(error);
+		 alert(error.responseText);
 	 });
   }
   

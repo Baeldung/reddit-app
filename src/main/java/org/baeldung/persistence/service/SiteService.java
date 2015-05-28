@@ -3,13 +3,13 @@ package org.baeldung.persistence.service;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.baeldung.persistence.dao.SiteRepository;
 import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +63,7 @@ public class SiteService implements ISiteService {
         try {
             entries = getFeedEntries(site.getUrl());
         } catch (final Exception e) {
-            logger.error("Error Occurred while parsing feed", e);
-            return Collections.emptyList();
+            throw new FeedServerException("Error Occurred while parsing feed", e);
         }
         return parseFeed(entries);
     }

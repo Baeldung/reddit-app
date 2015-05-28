@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.baeldung.web.exceptions.FeedServerException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.client.resource.UserApprovalRequiredException;
@@ -55,6 +58,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
     public ResponseEntity<Object> handleRedirect(final RuntimeException ex, final WebRequest request) {
         logger.info(ex.getLocalizedMessage());
         throw ex;
+    }
+
+    @ExceptionHandler({ FeedServerException.class })
+    public ResponseEntity<Object> handleFeed(final RuntimeException ex, final WebRequest request) {
+        logger.error("500 Status Code", ex);
+        final String bodyOfResponse = ex.getLocalizedMessage();
+        return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({ Exception.class })
