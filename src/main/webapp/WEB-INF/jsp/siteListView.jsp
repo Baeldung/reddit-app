@@ -36,11 +36,11 @@
 /*<![CDATA[*/
 function confirmDelete(id) {
     if (confirm("Do you really want to delete this site?") == true) {
-        deletePost(id);
+        deleteSite(id);
     } 
 }
 
-function deletePost(id){
+function deleteSite(id){
     $.ajax({
         url: 'sites/'+id,
         type: 'DELETE',
