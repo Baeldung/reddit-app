@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 public class Post {
 
@@ -29,6 +31,7 @@ public class Post {
     private boolean sendReplies;
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date submissionDate;
 
     private boolean isSent;

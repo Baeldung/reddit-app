@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.web.exceptions.FeedServerException;
+import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         model.addObject("msg", response);
         return model;
         // return handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.TOO_MANY_REQUESTS, request);
+    }
+
+    @ExceptionHandler({ InvalidDateException.class })
+    public ResponseEntity<Object> handleInvalidDate(final RuntimeException ex, final WebRequest request) {
+        logger.error("400 Status Code", ex);
+        final String bodyOfResponse = ex.getLocalizedMessage();
+        return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     // HttpClientErrorException

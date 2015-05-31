@@ -1,4 +1,4 @@
-package org.baeldung.web.controller;
+package org.baeldung.web.controller.rest;
 
 import java.text.ParseException;
 import java.util.List;
@@ -7,8 +7,7 @@ import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.ISiteService;
 import org.baeldung.reddit.util.SiteArticle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.baeldung.web.exceptions.FeedServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,38 +21,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-public class SiteController {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+@RequestMapping(value = "/api")
+public class SiteRestController {
 
     @Autowired
     private ISiteService service;
 
-    @RequestMapping("/sites")
-    public final String ShowSitesPage(final Model model) {
-        final List<Site> sites = service.getSitesByUser(getCurrentUser());
-        model.addAttribute("sites", sites);
-        return "siteListView";
-    }
+    // === API Methods
 
     @RequestMapping(value = "/sites", method = RequestMethod.POST)
-    public final String addSite(final Model model, @RequestParam("url") final String url, @RequestParam("name") final String name) throws ParseException {
-        logger.info("User adding Site with these parameters: Url = " + url + ", name = " + name);
-
-        final Site site = new Site();
-        site.setName(name);
-        site.setUrl(url);
+    @ResponseStatus(HttpStatus.OK)
+    public void addSite(Site site) throws ParseException {
+        if (!service.isValidFeedUrl(site.getUrl())) {
+            throw new FeedServerException("Invalid Feed Url");
+        }
         site.setUser(getCurrentUser());
         service.saveSite(site);
-
-        final List<Site> sites = service.getSitesByUser(getCurrentUser());
-        model.addAttribute("sites", sites);
-        return "siteListView";
-    }
-
-    @RequestMapping(value = "/sites/isValidUrl")
-    @ResponseBody
-    public boolean isValidUrl(@RequestParam("url") final String url) {
-        return service.isValidFeedUrl(url);
     }
 
     @RequestMapping(value = "/sites/list")
@@ -72,6 +55,15 @@ public class SiteController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteSite(@PathVariable("id") final Long id) {
         service.deleteSiteById(id);
+    }
+
+    // === Non API Methods
+
+    @RequestMapping("/sites")
+    public final String ShowSitesPage(final Model model) {
+        final List<Site> sites = service.getSitesByUser(getCurrentUser());
+        model.addAttribute("sites", sites);
+        return "siteListView";
     }
 
     // === private

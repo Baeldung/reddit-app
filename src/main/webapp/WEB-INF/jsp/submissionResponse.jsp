@@ -9,6 +9,10 @@
 <div th:include="header"/>
 <div class="container">
 <h1 th:text="${msg}">Hello</h1>
+<h1 th:if="${param.containsKey('msg')}" th:text="${param.msg[0]}">Hello</h1>
+
+<h2 th:if="${param.containsKey('url')}"><a th:href="${param.url[0]}">Here</a></h2>
+
 </div>
 </body>
 </html>

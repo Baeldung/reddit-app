@@ -65,7 +65,7 @@ border-color: #ddd;
     <img src="http://www.reddit.com/captcha/${iden}" alt="captcha" width="200"/>
     </div>
     <br/><br/>
-    <span class="col-sm-3"><button id="submitbtn" type="submit" class="btn btn-primary">Post</button></span>
+    <span class="col-sm-3"><button id="submitBut" type="submit" class="btn btn-primary">Post</button></span>
    </div>
 </form>
 <div>
@@ -75,7 +75,7 @@ border-color: #ddd;
 <script type="text/javascript">
 /*<![CDATA[*/
 $("input").change(function() {
-    if($("#submitbtn").hasClass("disabled")){
+    if($("#submitBut").hasClass("disabled")){
     	if(! $("#checkbtn").hasClass("disabled")){
     		$("#checkbtn").addClass("disabled");
     	}
@@ -88,7 +88,7 @@ function predicateResponse(){
 	var domain = $('input[name="url"]').val();
 	domain =  $('<a>').prop('href', domain).prop('hostname');
 	console.log(domain);
-	$.post("predicatePostResponse",{title: title, domain: domain} ,function(data){
+	$.post("api/predicatePostResponse",{title: title, domain: domain} ,function(data){
         $("#prediction").addClass("alert alert-info").html(data.replace('{','').replace('}',''));
     });
 }
@@ -100,7 +100,7 @@ function predicateResponse(){
 <script>
   $(function() {
     $( "#sr" ).autocomplete({
-      source: "subredditAutoComplete"
+      source: "api/subredditAutoComplete"
     });
     
     $("input[name='url'],input[name='sr']").focus(function (){
@@ -117,7 +117,7 @@ function checkIfAlreadySubmitted(){
     var sr = $("input[name='sr']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
-        $.post("checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
+        $.post("api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
         	var result = JSON.parse(data);
         	if(result.length == 0){
         		$("#checkResult").show().html("Not submitted before");
@@ -131,6 +131,29 @@ function checkIfAlreadySubmitted(){
     }
 }           
 /*]]>*/          
+</script>
+
+<script>
+/*<![CDATA[*/
+$("#submitBut").click(function(event) {
+    event.preventDefault();
+    submitPost();
+});
+
+function submitPost(){
+    $.post("api/submit",$('form').serialize(), function(data){
+         if(data.length < 2){
+             alert(data[0]);
+         }
+         else{
+        	 window.location.href="submissionResponse?msg="+data[0]+"&url="+data[1];
+         }
+    }).fail(function(error){
+        console.log(error);
+        alert(error.responseText);
+    });
+}
+/*]]>*/  
 </script>
 </body>
 </html>

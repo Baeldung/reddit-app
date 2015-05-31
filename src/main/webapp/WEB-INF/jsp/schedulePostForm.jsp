@@ -45,11 +45,11 @@ border-color: #ddd;
 <br/><br/>  
 <div class="form-group">
     <label class="col-sm-3">Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="sr" placeholder="Subreddit (e.g. kitten)" class="form-control" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit (e.g. kitten)" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
 <div>
-<label class="col-sm-3">Send replies to my inbox</label>  <span class="col-sm-9"><input type="checkbox" name="sendreplies" value="true"/></span> 
+<label class="col-sm-3">Send replies to my inbox</label>  <span class="col-sm-9"><input type="checkbox" name="sendReplies" value="true"/></span> 
 </div>
 <br/><br/>
 <div>
@@ -65,11 +65,11 @@ border-color: #ddd;
     
     <span class="col-sm-2">Votes didn't exceed </span>
     <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" value="0" name="score" required="required"/>
+    <input type="number" class="form-control input-sm" value="0" name="minScoreRequired" required="required"/>
     </span>
     
     <span class="col-sm-3">within &nbsp;&nbsp;
-    <select name="interval">
+    <select name="timeInterval">
         <option value="0" selected="selected">None</option>
         <option value="45">45 minutes</option>
         <option value="60">1 hour</option>
@@ -78,7 +78,7 @@ border-color: #ddd;
     </span>
     
     <span class="col-sm-3">try resubmitting &nbsp;&nbsp;
-    <select name="attempt">
+    <select name="noOfAttempts">
         <option value="0" selected="selected">No</option>
         <option value="2">2</option>
 	    <option value="3">3</option>
@@ -94,11 +94,11 @@ border-color: #ddd;
 
 
 <label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
-<span class="col-sm-9"><input type="text" name="date" class="form-control" readonly="readonly"/></span>
+<span class="col-sm-9"><input name="submissionDate" class="form-control" readonly="readonly"/></span>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
-            $('*[name=date]').appendDtpicker({"inline": true});
+            $('*[name=submissionDate]').appendDtpicker({"inline": true});
         });
         /*]]>*/
     </script>
@@ -106,7 +106,7 @@ border-color: #ddd;
 <br/><br/>
 
     
-    <button type="submit" class="btn btn-primary">Schedule</button>
+    <button id="submitBut" type="submit" class="btn btn-primary">Schedule</button>
    </div>
 </form>
 </div>
@@ -151,10 +151,10 @@ border-color: #ddd;
 /*<![CDATA[*/
   $(function() {
     $( "#sr" ).autocomplete({
-      source: "subredditAutoComplete"
+      source: "api/subredditAutoComplete"
     });
     
-    $("input[name='url'],input[name='sr']").focus(function (){
+    $("input[name='url'],input[name='subreddit']").focus(function (){
         $("#checkResult").hide();
     });
     
@@ -163,7 +163,7 @@ border-color: #ddd;
   $('#myModal').on('shown.bs.modal', function () {
 	  if($("#siteList").children().length > 0)
 		  return;
-	  $.get("sites/list", function(data){
+	  $.get("api/sites/list", function(data){
 		 $.each(data, function( index, site ) {
 			  $("#siteList").append('<li><a href="#" onclick="loadArticles('+site.id+',\''+site.name+'\')">'+site.name+'</a></li>')
 		 });
@@ -173,7 +173,7 @@ border-color: #ddd;
   
   function loadArticles(siteID,siteName){
 	  $("#dropdownMenu1").html(siteName);
-	  $.get("sites/articles?id="+siteID, function(data){
+	  $.get("api/sites/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
 		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
 	      $.each(data, function( index, article ) {
@@ -205,10 +205,10 @@ border-color: #ddd;
 /*<![CDATA[*/
 function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
-    var sr = $("input[name='sr']").val();
+    var sr = $("input[name='subreddit']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
-        $.post("checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
+        $.post("api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
             var result = JSON.parse(data);
             if(result.length == 0){
                 $("#checkResult").show().html("Not submitted before");
@@ -222,6 +222,24 @@ function checkIfAlreadySubmitted(){
     }
 }           
 /*]]>*/          
+</script>
+
+<script>
+/*<![CDATA[*/
+$("#submitBut").click(function(event) {
+    event.preventDefault();
+    schedulePost();
+});
+
+function schedulePost(){
+    $.post("api/schedule", $('form').serialize(), function(data){
+       window.location.href="posts";
+    }).fail(function(error){
+        console.log(error);
+        alert(error.responseText);
+    });
+}
+/*]]>*/  
 </script>
 </body>
 </html>

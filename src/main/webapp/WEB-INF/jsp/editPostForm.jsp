@@ -26,9 +26,9 @@ border-color: #ddd;
 
 <div class="container">
 <h1>Edit Scheduled Post</h1>
-<form th:action="@{/updatePost/{id}(id=${post.getId()})}" method="post" role="form" data-toggle="validator">
+<form th:action="@{/api/updatePost/{id}(id=${post.getId()})}" method="post" role="form" data-toggle="validator">
 <div class="row">
-<input type="hidden" name="id" value="${post.getId()}"/>
+<input type="hidden" name="id" th:value="${post.getId()}"/>
 <div class="form-group">
     <label class="col-sm-3">Title</label>
     <span class="col-sm-9"><input name="title" placeholder="title" class="form-control" th:value="${post.getTitle()}" required="required" data-minlength="3"/></span>
@@ -41,14 +41,14 @@ border-color: #ddd;
 <br/><br/>  
 <div class="form-group">
     <label class="col-sm-3">Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="sr" placeholder="Subreddit" class="form-control" th:value="${post.getSubreddit()}" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control" th:value="${post.getSubreddit()}" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
 <div>
 <label  class="col-sm-3">Send replies to my inbox</label>  
 <span class="col-sm-9"> 
-<input th:if="${post.isSendReplies()}" type="checkbox" name="sendreplies" value="true" checked="checked"/>
-<input th:if="${!post.isSendReplies()}" type="checkbox" name="sendreplies"/>
+<input th:if="${post.isSendReplies()}" type="checkbox" name="sendReplies" value="true" checked="checked"/>
+<input th:if="${!post.isSendReplies()}" type="checkbox" name="sendReplies"/>
 </span> 
 </div>
 <br/><br/>
@@ -65,11 +65,11 @@ border-color: #ddd;
     
     <span class="col-sm-2">Votes didn't exceed </span>
     <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" th:value="${post.getMinScoreRequired()}" name="score" required="required"/>
+    <input type="number" class="form-control input-sm" th:value="${post.getMinScoreRequired()}" name="minScoreRequired" required="required"/>
     </span>
     
     <span class="col-sm-3">within &nbsp;&nbsp;
-    <select name="interval">
+    <select name="timeInterval">
         <option value="0" th:selected="${post.getTimeInterval() == 0}">None</option>
         <option value="45" th:selected="${post.getTimeInterval() == 45}">45 minutes</option>
         <option value="60" th:selected="${post.getTimeInterval() == 60}">1 hour</option>
@@ -78,7 +78,7 @@ border-color: #ddd;
     </span>
     
     <span class="col-sm-3">try resubmitting &nbsp;&nbsp;
-    <select name="attempt">
+    <select name="noOfAttempts">
         <option value="0" th:selected="${post.getNoOfAttempts() == 0}">No</option>
         <option value="1" th:selected="${post.getNoOfAttempts() == 1}">1</option>
         <option value="2" th:selected="${post.getNoOfAttempts() == 2}">2</option>
@@ -93,16 +93,16 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
-<span class="col-sm-9"><input type="text" name="date" class="form-control" th:value="${dateValue}" readonly="readonly"/></span>
+<span class="col-sm-9"><input name="submissionDate" class="form-control" th:value="${dateValue}" readonly="readonly"/></span>
     <script type="text/javascript">
         $(function(){
-            $('*[name=date]').appendDtpicker({"inline": true});
+            $('*[name=submissionDate]').appendDtpicker({"inline": true});
         });
     </script>
 
     <br/><br/>
     
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button>
    </div>
 </form>
 </div>
@@ -110,7 +110,7 @@ border-color: #ddd;
 <script>
   $(function() {
     $( "#sr" ).autocomplete({
-      source: "../subredditAutoComplete"
+      source: "../api/subredditAutoComplete"
     });
     
     $("input[name='url'],input[name='sr']").focus(function (){
@@ -126,7 +126,7 @@ function checkIfAlreadySubmitted(){
     var sr = $("input[name='sr']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
-        $.post("../checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
+        $.post("../api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
             var result = JSON.parse(data);
             if(result.length == 0){
                 $("#checkResult").show().html("Not submitted before");
@@ -140,5 +140,23 @@ function checkIfAlreadySubmitted(){
     }
 }           
 /*]]>*/          
+</script>
+
+<script>
+/*<![CDATA[*/
+$("#submitBut").click(function(event) {
+    event.preventDefault();
+    editPost();
+});
+
+function editPost(){
+    $.post($('form').attr('action'), $('form').serialize(), function(data){
+       window.location.href="../posts";
+    }).fail(function(error){
+        console.log(error);
+        alert(error.responseText);
+    });
+}
+/*]]>*/  
 </script>
 </html>

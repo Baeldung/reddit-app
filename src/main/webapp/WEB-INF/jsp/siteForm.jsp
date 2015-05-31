@@ -49,17 +49,12 @@ $("#submitBut").click(function(event) {
 });
 
 function addSite(){
-	console.log("checking url");
-	$.get("sites/isValidUrl?url="+$("#url").val(), function(data){
-		console.log(data);
-		if(data == true){
-			console.log("yes");
-			$("form").submit();
-		}
-		else{
-			alert("Invalid Feed Url");
-		}
-	});
+	$.post("api/sites",$('form').serialize(), function(data){
+		 window.location.href="sites";
+	}).fail(function(error){
+        console.log(error);
+        alert(error.responseText);
+    });
 }
 </script>
 </body>
