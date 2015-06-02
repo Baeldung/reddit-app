@@ -38,7 +38,7 @@ border-color: #ddd;
 <br/><br/>  
 <div class="form-group">
     <label class="col-sm-3">Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="sr" placeholder="Subreddit (e.g. kitten)" class="form-control" data-minlength="3" required="required"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit (e.g. kitten)" class="form-control" data-minlength="3" required="required"/></span>
 </div>
 <br/><br/>
 <div>
@@ -103,7 +103,7 @@ function predicateResponse(){
       source: "api/subredditAutoComplete"
     });
     
-    $("input[name='url'],input[name='sr']").focus(function (){
+    $("input[name='url'],input[name='subreddit']").focus(function (){
     	$("#checkResult").hide();
     });
     
@@ -114,7 +114,7 @@ function predicateResponse(){
 /*<![CDATA[*/
 function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
-    var sr = $("input[name='sr']").val();
+    var sr = $("input[name='subreddit']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
         $.get("api/posts",{url: url, sr: sr}, function(data){
@@ -159,6 +159,7 @@ function submitPost(){
         }
     })
     .fail(function(error) {
+    	console.log(error);
         alert(error.responseText);
     }); 
 }

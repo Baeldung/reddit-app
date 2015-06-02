@@ -70,7 +70,7 @@ class RedditService implements IRedditService {
     private final MultiValueMap<String, String> constructParams(PostDto postDto) {
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add(RedditApiConstants.TITLE, postDto.getTitle());
-        param.add(RedditApiConstants.SR, postDto.getSr());
+        param.add(RedditApiConstants.SR, postDto.getSubreddit());
         param.add(RedditApiConstants.URL, postDto.getUrl());
         param.add(RedditApiConstants.IDEN, postDto.getIden());
         param.add(RedditApiConstants.CAPTCHA, postDto.getCaptcha());

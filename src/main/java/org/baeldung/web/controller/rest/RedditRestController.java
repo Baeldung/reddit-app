@@ -2,6 +2,8 @@ package org.baeldung.web.controller.rest;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
@@ -31,7 +33,7 @@ public class RedditRestController {
 
     @RequestMapping(value = "/posts", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public final List<String> submit(@RequestBody PostDto postDto) {
+    public final List<String> submit(@Valid @RequestBody PostDto postDto) {
         return service.submitPost(postDto);
     }
 
@@ -50,12 +52,12 @@ public class RedditRestController {
 
     // === Non Restful
 
-    @RequestMapping("/login")
-    public final String redditLogin() {
-        final JsonNode node = redditTemplate.getUserInfo();
-        service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
-        return "redirect:home.html";
-    }
+    // @RequestMapping("/login")
+    // public final String redditLogin() {
+    // final JsonNode node = redditTemplate.getUserInfo();
+    // service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
+    // return "redirect:home.html";
+    // }
 
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {

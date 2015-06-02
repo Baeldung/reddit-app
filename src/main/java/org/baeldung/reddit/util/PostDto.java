@@ -1,10 +1,19 @@
 package org.baeldung.reddit.util;
 
+import javax.validation.constraints.NotNull;
+
 public class PostDto {
+    @NotNull
     private String title;
+
+    @NotNull
     private String url;
-    private String sr;
+
+    @NotNull
+    private String subreddit;
+
     private boolean sendreplies;
+
     private String iden;
     private String captcha;
 
@@ -24,12 +33,12 @@ public class PostDto {
         this.url = url;
     }
 
-    public String getSr() {
-        return sr;
+    public String getSubreddit() {
+        return subreddit;
     }
 
-    public void setSr(String sr) {
-        this.sr = sr;
+    public void setSubreddit(String sr) {
+        this.subreddit = sr;
     }
 
     public boolean isSendreplies() {
@@ -59,7 +68,7 @@ public class PostDto {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("PostDto [title=").append(title).append(", url=").append(url).append(", sr=").append(sr).append(", sendreplies=").append(sendreplies).append(", iden=").append(iden).append(", captcha=").append(captcha).append("]");
+        builder.append("PostDto [title=").append(title).append(", url=").append(url).append(", sr=").append(subreddit).append(", sendreplies=").append(sendreplies).append(", iden=").append(iden).append(", captcha=").append(captcha).append("]");
         return builder.toString();
     }
 
