@@ -31,7 +31,7 @@ border-color: #ddd;
   Load from My Sites
 </button>
 </h1>
-<form action="schedule" method="post" role="form" data-toggle="validator">
+<form action="#" method="post" role="form" data-toggle="validator">
 <div class="row">
 <div class="form-group">
     <label class="col-sm-3">Title</label>
@@ -208,7 +208,7 @@ function checkIfAlreadySubmitted(){
     var sr = $("input[name='subreddit']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
-        $.post("api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
+        $.get("api/posts",{url: url, sr: sr}, function(data){
             var result = JSON.parse(data);
             if(result.length == 0){
                 $("#checkResult").show().html("Not submitted before");
@@ -232,12 +232,21 @@ $("#submitBut").click(function(event) {
 });
 
 function schedulePost(){
-    $.post("api/schedule", $('form').serialize(), function(data){
-       window.location.href="posts";
-    }).fail(function(error){
-        console.log(error);
+    var data = {};
+    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
+    console.log(JSON.stringify(data));
+ $.ajax({
+    url: 'api/scheduledPosts',
+    data: JSON.stringify(data),
+    type: 'POST',
+    contentType:'application/json',
+    success: function(result) {
+        window.location.href="scheduledPosts";
+    },
+    error: function(error) {
         alert(error.responseText);
-    });
+    }   
+}); 
 }
 /*]]>*/  
 </script>

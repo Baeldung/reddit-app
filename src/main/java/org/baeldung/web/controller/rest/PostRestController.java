@@ -15,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,14 +37,30 @@ public class PostRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/schedule", method = RequestMethod.POST)
+    @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void schedule(@ModelAttribute("post") Post post) {
+    public void schedule(@RequestBody Post post) {
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
+        postReopsitory.save(post);
+    }
+
+    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable("id") final Long id) {
+        postReopsitory.delete(id);
+    }
+
+    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePost(@RequestBody Post post, @PathVariable Long id) throws ParseException {
+        if (post.getSubmissionDate().before(new Date())) {
+            throw new InvalidDateException("Scheduling Date already passed");
+        }
+        post.setUser(getCurrentUser());
         postReopsitory.save(post);
     }
 
@@ -56,25 +72,9 @@ public class PostRestController {
         return (result == RedditClassifier.GOOD) ? "{Good Response}" : "{Bad response}";
     }
 
-    @RequestMapping(value = "/deletePost/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@PathVariable("id") final Long id) {
-        postReopsitory.delete(id);
-    }
+    // === Non Restful
 
-    @RequestMapping(value = "/updatePost/{id}", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@ModelAttribute("post") Post post) throws ParseException {
-        if (post.getSubmissionDate().before(new Date())) {
-            throw new InvalidDateException("Scheduling Date already passed");
-        }
-        post.setUser(getCurrentUser());
-        postReopsitory.save(post);
-    }
-
-    // === Non API Methods
-
-    @RequestMapping("/posts")
+    @RequestMapping("/scheduledPosts")
     public final String ShowScheduledPostsPage(final Model model) {
         final User user = getCurrentUser();
         final List<Post> posts = postReopsitory.findByUser(user);

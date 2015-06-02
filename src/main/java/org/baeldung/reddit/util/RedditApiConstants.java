@@ -8,6 +8,8 @@ public final class RedditApiConstants {
     public static final String URL = "url";
     public static final String SR = "sr";
     public static final String TITLE = "title";
+    public static final String IDEN = "iden";
+    public static final String CAPTCHA = "captcha";
     public static final String THEN = "then";
     public static final String SENDREPLIES = "sendreplies";
     public static final String RESUBMIT = "resubmit";

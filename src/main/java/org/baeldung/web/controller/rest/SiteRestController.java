@@ -57,7 +57,7 @@ public class SiteRestController {
         service.deleteSiteById(id);
     }
 
-    // === Non API Methods
+    // === Non Restful
 
     @RequestMapping("/sites")
     public final String ShowSitesPage(final Model model) {

@@ -1,15 +1,16 @@
 package org.baeldung.web.controller.rest;
 
 import java.util.List;
-import java.util.Map;
 
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IRedditService;
+import org.baeldung.reddit.util.PostDto;
 import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,13 +29,13 @@ public class RedditRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/submit", method = RequestMethod.POST)
+    @RequestMapping(value = "/posts", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public final List<String> submit(@RequestParam final Map<String, String> formParams) {
-        return service.submitPost(formParams);
+    public final List<String> submit(@RequestBody PostDto postDto) {
+        return service.submitPost(postDto);
     }
 
-    @RequestMapping(value = "/checkIfAlreadySubmitted", method = RequestMethod.POST)
+    @RequestMapping(value = "/posts")
     @ResponseBody
     public String checkIfAlreadySubmitted(@RequestParam("url") final String url, @RequestParam("sr") final String sr) {
         final JsonNode node = redditTemplate.searchForLink(url, sr);
@@ -43,11 +44,11 @@ public class RedditRestController {
 
     @RequestMapping(value = "/subredditAutoComplete")
     @ResponseBody
-    public String subredditAutoComplete(@RequestParam("term") final String term) {
+    public JsonNode subredditAutoComplete(@RequestParam("term") final String term) {
         return service.SearchSubredditNames(term);
     }
 
-    // === Non API Methods
+    // === Non Restful
 
     @RequestMapping("/login")
     public final String redditLogin() {

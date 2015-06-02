@@ -26,9 +26,13 @@ border-color: #ddd;
 
 <div class="container">
 <h1>Edit Scheduled Post</h1>
-<form th:action="@{/api/updatePost/{id}(id=${post.getId()})}" method="post" role="form" data-toggle="validator">
+<form th:action="@{/api/scheduledPosts/{id}(id=${post.getId()})}" method="post" role="form" data-toggle="validator">
 <div class="row">
 <input type="hidden" name="id" th:value="${post.getId()}"/>
+<input type="hidden" name="submissionResponse" th:value="${post.getSubmissionResponse()}"/>
+<input type="hidden" name="redditID" th:value="${post.getRedditID()}"/>
+<input type="hidden" name="Sent" th:value="${post.isSent()}"/>
+
 <div class="form-group">
     <label class="col-sm-3">Title</label>
     <span class="col-sm-9"><input name="title" placeholder="title" class="form-control" th:value="${post.getTitle()}" required="required" data-minlength="3"/></span>
@@ -150,12 +154,21 @@ $("#submitBut").click(function(event) {
 });
 
 function editPost(){
-    $.post($('form').attr('action'), $('form').serialize(), function(data){
-       window.location.href="../posts";
-    }).fail(function(error){
-        console.log(error);
-        alert(error.responseText);
-    });
+    var data = {};
+	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
+    console.log(JSON.stringify(data));
+	$.ajax({
+        url: $('form').attr('action'),
+        data: JSON.stringify(data),
+        type: 'PUT',
+        contentType:'application/json'
+        	
+    }).done(function() {
+    	window.location.href="../scheduledPosts";
+    })
+    .fail(function(error) {
+    	alert(error.responseText);
+    }); 
 }
 /*]]>*/  
 </script>

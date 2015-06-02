@@ -1,6 +1,7 @@
 package org.baeldung.config;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -77,6 +81,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/home.html");
         registry.addViewController("/siteForm");
         registry.addViewController("/submissionResponse");
+    }
+
+    @Override
+    public void configureMessageConverters(final List<HttpMessageConverter<?>> messageConverters) {
+        final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm"));
+        messageConverters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+        super.configureMessageConverters(messageConverters);
     }
 
     @Bean

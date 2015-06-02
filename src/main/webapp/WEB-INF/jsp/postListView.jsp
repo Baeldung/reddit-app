@@ -44,10 +44,10 @@ function confirmDelete(id) {
 
 function deletePost(id){
 	$.ajax({
-	    url: 'deletePost/'+id,
+	    url: 'scheduledPosts/'+id,
 	    type: 'DELETE',
 	    success: function(result) {
-	    	window.location.href="posts"
+	    	window.location.href="scheduledPosts"
 	    }
 	});
 }

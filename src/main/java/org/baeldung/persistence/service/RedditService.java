@@ -2,10 +2,10 @@ package org.baeldung.persistence.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
+import org.baeldung.reddit.util.PostDto;
 import org.baeldung.reddit.util.RedditApiConstants;
 import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.util.MultiValueMap;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-public class RedditService implements IRedditService {
+class RedditService implements IRedditService {
     @Autowired
     private RedditTemplate redditTemplate;
 
@@ -51,31 +51,38 @@ public class RedditService implements IRedditService {
     }
 
     @Override
-    public String SearchSubredditNames(String query) {
+    public JsonNode SearchSubredditNames(String query) {
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("query", query);
         final JsonNode node = redditTemplate.subredditNameSearch(query);
-        return node.get("names").toString();
+        return node.get("names");
     }
 
     @Override
-    public List<String> submitPost(Map<String, String> formParams) {
-        final MultiValueMap<String, String> param1 = constructParams(formParams);
+    public List<String> submitPost(PostDto postDto) {
+        final MultiValueMap<String, String> param1 = constructParams(postDto);
         final JsonNode node = redditTemplate.submitPost(param1);
         return parseResponse(node);
     }
 
     // === private
 
-    private final MultiValueMap<String, String> constructParams(final Map<String, String> formParams) {
+    private final MultiValueMap<String, String> constructParams(PostDto postDto) {
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
+        param.add(RedditApiConstants.TITLE, postDto.getTitle());
+        param.add(RedditApiConstants.SR, postDto.getSr());
+        param.add(RedditApiConstants.URL, postDto.getUrl());
+        param.add(RedditApiConstants.IDEN, postDto.getIden());
+        param.add(RedditApiConstants.CAPTCHA, postDto.getCaptcha());
+        param.add(RedditApiConstants.URL, postDto.getUrl());
+        if (postDto.isSendreplies()) {
+            param.add(RedditApiConstants.SENDREPLIES, "true");
+        }
+
         param.add(RedditApiConstants.API_TYPE, "json");
         param.add(RedditApiConstants.KIND, "link");
         param.add(RedditApiConstants.RESUBMIT, "true");
         param.add(RedditApiConstants.THEN, "comments");
-        for (final Map.Entry<String, String> entry : formParams.entrySet()) {
-            param.add(entry.getKey(), entry.getValue());
-        }
         return param;
     }
 

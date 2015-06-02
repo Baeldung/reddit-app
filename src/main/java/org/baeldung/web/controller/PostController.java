@@ -76,7 +76,7 @@ public class PostController {
         return "postListView";
     }
 
-    @RequestMapping("/posts")
+    @RequestMapping("/scheduledPosts")
     public final String ShowScheduledPostsPage(final Model model) {
         final User user = getCurrentUser();
         final List<Post> posts = postReopsitory.findByUser(user);

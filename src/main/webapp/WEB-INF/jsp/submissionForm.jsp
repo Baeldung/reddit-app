@@ -117,7 +117,7 @@ function checkIfAlreadySubmitted(){
     var sr = $("input[name='sr']").val();
     console.log(url);
     if(url.length >3 && sr.length > 3){
-        $.post("api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
+        $.get("api/posts",{url: url, sr: sr}, function(data){
         	var result = JSON.parse(data);
         	if(result.length == 0){
         		$("#checkResult").show().html("Not submitted before");
@@ -141,17 +141,26 @@ $("#submitBut").click(function(event) {
 });
 
 function submitPost(){
-    $.post("api/submit",$('form').serialize(), function(data){
-         if(data.length < 2){
-             alert(data[0]);
-         }
-         else{
-        	 window.location.href="submissionResponse?msg="+data[0]+"&url="+data[1];
-         }
-    }).fail(function(error){
-        console.log(error);
+    var data = {};
+    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
+    console.log(JSON.stringify(data));
+    $.ajax({
+        url: "api/posts",
+        data: JSON.stringify(data),
+        type: 'POST',
+        contentType:'application/json'
+            
+    }).done(function(data) {
+    	if(data.length < 2){
+            alert(data[0]);
+        }
+        else{
+            window.location.href="submissionResponse?msg="+data[0]+"&url="+data[1];
+        }
+    })
+    .fail(function(error) {
         alert(error.responseText);
-    });
+    }); 
 }
 /*]]>*/  
 </script>
