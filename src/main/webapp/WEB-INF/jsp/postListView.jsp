@@ -44,7 +44,7 @@ function confirmDelete(id) {
 
 function deletePost(id){
 	$.ajax({
-	    url: 'scheduledPosts/'+id,
+	    url: 'api/scheduledPosts/'+id,
 	    type: 'DELETE',
 	    success: function(result) {
 	    	window.location.href="scheduledPosts"
