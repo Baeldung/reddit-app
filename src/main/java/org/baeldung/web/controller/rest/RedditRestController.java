@@ -31,7 +31,7 @@ public class RedditRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/posts", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/posts", method = RequestMethod.POST)
     @ResponseBody
     public final List<String> submit(@Valid @RequestBody PostDto postDto) {
         return service.submitPost(postDto);

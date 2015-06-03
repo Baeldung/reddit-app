@@ -37,7 +37,7 @@ public class PostRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void schedule(@RequestBody Post post) {
         if (post.getSubmissionDate().before(new Date())) {
@@ -54,7 +54,7 @@ public class PostRestController {
         postReopsitory.delete(id);
     }
 
-    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@RequestBody Post post, @PathVariable Long id) throws ParseException {
         if (post.getSubmissionDate().before(new Date())) {
