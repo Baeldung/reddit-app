@@ -132,6 +132,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         @Value("${clientSecret}")
         private String clientSecret;
 
+        @Value("${redirectUri}")
+        private String redirectUri;
+
         @Autowired
         private PostRepository repo;
 
@@ -146,7 +149,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             details.setTokenName("oauth_token");
             details.setScope(Arrays.asList("identity", "read", "submit", "edit"));
             details.setGrantType("authorization_code");
-            details.setPreEstablishedRedirectUri("http://localhost:8080/reddit-scheduler/login");
+            details.setPreEstablishedRedirectUri(redirectUri);
             details.setUseCurrentUri(false);
             return details;
         }
