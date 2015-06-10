@@ -3,7 +3,6 @@ package org.baeldung.web.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.baeldung.persistence.dao.PostRepository;
@@ -13,6 +12,8 @@ import org.baeldung.reddit.classifier.RedditClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -71,15 +72,14 @@ public class PostController {
             return "submissionResponse";
         }
         postReopsitory.save(post);
-        final List<Post> posts = postReopsitory.findByUser(user);
-        model.addAttribute("posts", posts);
-        return "postListView";
+
+        return "redirect:scheduledPosts";
     }
 
     @RequestMapping("/scheduledPosts")
-    public final String ShowScheduledPostsPage(final Model model) {
+    public final String showScheduledPostsPage(final Model model, Pageable pageable) {
         final User user = getCurrentUser();
-        final List<Post> posts = postReopsitory.findByUser(user);
+        final Page<Post> posts = postReopsitory.findByUser(user, pageable);
         model.addAttribute("posts", posts);
         return "postListView";
     }

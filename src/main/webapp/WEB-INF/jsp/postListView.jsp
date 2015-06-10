@@ -20,7 +20,7 @@
 <th>Actions</th>
 </tr>
 </thead>
-    <tr th:each="post  : ${posts}">
+    <tr th:each="post  : ${posts.getContent()}">
         <td th:text="${post.getTitle()}"></td>
         <td th:text="${#calendars.format(post.getSubmissionDate(),'dd MMMM yyyy  HH:mm z')}"></td>
         <td th:text="${post.getSubmissionResponse()}"></td>
@@ -32,6 +32,17 @@
         </td>
     </tr>
 </table>
+
+<br/>
+
+<nav th:if="${posts.getTotalPages() > 1 }">
+    <ul class='pagination'>
+      <li th:each="i : ${#numbers.sequence( 1, posts.getTotalPages())}" th:class="${i-1 == posts.getNumber()}? active : none">
+        <a href="#" th:if="${i-1 == posts.getNumber()}" th:text="${i}">1</a>
+        <a th:unless="${i-1 == posts.getNumber()}" th:href="@{scheduledPosts(page=${i},size=${posts.getSize()})}"><span th:text="${i}">1</span></a>
+      </li>
+    </ul>
+</nav>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>

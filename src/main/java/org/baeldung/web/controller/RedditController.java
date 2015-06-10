@@ -36,11 +36,19 @@ public class RedditController {
     @Autowired
     private UserRepository userReopsitory;
 
+    @RequestMapping("/")
+    public final String homePage() {
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            return "home";
+        }
+        return "index";
+    }
+
     @RequestMapping("/login")
     public final String redditLogin() {
         final JsonNode node = redditTemplate.getUserInfo();
         loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
-        return "redirect:home.html";
+        return "redirect:home";
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)

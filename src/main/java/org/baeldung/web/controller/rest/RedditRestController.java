@@ -46,18 +46,18 @@ public class RedditRestController {
 
     @RequestMapping(value = "/subredditAutoComplete")
     @ResponseBody
-    public JsonNode subredditAutoComplete(@RequestParam("term") final String term) {
-        return service.SearchSubredditNames(term);
+    public List<String> subredditAutoComplete(@RequestParam("term") final String term) {
+        return service.searchSubreddit(term);
     }
 
     // === Non Restful
 
-    // @RequestMapping("/login")
-    // public final String redditLogin() {
-    // final JsonNode node = redditTemplate.getUserInfo();
-    // service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
-    // return "redirect:home.html";
-    // }
+    @RequestMapping("/login")
+    public final String redditLogin() {
+        final JsonNode node = redditTemplate.getUserInfo();
+        service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
+        return "redirect:home";
+    }
 
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {

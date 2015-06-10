@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anonymous().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/home.html","/post","/postSchedule","/posts").hasRole("USER")
+                .antMatchers("/home","/post","/postSchedule","/posts").hasRole("USER")
                 .and()
                 .httpBasic().authenticationEntryPoint(oauth2AuthenticationEntryPoint())
                 .and()

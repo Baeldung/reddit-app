@@ -1,14 +1,21 @@
 package org.baeldung.persistence.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.PostDto;
 import org.baeldung.reddit.util.RedditApiConstants;
 import org.baeldung.web.RedditTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +33,14 @@ class RedditService implements IRedditService {
 
     @Autowired
     private UserRepository userReopsitory;
+
+    private List<String> subreddits;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    public RedditService() {
+        loadSubreddits();
+    }
 
     @Override
     public void loadAuthentication(final String name, final OAuth2AccessToken token) {
@@ -51,18 +66,24 @@ class RedditService implements IRedditService {
     }
 
     @Override
-    public JsonNode SearchSubredditNames(String query) {
-        final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
-        param.add("query", query);
-        final JsonNode node = redditTemplate.subredditNameSearch(query);
-        return node.get("names");
-    }
-
-    @Override
     public List<String> submitPost(PostDto postDto) {
         final MultiValueMap<String, String> param1 = constructParams(postDto);
         final JsonNode node = redditTemplate.submitPost(param1);
         return parseResponse(node);
+    }
+
+    @Override
+    public List<String> searchSubreddit(String query) {
+        final List<String> result = new ArrayList<String>();
+        for (final String subreddit : subreddits) {
+            if (subreddit.startsWith(query)) {
+                result.add(subreddit);
+                if (result.size() > 9) {
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     // === private
@@ -102,4 +123,28 @@ class RedditService implements IRedditService {
             }
         }
     }
+
+    private void loadSubreddits() {
+        subreddits = new ArrayList<String>();
+        try {
+            final Resource resource = new ClassPathResource("subreddits.csv");
+            final Scanner scanner = new Scanner(resource.getFile());
+            scanner.useDelimiter(",");
+            while (scanner.hasNext()) {
+                subreddits.add(scanner.next());
+            }
+            scanner.close();
+        } catch (final IOException e) {
+            logger.error("error while loading subreddits", e);
+        }
+
+    }
+
+    // old autocomplete subreddit
+    // private JsonNode searchSubredditNames(String query) {
+    // final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
+    // param.add("query", query);
+    // final JsonNode node = redditTemplate.subredditNameSearch(query);
+    // return node.get("names");
+    // }
 }

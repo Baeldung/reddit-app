@@ -41,4 +41,12 @@ public class RedditScheduler {
         }
     }
 
+    @Scheduled(fixedRate = 3 * 60 * 1000)
+    public void checkAndDeleteConsumedAttempts() {
+        final List<Post> submitted = postReopsitory.findByRedditIDNotNullAndNoOfAttemptsAndDeleteIfConsumeAttemptsTrue(0);
+        logger.info(submitted.size() + " Posts consumed attempts ");
+        for (final Post post : submitted) {
+            service.checkAndDelete(post);
+        }
+    }
 }

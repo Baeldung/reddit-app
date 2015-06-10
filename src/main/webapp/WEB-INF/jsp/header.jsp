@@ -2,7 +2,7 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" th:href="@{/home.html}">Schedule to Reddit</a>
+      <a class="navbar-brand" th:href="@{/}">Schedule to Reddit</a>
     </div>
     
      <p class="navbar-text navbar-right">Logged in as 

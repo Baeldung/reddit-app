@@ -46,6 +46,12 @@ public class Post {
 
     private int minScoreRequired;
 
+    private int minUpvoteRatio;
+
+    private boolean keepIfHasComments;
+
+    private boolean deleteIfConsumeAttempts;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -158,9 +164,36 @@ public class Post {
         this.minScoreRequired = minScoreRequired;
     }
 
+    public int getMinUpvoteRatio() {
+        return minUpvoteRatio;
+    }
+
+    public void setMinUpvoteRatio(int minUpvoteRatio) {
+        this.minUpvoteRatio = minUpvoteRatio;
+    }
+
+    public boolean isKeepIfHasComments() {
+        return keepIfHasComments;
+    }
+
+    public void setKeepIfHasComments(boolean keepIfHasComments) {
+        this.keepIfHasComments = keepIfHasComments;
+    }
+
+    public boolean isDeleteIfConsumeAttempts() {
+        return deleteIfConsumeAttempts;
+    }
+
+    public void setDeleteIfConsumeAttempts(boolean deleteIfConsumeAttempts) {
+        this.deleteIfConsumeAttempts = deleteIfConsumeAttempts;
+    }
+
     @Override
     public String toString() {
-        return "Post [title=" + title + ", subreddit=" + subreddit + ", url=" + url + ", submissionDate=" + submissionDate + ", user=" + user + "]";
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Post [title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", submissionDate=").append(submissionDate).append(", isSent=").append(isSent).append(", submissionResponse=")
+                .append(submissionResponse).append(", redditID=").append(redditID).append(", noOfAttempts=").append(noOfAttempts).append(", deleteIfConsumeAttempts=").append(deleteIfConsumeAttempts).append("]");
+        return builder.toString();
     }
 
 }

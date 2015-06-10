@@ -33,6 +33,7 @@ public class ServletInitializer extends AbstractDispatcherServletInitializer {
         servletContext.addListener(new SessionListener());
         registerProxyFilter(servletContext, "oauth2ClientContextFilter");
         registerProxyFilter(servletContext, "springSecurityFilterChain");
+        registerProxyFilter(servletContext, "metricFilter");
     }
 
     private void registerProxyFilter(ServletContext servletContext, String name) {

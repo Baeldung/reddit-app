@@ -1,17 +1,21 @@
 package org.baeldung.persistence.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.RedditApiConstants;
+import org.baeldung.reddit.util.UserAgentInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +25,7 @@ import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -44,15 +49,24 @@ public class RedditSchedulerService {
         }
     }
 
-    public int getPostScore(String redditId) {
-        final JsonNode node = redditRestTemplate.getForObject("https://oauth.reddit.com/api/info?id=t3_" + redditId, JsonNode.class);
+    public int[] getPostScore(Post post) {
+        final RestTemplate restTemplate = new RestTemplate();
+        final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
+        list.add(new UserAgentInterceptor());
+        restTemplate.setInterceptors(list);
+        JsonNode node = restTemplate.getForObject("http://www.reddit.com/r/" + post.getSubreddit() + "/comments/" + post.getRedditID() + ".json", JsonNode.class);
         logger.info(node.toString());
-        final int score = node.get("data").get("children").get(0).get("data").get("score").asInt();
-        logger.info("post score = " + score);
-        return score;
+        final int[] postInfo = new int[3];
+        node = node.get(0).get("data").get("children").get(0).get("data");
+        postInfo[0] = node.get("score").asInt();
+        final double ratio = node.get("upvote_ratio").asDouble();
+        postInfo[1] = (int) (ratio * 100);
+        postInfo[2] = node.get("num_comments").asInt();
+        return postInfo;
     }
 
     public void deletePost(String redditId) {
+        logger.info("deleting post with id = " + redditId);
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("id", "t3_" + redditId);
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/del.json", param, JsonNode.class);
@@ -62,6 +76,14 @@ public class RedditSchedulerService {
     public void checkAndReSubmit(Post post) {
         try {
             checkAndReSubmitInternal(post);
+        } catch (final Exception e) {
+            logger.error("Error occurred while check post " + post.toString(), e);
+        }
+    }
+
+    public void checkAndDelete(Post post) {
+        try {
+            checkAndDeleteInternal(post);
         } catch (final Exception e) {
             logger.error("Error occurred while check post " + post.toString(), e);
         }
@@ -113,13 +135,33 @@ public class RedditSchedulerService {
     }
 
     private void checkAndReSubmitInternal(Post post) {
+        logger.info(post.toString());
         if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
-            final int score = getPostScore(post.getRedditID());
-            if (score < post.getMinScoreRequired()) {
+            final int[] postInfo = getPostScore(post);
+            final boolean keepBecauseComment = (postInfo[2] > 0) && post.isKeepIfHasComments();
+            if (((postInfo[0] < post.getMinScoreRequired()) || (postInfo[1] < post.getMinUpvoteRatio())) && !keepBecauseComment) {
                 deletePost(post.getRedditID());
                 resetPost(post);
             } else {
                 post.setNoOfAttempts(0);
+                post.setRedditID(null);
+                postReopsitory.save(post);
+            }
+        }
+    }
+
+    private void checkAndDeleteInternal(Post post) {
+        logger.info(post.toString());
+        if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
+            final int[] postInfo = getPostScore(post);
+            if (((postInfo[0] < post.getMinScoreRequired()) || (postInfo[1] < post.getMinUpvoteRatio())) && !((postInfo[2] > 0) && post.isKeepIfHasComments())) {
+                deletePost(post.getRedditID());
+                post.setSubmissionResponse("Consumed Attempts without reaching score");
+                post.setRedditID(null);
+                postReopsitory.save(post);
+            } else {
+                post.setNoOfAttempts(0);
+                post.setRedditID(null);
                 postReopsitory.save(post);
             }
         }

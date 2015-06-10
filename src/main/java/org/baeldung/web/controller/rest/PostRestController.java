@@ -3,7 +3,6 @@ package org.baeldung.web.controller.rest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
@@ -11,6 +10,8 @@ import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -75,9 +76,9 @@ public class PostRestController {
     // === Non Restful
 
     @RequestMapping("/scheduledPosts")
-    public final String ShowScheduledPostsPage(final Model model) {
+    public final String showScheduledPostsPage(final Model model, Pageable pageable) {
         final User user = getCurrentUser();
-        final List<Post> posts = postReopsitory.findByUser(user);
+        final Page<Post> posts = postReopsitory.findByUser(user, pageable);
         model.addAttribute("posts", posts);
         return "postListView";
     }

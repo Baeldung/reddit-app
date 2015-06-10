@@ -81,8 +81,36 @@ public class RedditDataCollector {
         }
     }
 
+    public void getAllSubreddits() {
+        JsonNode node;
+        String srAfter = "";
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter("src/main/resources/subreddits.csv");
+            for (int i = 0; i < 20; i++) {
+                node = restTemplate.getForObject("http://www.reddit.com/subreddits/popular.json?limit=100&after=" + srAfter, JsonNode.class);
+                srAfter = node.get("data").get("after").asText();
+                logger.info(srAfter);
+                node = node.get("data").get("children");
+                for (final JsonNode child : node) {
+                    writer.append(child.get("data").get("display_name").asText() + ",");
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (final InterruptedException e) {
+                    logger.error("error while loading subreddits", e);
+                }
+            }
+            writer.close();
+        } catch (final Exception e) {
+            logger.error("error while loading subreddits", e);
+        }
+
+    }
+
     public static void main(String[] args) throws IOException {
         final RedditDataCollector collector = new RedditDataCollector();
-        collector.collectData();
+        // collector.collectData();
+        collector.getAllSubreddits();
     }
 }

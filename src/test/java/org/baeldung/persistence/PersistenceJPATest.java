@@ -97,7 +97,7 @@ public class PersistenceJPATest {
 
     @Test
     public void whenGettingListOfSpecificuser_thenCorrect() throws ParseException {
-        final List<Post> results = postRepository.findByUser(userTom);
+        final List<Post> results = postRepository.findByUser(userTom, null).getContent();
         assertThat(notSentYetOld, isIn(results));
         assertThat(notSentYet, not(isIn(results)));
         assertThat(alreadySentPost, not(isIn(results)));

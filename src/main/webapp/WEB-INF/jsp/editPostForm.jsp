@@ -95,6 +95,28 @@ border-color: #ddd;
     
     
 </div>
+<br/>
+
+<div class="form-group">
+    <label class="col-sm-3">&nbsp;</label>
+    
+    <span class="col-sm-2">Minimum Upvote Ratio</span>
+    <span class="col-sm-1">
+    <input type="number" class="form-control input-sm" value="98" name="minUpvoteRatio" data-min="0" data-max="100" th:value="${post.getMinUpvoteRatio()}" required="required"/>
+    </span>
+    
+    <span class="col-sm-3">keep If Has Comments &nbsp;&nbsp;    
+    <input th:if="${post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments" value="true" checked="checked"/>
+    <input th:if="${!post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments"/>
+    </span>
+    
+    <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;    
+    <input th:if="${post.isDeleteIfConsumeAttempts()}" type="checkbox" name="deleteIfConsumeAttempts" value="true" checked="checked"/>
+    <input th:if="${!post.isDeleteIfConsumeAttempts()}" type="checkbox" name="deleteIfConsumeAttempts"/>
+    </span>
+    
+    
+</div>
 <br/><br/>
 <label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
 <span class="col-sm-9"><input name="submissionDate" class="form-control" th:value="${dateValue}" readonly="readonly"/></span>

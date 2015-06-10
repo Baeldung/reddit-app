@@ -23,6 +23,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -39,6 +40,7 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -76,9 +78,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        final PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+        resolver.setMaxPageSize(2);
+        resolver.setOneIndexedParameters(true);
+        argumentResolvers.add(resolver);
+    }
+
+    @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         super.addViewControllers(registry);
-        registry.addViewController("/home.html");
+        registry.addViewController("/home");
         registry.addViewController("/siteForm");
         registry.addViewController("/submissionResponse");
     }
@@ -97,6 +107,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         list.add(new UserAgentInterceptor());
         final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(reddit);
         restTemplate.setInterceptors(list);
+        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                new ClientCredentialsAccessTokenProvider()));
+        restTemplate.setAccessTokenProvider(accessTokenProvider);
         return restTemplate;
     }
 

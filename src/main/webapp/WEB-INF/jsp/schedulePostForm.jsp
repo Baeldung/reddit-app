@@ -91,6 +91,25 @@ border-color: #ddd;
     
 </div>
 <br/><br/>
+<div class="form-group">
+    <label class="col-sm-3">&nbsp;</label>
+    
+    <span class="col-sm-2">Minimum Upvote Ratio</span>
+    <span class="col-sm-1">
+    <input type="number" class="form-control input-sm" value="98" name="minUpvoteRatio" data-min="0" data-max="100" required="required"/>
+    </span>
+    
+    <span class="col-sm-3">keep If Has Comments &nbsp;&nbsp;
+    <input type="checkbox" name="keepIfHasComments" value="true"/>
+    </span>
+    
+    <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;
+    <input type="checkbox" name="deleteIfConsumeAttempts" value="true"/>
+    </span>
+    
+    
+</div>
+<br/><br/>
 
 
 <label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
