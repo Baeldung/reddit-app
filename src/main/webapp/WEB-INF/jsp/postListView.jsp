@@ -20,31 +20,13 @@
 <th>Actions</th>
 </tr>
 </thead>
-    <tr th:each="post  : ${posts.getContent()}">
-        <td th:text="${post.getTitle()}"></td>
-        <td th:text="${post.getSubmissionDate()}"></td>
-        <td th:text="${post.getSubmissionResponse()}"></td>
-        <td th:if="${post.getNoOfAttempts() > 0}" th:text="${post.getNoOfAttempts()}"></td>
-        <td th:unless="${post.getNoOfAttempts() > 0}">-</td>
-        <td>
-            <a th:href="@{/editPost/{id}(id=${post.getId()})}" class="btn btn-warning" >Edit</a>
-            <a href="#" class="btn btn-danger" th:onclick="'javascript:confirmDelete(\'' +${post.getId()}+ '\') '">Delete</a>
-        </td>
-    </tr>
+    
 </table>
 
 <br/>
+  <button id="prev" type="button" class="btn btn-default" onclick="loadPrev()">Previous</button>
+  <button id="next" type="button" class="btn btn-default" onclick="loadNext()">Next</button>
 
-<nav th:if="${posts.getTotalPages() > 1 }">
-    <ul class='pagination'>
-      <li class="active">
-        <a href="#" onclick="loadPage(1)">1</a>
-      </li>
-      <li th:each="i : ${#numbers.sequence( 2, posts.getTotalPages())}" >
-        <a href="#" th:onclick="'javascript:loadPage(\'' +${i}+ '\') '"  th:text="${i}">1</a>
-      </li>
-    </ul>
-</nav>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
@@ -65,12 +47,32 @@ function deletePost(id){
 	});
 }
 
+var currentPage = 0;
+
+$(function(){
+	loadPage(0);
+});
+
+function loadNext(){
+	loadPage(currentPage+1);
+	$("#next").blur();
+}
+
+function loadPrev(){
+    loadPage(currentPage-1);
+    $("#prev").blur();
+}
+
 function loadPage(page){
-	$('.pagination').children().removeClass('active');
-	$('.pagination').children().eq(page-1).addClass('active');
+	currentPage = page;
 	$('table').children().not(':first').remove();
+	if(page == 0){
+		$('#prev').hide();
+	}else{
+		$('#prev').show();
+	}
 	var attempt = '-';
-	$.get("api/scheduledPosts?page="+(page-1), function(data){
+	$.get("api/scheduledPosts?page="+page, function(data){
 		$.each(data, function( index, post ) {
 		     attempt = post.noOfAttempts<1? '-':post.noOfAttempts;
 			$('.table').append('<tr><td>'+post.title+'</td><td>'+
@@ -79,6 +81,11 @@ function loadPage(page){
 					'">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+post.id
 							+') ">Delete</a> </td></tr>');
 		});
+		if(data.length == 0){
+			$('#next').hide();
+		}else{
+			$('#next').show();
+		}
 	});
 }
 
