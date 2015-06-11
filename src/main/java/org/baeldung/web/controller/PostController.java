@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -31,6 +31,7 @@ public class PostController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
+    private static final int PAGE_SIZE = 2;
 
     @Autowired
     private PostRepository postReopsitory;
@@ -77,9 +78,9 @@ public class PostController {
     }
 
     @RequestMapping("/scheduledPosts")
-    public final String showScheduledPostsPage(final Model model, Pageable pageable) {
+    public final String showScheduledPostsPage(final Model model) {
         final User user = getCurrentUser();
-        final Page<Post> posts = postReopsitory.findByUser(user, pageable);
+        final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(0, PAGE_SIZE));
         model.addAttribute("posts", posts);
         return "postListView";
     }

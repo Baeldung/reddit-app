@@ -3,6 +3,7 @@ package org.baeldung.web.controller.rest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
@@ -11,7 +12,7 @@ import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PostRestController {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
+    private static final int PAGE_SIZE = 2;
 
     @Autowired
     private PostRepository postReopsitory;
@@ -73,15 +75,23 @@ public class PostRestController {
         return (result == RedditClassifier.GOOD) ? "{Good Response}" : "{Bad response}";
     }
 
+    @RequestMapping("/scheduledPosts")
+    @ResponseBody
+    public final List<Post> getScheduledPosts(@RequestParam(value = "page", required = false) final int page) {
+        final User user = getCurrentUser();
+        final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(page, PAGE_SIZE));
+        return posts.getContent();
+    }
+
     // === Non Restful
 
-    @RequestMapping("/scheduledPosts")
-    public final String showScheduledPostsPage(final Model model, Pageable pageable) {
-        final User user = getCurrentUser();
-        final Page<Post> posts = postReopsitory.findByUser(user, pageable);
-        model.addAttribute("posts", posts);
-        return "postListView";
-    }
+    // @RequestMapping("/scheduledPosts")
+    // public final String showScheduledPostsPage(final Model model) {
+    // final User user = getCurrentUser();
+    // final Page<Post> posts = postReopsitory.findByUser(user, null);
+    // model.addAttribute("posts", posts);
+    // return "postListView";
+    // }
 
     @RequestMapping("/postSchedule")
     public final String showSchedulePostForm(final Model model) {

@@ -119,16 +119,24 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
-<span class="col-sm-9"><input name="submissionDate" class="form-control" th:value="${dateValue}" readonly="readonly"/></span>
+<div class="col-sm-5"><input name="submissionDate" class="form-control" th:value="${dateValue}" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
+    /*<![CDATA[*/
         $(function(){
             $('*[name=submissionDate]').appendDtpicker({"inline": true});
+            $('*[name=submissionDate]').handleDtpicker('hide');
         });
+        var toggle = "show";
+        function togglePicker(){
+            $('*[name=submissionDate]').handleDtpicker(toggle);
+            toggle = toggle=="show"?"hide":"show";
+        }
+        /*]]>*/
     </script>
 
     <br/><br/>
     
-    <button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button>
+    <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>
    </div>
 </form>
 </div>
@@ -151,7 +159,7 @@ function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
     var sr = $("input[name='sr']").val();
     console.log(url);
-    if(url.length >3 && sr.length > 3){
+    if(url.length >2 && sr.length > 2){
         $.post("../api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
             var result = JSON.parse(data);
             if(result.length == 0){

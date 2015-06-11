@@ -137,9 +137,7 @@ public class RedditSchedulerService {
     private void checkAndReSubmitInternal(Post post) {
         logger.info(post.toString());
         if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
-            final int[] postInfo = getPostScore(post);
-            final boolean keepBecauseComment = (postInfo[2] > 0) && post.isKeepIfHasComments();
-            if (((postInfo[0] < post.getMinScoreRequired()) || (postInfo[1] < post.getMinUpvoteRatio())) && !keepBecauseComment) {
+            if (didPostGoalFailed(post)) {
                 deletePost(post.getRedditID());
                 resetPost(post);
             } else {
@@ -153,8 +151,7 @@ public class RedditSchedulerService {
     private void checkAndDeleteInternal(Post post) {
         logger.info(post.toString());
         if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
-            final int[] postInfo = getPostScore(post);
-            if (((postInfo[0] < post.getMinScoreRequired()) || (postInfo[1] < post.getMinUpvoteRatio())) && !((postInfo[2] > 0) && post.isKeepIfHasComments())) {
+            if (didPostGoalFailed(post)) {
                 deletePost(post.getRedditID());
                 post.setSubmissionResponse("Consumed Attempts without reaching score");
                 post.setRedditID(null);
@@ -182,6 +179,14 @@ public class RedditSchedulerService {
         post.setSent(false);
         post.setSubmissionResponse("Not sent yet");
         postReopsitory.save(post);
+    }
+
+    private boolean didPostGoalFailed(Post post) {
+        final int[] postInfo = getPostScore(post);
+        final int score = postInfo[0];
+        final int upvoteRatio = postInfo[1];
+        final int noOfComments = postInfo[2];
+        return (((score < post.getMinScoreRequired()) || (upvoteRatio < post.getMinUpvoteRatio())) && !((noOfComments > 0) && post.isKeepIfHasComments()));
     }
 
 }

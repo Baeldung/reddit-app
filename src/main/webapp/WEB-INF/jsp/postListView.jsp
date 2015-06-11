@@ -14,7 +14,7 @@
 <thead>
 <tr>
 <th>Post title</th>
-<th>Submission Date</th>
+<th>Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</th>
 <th>Status</th>
 <th>Resubmit Attempts left</th>
 <th>Actions</th>
@@ -22,7 +22,7 @@
 </thead>
     <tr th:each="post  : ${posts.getContent()}">
         <td th:text="${post.getTitle()}"></td>
-        <td th:text="${#calendars.format(post.getSubmissionDate(),'dd MMMM yyyy  HH:mm z')}"></td>
+        <td th:text="${post.getSubmissionDate()}"></td>
         <td th:text="${post.getSubmissionResponse()}"></td>
         <td th:if="${post.getNoOfAttempts() > 0}" th:text="${post.getNoOfAttempts()}"></td>
         <td th:unless="${post.getNoOfAttempts() > 0}">-</td>
@@ -37,9 +37,11 @@
 
 <nav th:if="${posts.getTotalPages() > 1 }">
     <ul class='pagination'>
-      <li th:each="i : ${#numbers.sequence( 1, posts.getTotalPages())}" th:class="${i-1 == posts.getNumber()}? active : none">
-        <a href="#" th:if="${i-1 == posts.getNumber()}" th:text="${i}">1</a>
-        <a th:unless="${i-1 == posts.getNumber()}" th:href="@{scheduledPosts(page=${i},size=${posts.getSize()})}"><span th:text="${i}">1</span></a>
+      <li class="active">
+        <a href="#" onclick="loadPage(1)">1</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence( 2, posts.getTotalPages())}" >
+        <a href="#" th:onclick="'javascript:loadPage(\'' +${i}+ '\') '"  th:text="${i}">1</a>
       </li>
     </ul>
 </nav>
@@ -62,6 +64,24 @@ function deletePost(id){
 	    }
 	});
 }
+
+function loadPage(page){
+	$('.pagination').children().removeClass('active');
+	$('.pagination').children().eq(page-1).addClass('active');
+	$('table').children().not(':first').remove();
+	var attempt = '-';
+	$.get("api/scheduledPosts?page="+(page-1), function(data){
+		$.each(data, function( index, post ) {
+		     attempt = post.noOfAttempts<1? '-':post.noOfAttempts;
+			$('.table').append('<tr><td>'+post.title+'</td><td>'+
+					post.submissionDate+'</td><td>'+post.submissionResponse+'</td><td>'+
+					attempt+'</td><td> <a class="btn btn-warning" href="/reddit-scheduler/editPost/'+post.id+
+					'">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+post.id
+							+') ">Delete</a> </td></tr>');
+		});
+	});
+}
+
 /*]]>*/
 </script>
 </body>

@@ -116,7 +116,7 @@ function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
     var sr = $("input[name='subreddit']").val();
     console.log(url);
-    if(url.length >3 && sr.length > 3){
+    if(url.length >2 && sr.length > 2){
         $.get("api/posts",{url: url, sr: sr}, function(data){
         	var result = JSON.parse(data);
         	if(result.length == 0){
