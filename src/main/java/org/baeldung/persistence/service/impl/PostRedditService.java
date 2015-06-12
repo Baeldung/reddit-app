@@ -121,10 +121,10 @@ public class PostRedditService {
 
         logger.info("Submitting link with these parameters = {}", param.entrySet());
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/submit", param, JsonNode.class);
-        parseResponse(node, post);
+        updatePostFromResponse(node, post);
     }
 
-    private void parseResponse(final JsonNode node, final Post post) {
+    private void updatePostFromResponse(final JsonNode node, final Post post) {
         final JsonNode errorNode = node.get("json").get("errors").get(0);
         if (errorNode == null) {
             post.setSent(true);
