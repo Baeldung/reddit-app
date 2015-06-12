@@ -103,10 +103,9 @@ border-color: #ddd;
     <input type="checkbox" name="keepIfHasComments" value="true"/>
     </span>
     
-    <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;
-    <input type="checkbox" name="deleteIfConsumeAttempts" value="true"/>
+    <span class="col-sm-3">Delete After Last Attempt &nbsp;&nbsp;
+    <input type="checkbox" name="deleteAfterLastAttempt" value="true"/>
     </span>
-    
     
 </div>
 <br/><br/>

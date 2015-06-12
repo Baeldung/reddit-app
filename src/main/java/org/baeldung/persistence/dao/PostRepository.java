@@ -17,6 +17,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByRedditIDNotNullAndNoOfAttemptsGreaterThan(final int attempts);
 
-    List<Post> findByRedditIDNotNullAndNoOfAttemptsAndDeleteIfConsumeAttemptsTrue(final int attempts);
+    List<Post> findByRedditIDNotNullAndNoOfAttemptsAndDeleteAfterLastAttemptTrue(final int attempts);
 
 }

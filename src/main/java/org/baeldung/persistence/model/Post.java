@@ -50,7 +50,7 @@ public class Post {
 
     private boolean keepIfHasComments;
 
-    private boolean deleteIfConsumeAttempts;
+    private boolean deleteAfterLastAttempt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -182,12 +182,12 @@ public class Post {
         this.keepIfHasComments = keepIfHasComments;
     }
 
-    public boolean isDeleteIfConsumeAttempts() {
-        return deleteIfConsumeAttempts;
+    public boolean isDeleteAfterLastAttempt() {
+        return deleteAfterLastAttempt;
     }
 
-    public void setDeleteIfConsumeAttempts(final boolean deleteIfConsumeAttempts) {
-        this.deleteIfConsumeAttempts = deleteIfConsumeAttempts;
+    public void setDeleteAfterLastAttempt(final boolean deleteAfterLastAttempt) {
+        this.deleteAfterLastAttempt = deleteAfterLastAttempt;
     }
 
     //
@@ -196,7 +196,7 @@ public class Post {
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("Post [title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", submissionDate=").append(submissionDate).append(", isSent=").append(isSent).append(", submissionResponse=")
-                .append(submissionResponse).append(", redditID=").append(redditID).append(", noOfAttempts=").append(noOfAttempts).append(", deleteIfConsumeAttempts=").append(deleteIfConsumeAttempts).append("]");
+                .append(submissionResponse).append(", redditID=").append(redditID).append(", noOfAttempts=").append(noOfAttempts).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append("]");
         return builder.toString();
     }
 

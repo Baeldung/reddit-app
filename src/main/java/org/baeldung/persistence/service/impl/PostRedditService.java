@@ -144,7 +144,7 @@ public class PostRedditService {
     private void checkAndReSubmitInternal(final Post post) {
         logger.info("Checking and Resubmitting post = {}", post.toString());
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
-            if (didPostGoalFailed(post)) {
+            if (didPostGoalFail(post)) {
                 deletePost(post.getRedditID());
                 resetPost(post);
             } else {
@@ -158,7 +158,7 @@ public class PostRedditService {
     private void checkAndDeleteInternal(final Post post) {
         logger.info("Checking and deleting post = {}", post.toString());
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
-            if (didPostGoalFailed(post)) {
+            if (didPostGoalFail(post)) {
                 deletePost(post.getRedditID());
                 post.setSubmissionResponse("Consumed Attempts without reaching score");
                 post.setRedditID(null);
@@ -188,7 +188,7 @@ public class PostRedditService {
         postReopsitory.save(post);
     }
 
-    private boolean didPostGoalFailed(final Post post) {
+    private boolean didPostGoalFail(final Post post) {
         final int[] postInfo = getPostScore(post);
         final int score = postInfo[0];
         final int upvoteRatio = postInfo[1];

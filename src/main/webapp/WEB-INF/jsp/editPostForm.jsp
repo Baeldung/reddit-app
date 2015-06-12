@@ -111,8 +111,8 @@ border-color: #ddd;
     </span>
     
     <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;    
-    <input th:if="${post.isDeleteIfConsumeAttempts()}" type="checkbox" name="deleteIfConsumeAttempts" value="true" checked="checked"/>
-    <input th:if="${!post.isDeleteIfConsumeAttempts()}" type="checkbox" name="deleteIfConsumeAttempts"/>
+    <input th:if="${post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt" value="true" checked="checked"/>
+    <input th:if="${!post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt"/>
     </span>
     
     
