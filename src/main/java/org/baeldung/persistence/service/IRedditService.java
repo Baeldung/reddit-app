@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 public interface IRedditService {
     void loadAuthentication(final String name, final OAuth2AccessToken token);
 
-    List<String> submitPost(PostDto postDto);
+    List<String> submitPost(final PostDto postDto);
 
-    List<String> searchSubreddit(String query);
+    List<String> searchSubreddit(final String query);
 }

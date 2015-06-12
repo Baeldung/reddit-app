@@ -49,7 +49,7 @@ public class RedditSchedulerService {
         }
     }
 
-    public int[] getPostScore(Post post) {
+    public int[] getPostScore(final Post post) {
         final RestTemplate restTemplate = new RestTemplate();
         final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
         list.add(new UserAgentInterceptor());
@@ -65,7 +65,7 @@ public class RedditSchedulerService {
         return postInfo;
     }
 
-    public void deletePost(String redditId) {
+    public void deletePost(final String redditId) {
         logger.info("deleting post with id = " + redditId);
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("id", "t3_" + redditId);
@@ -73,15 +73,15 @@ public class RedditSchedulerService {
         logger.info(node.toString());
     }
 
-    public void checkAndReSubmit(Post post) {
+    public void checkAndReSubmit(final Post post) {
         try {
             checkAndReSubmitInternal(post);
         } catch (final Exception e) {
-            logger.error("Error occurred while check post " + post.toString(), e);
+            logger.error("Error occurred while checking and resubmitting post = {}", post.toString(), e);
         }
     }
 
-    public void checkAndDelete(Post post) {
+    public void checkAndDelete(final Post post) {
         try {
             checkAndDeleteInternal(post);
         } catch (final Exception e) {
@@ -118,7 +118,7 @@ public class RedditSchedulerService {
         parseResponse(node, post);
     }
 
-    private void parseResponse(JsonNode node, Post post) {
+    private void parseResponse(final JsonNode node, final Post post) {
         final JsonNode errorNode = node.get("json").get("errors").get(0);
         if (errorNode == null) {
             post.setSent(true);
@@ -134,9 +134,9 @@ public class RedditSchedulerService {
         }
     }
 
-    private void checkAndReSubmitInternal(Post post) {
-        logger.info(post.toString());
-        if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
+    private void checkAndReSubmitInternal(final Post post) {
+        logger.info("Checking and Resubmitting post = {}", post.toString());
+        if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
             if (didPostGoalFailed(post)) {
                 deletePost(post.getRedditID());
                 resetPost(post);
@@ -148,9 +148,9 @@ public class RedditSchedulerService {
         }
     }
 
-    private void checkAndDeleteInternal(Post post) {
+    private void checkAndDeleteInternal(final Post post) {
         logger.info(post.toString());
-        if (didIntervalPassed(post.getSubmissionDate(), post.getTimeInterval())) {
+        if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
             if (didPostGoalFailed(post)) {
                 deletePost(post.getRedditID());
                 post.setSubmissionResponse("Consumed Attempts without reaching score");
@@ -164,14 +164,14 @@ public class RedditSchedulerService {
         }
     }
 
-    private boolean didIntervalPassed(Date submissonDate, int postInterval) {
+    private boolean didIntervalPass(final Date submissonDate, final int postInterval) {
         final long currentTime = new Date().getTime();
         final long interval = currentTime - submissonDate.getTime();
         final long intervalInMinutes = TimeUnit.MINUTES.convert(interval, TimeUnit.MILLISECONDS);
         return intervalInMinutes > postInterval;
     }
 
-    private void resetPost(Post post) {
+    private void resetPost(final Post post) {
         long time = new Date().getTime();
         time += TimeUnit.MILLISECONDS.convert(post.getTimeInterval(), TimeUnit.MINUTES);
         post.setRedditID(null);
@@ -181,7 +181,7 @@ public class RedditSchedulerService {
         postReopsitory.save(post);
     }
 
-    private boolean didPostGoalFailed(Post post) {
+    private boolean didPostGoalFailed(final Post post) {
         final int[] postInfo = getPostScore(post);
         final int score = postInfo[0];
         final int upvoteRatio = postInfo[1];

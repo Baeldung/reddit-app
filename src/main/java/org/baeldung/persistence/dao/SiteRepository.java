@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SiteRepository extends JpaRepository<Site, Long> {
 
-    List<Site> findByUser(User user);
+    List<Site> findByUser(final User user);
 
 }

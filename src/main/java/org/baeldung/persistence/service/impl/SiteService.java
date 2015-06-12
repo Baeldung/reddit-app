@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service;
+package org.baeldung.persistence.service.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,6 +8,7 @@ import java.util.List;
 import org.baeldung.persistence.dao.SiteRepository;
 import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.ISiteService;
 import org.baeldung.reddit.util.SiteArticle;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
@@ -22,43 +23,42 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 @Service
-public class SiteService implements ISiteService {
+class SiteService implements ISiteService {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SiteRepository repo;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     // API
 
     @Override
-    public List<Site> getSitesByUser(User user) {
+    public List<Site> getSitesByUser(final User user) {
         return repo.findByUser(user);
     }
 
     @Override
-    public void saveSite(Site site) {
+    public void saveSite(final Site site) {
         repo.save(site);
     }
 
     @Override
-    public Site findSiteById(Long siteId) {
+    public Site findSiteById(final Long siteId) {
         return repo.findOne(siteId);
     }
 
     @Override
-    public void deleteSiteById(Long siteId) {
+    public void deleteSiteById(final Long siteId) {
         repo.delete(siteId);
     }
 
     @Override
-    public List<SiteArticle> getArticlesFromSite(Long siteId) {
+    public List<SiteArticle> getArticlesFromSite(final Long siteId) {
         final Site site = repo.findOne(siteId);
         return getArticlesFromSite(site);
     }
 
     @Override
-    public List<SiteArticle> getArticlesFromSite(Site site) {
+    public List<SiteArticle> getArticlesFromSite(final Site site) {
         List<SyndEntry> entries;
         try {
             entries = getFeedEntries(site.getUrl());
@@ -69,7 +69,7 @@ public class SiteService implements ISiteService {
     }
 
     @Override
-    public boolean isValidFeedUrl(String feedUrl) {
+    public boolean isValidFeedUrl(final String feedUrl) {
         try {
             return getFeedEntries(feedUrl).size() > 0;
         } catch (final Exception e) {
@@ -79,13 +79,13 @@ public class SiteService implements ISiteService {
 
     // Non API
 
-    private List<SyndEntry> getFeedEntries(String feedUrl) throws IllegalArgumentException, FeedException, IOException {
+    private List<SyndEntry> getFeedEntries(final String feedUrl) throws IllegalArgumentException, FeedException, IOException {
         final URL url = new URL(feedUrl);
         final SyndFeed feed = new SyndFeedInput().build(new XmlReader(url));
         return feed.getEntries();
     }
 
-    private List<SiteArticle> parseFeed(List<SyndEntry> entries) {
+    private List<SiteArticle> parseFeed(final List<SyndEntry> entries) {
         final List<SiteArticle> articles = new ArrayList<SiteArticle>();
         for (final SyndEntry entry : entries) {
             articles.add(new SiteArticle(entry.getTitle(), entry.getLink(), entry.getPublishedDate()));

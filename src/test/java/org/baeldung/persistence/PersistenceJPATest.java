@@ -22,11 +22,12 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestJPAConfig.class })
+@ContextConfiguration(classes = { TestJpaConfig.class })
 @Transactional
 @TransactionConfiguration
 // @Ignore
 public class PersistenceJPATest {
+
     @Autowired
     private PostRepository postRepository;
 
@@ -38,6 +39,8 @@ public class PersistenceJPATest {
     private User userJohn, userTom;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    // fixtures
 
     @Before
     public void init() throws ParseException {
@@ -76,6 +79,8 @@ public class PersistenceJPATest {
         notSentYet.setUrl("www.example.com");
         postRepository.save(notSentYet);
     }
+
+    // tests
 
     @Test
     public void whenGettingListOfSentPosts_thenCorrect() throws ParseException {

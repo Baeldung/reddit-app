@@ -11,11 +11,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findBySubmissionDateBeforeAndIsSent(Date date, boolean isSent);
+    List<Post> findBySubmissionDateBeforeAndIsSent(final Date date, final boolean isSent);
 
-    Page<Post> findByUser(User user, Pageable pageable);
+    Page<Post> findByUser(final User user, final Pageable pageable);
 
-    List<Post> findByRedditIDNotNullAndNoOfAttemptsGreaterThan(int attempts);
+    List<Post> findByRedditIDNotNullAndNoOfAttemptsGreaterThan(final int attempts);
 
-    List<Post> findByRedditIDNotNullAndNoOfAttemptsAndDeleteIfConsumeAttemptsTrue(int attempts);
+    List<Post> findByRedditIDNotNullAndNoOfAttemptsAndDeleteIfConsumeAttemptsTrue(final int attempts);
+
 }

@@ -23,11 +23,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource({ "classpath:persistence-test.properties" })
 @ComponentScan({ "org.baeldung.persistence.model", "org.baeldung.persistence.dao" })
 @EnableJpaRepositories(basePackages = "org.baeldung.persistence.dao")
-public class TestJPAConfig {
+public class TestJpaConfig {
     @Autowired
     private Environment env;
 
-    public TestJPAConfig() {
+    public TestJpaConfig() {
         super();
     }
 
@@ -64,10 +64,13 @@ public class TestJPAConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
+    //
+
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto", "create-drop"));
         hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         return hibernateProperties;
     }
+
 }

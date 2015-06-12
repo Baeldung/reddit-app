@@ -8,18 +8,18 @@ import org.baeldung.reddit.util.SiteArticle;
 
 public interface ISiteService {
 
-    List<Site> getSitesByUser(User user);
+    List<Site> getSitesByUser(final User user);
 
-    void saveSite(Site site);
+    void saveSite(final Site site);
 
-    Site findSiteById(Long siteId);
+    Site findSiteById(final Long siteId);
 
-    void deleteSiteById(Long siteId);
+    void deleteSiteById(final Long siteId);
 
-    List<SiteArticle> getArticlesFromSite(Long siteId);
+    List<SiteArticle> getArticlesFromSite(final Long siteId);
 
-    List<SiteArticle> getArticlesFromSite(Site site);
+    List<SiteArticle> getArticlesFromSite(final Site site);
 
-    boolean isValidFeedUrl(String feedUrl);
+    boolean isValidFeedUrl(final String feedUrl);
 
 }

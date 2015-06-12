@@ -1,4 +1,4 @@
-package org.baeldung.service;
+package org.baeldung.persistence.service.impl;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.service.ISiteService;
-import org.baeldung.persistence.service.SiteService;
+import org.baeldung.persistence.service.impl.SiteService;
 import org.baeldung.reddit.util.SiteArticle;
 import org.junit.Before;
 import org.junit.Test;

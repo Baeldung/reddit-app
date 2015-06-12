@@ -56,6 +56,8 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    //
+
     public Post() {
         super();
     }
@@ -72,7 +74,7 @@ public class Post {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -80,7 +82,7 @@ public class Post {
         return subreddit;
     }
 
-    public void setSubreddit(String subreddit) {
+    public void setSubreddit(final String subreddit) {
         this.subreddit = subreddit;
     }
 
@@ -88,7 +90,7 @@ public class Post {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -96,7 +98,7 @@ public class Post {
         return sendReplies;
     }
 
-    public void setSendReplies(boolean sendReplies) {
+    public void setSendReplies(final boolean sendReplies) {
         this.sendReplies = sendReplies;
     }
 
@@ -104,7 +106,7 @@ public class Post {
         return submissionDate;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
+    public void setSubmissionDate(final Date submissionDate) {
         this.submissionDate = submissionDate;
     }
 
@@ -112,7 +114,7 @@ public class Post {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -120,7 +122,7 @@ public class Post {
         return isSent;
     }
 
-    public void setSent(boolean isSent) {
+    public void setSent(final boolean isSent) {
         this.isSent = isSent;
     }
 
@@ -128,7 +130,7 @@ public class Post {
         return submissionResponse;
     }
 
-    public void setSubmissionResponse(String submissionResponse) {
+    public void setSubmissionResponse(final String submissionResponse) {
         this.submissionResponse = submissionResponse;
     }
 
@@ -136,7 +138,7 @@ public class Post {
         return redditID;
     }
 
-    public void setRedditID(String redditID) {
+    public void setRedditID(final String redditID) {
         this.redditID = redditID;
     }
 
@@ -144,7 +146,7 @@ public class Post {
         return noOfAttempts;
     }
 
-    public void setNoOfAttempts(int noOfAttempts) {
+    public void setNoOfAttempts(final int noOfAttempts) {
         this.noOfAttempts = noOfAttempts;
     }
 
@@ -152,7 +154,7 @@ public class Post {
         return timeInterval;
     }
 
-    public void setTimeInterval(int timeInterval) {
+    public void setTimeInterval(final int timeInterval) {
         this.timeInterval = timeInterval;
     }
 
@@ -160,7 +162,7 @@ public class Post {
         return minScoreRequired;
     }
 
-    public void setMinScoreRequired(int minScoreRequired) {
+    public void setMinScoreRequired(final int minScoreRequired) {
         this.minScoreRequired = minScoreRequired;
     }
 
@@ -168,7 +170,7 @@ public class Post {
         return minUpvoteRatio;
     }
 
-    public void setMinUpvoteRatio(int minUpvoteRatio) {
+    public void setMinUpvoteRatio(final int minUpvoteRatio) {
         this.minUpvoteRatio = minUpvoteRatio;
     }
 
@@ -176,7 +178,7 @@ public class Post {
         return keepIfHasComments;
     }
 
-    public void setKeepIfHasComments(boolean keepIfHasComments) {
+    public void setKeepIfHasComments(final boolean keepIfHasComments) {
         this.keepIfHasComments = keepIfHasComments;
     }
 
@@ -184,7 +186,7 @@ public class Post {
         return deleteIfConsumeAttempts;
     }
 
-    public void setDeleteIfConsumeAttempts(boolean deleteIfConsumeAttempts) {
+    public void setDeleteIfConsumeAttempts(final boolean deleteIfConsumeAttempts) {
         this.deleteIfConsumeAttempts = deleteIfConsumeAttempts;
     }
 

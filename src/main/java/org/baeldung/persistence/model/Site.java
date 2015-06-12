@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Site {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,16 +29,18 @@ public class Site {
         super();
     }
 
-    public Site(String url) {
+    public Site(final String url) {
         super();
         this.url = url;
     }
+
+    //
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -45,7 +48,7 @@ public class Site {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -53,7 +56,7 @@ public class Site {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -61,7 +64,7 @@ public class Site {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 

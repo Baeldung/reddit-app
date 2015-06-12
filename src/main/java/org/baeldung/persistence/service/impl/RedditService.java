@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service;
+package org.baeldung.persistence.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
 import org.baeldung.reddit.util.RedditApiConstants;
 import org.baeldung.web.RedditTemplate;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 class RedditService implements IRedditService {
+
     @Autowired
     private RedditTemplate redditTemplate;
 
@@ -41,6 +43,8 @@ class RedditService implements IRedditService {
     public RedditService() {
         loadSubreddits();
     }
+
+    // API
 
     @Override
     public void loadAuthentication(final String name, final OAuth2AccessToken token) {
@@ -66,14 +70,14 @@ class RedditService implements IRedditService {
     }
 
     @Override
-    public List<String> submitPost(PostDto postDto) {
+    public List<String> submitPost(final PostDto postDto) {
         final MultiValueMap<String, String> param1 = constructParams(postDto);
         final JsonNode node = redditTemplate.submitPost(param1);
         return parseResponse(node);
     }
 
     @Override
-    public List<String> searchSubreddit(String query) {
+    public List<String> searchSubreddit(final String query) {
         final List<String> result = new ArrayList<String>();
         for (final String subreddit : subreddits) {
             if (subreddit.startsWith(query)) {
@@ -88,7 +92,7 @@ class RedditService implements IRedditService {
 
     // === private
 
-    private final MultiValueMap<String, String> constructParams(PostDto postDto) {
+    private final MultiValueMap<String, String> constructParams(final PostDto postDto) {
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add(RedditApiConstants.TITLE, postDto.getTitle());
         param.add(RedditApiConstants.SR, postDto.getSubreddit());
