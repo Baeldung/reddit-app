@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
-import org.baeldung.persistence.service.impl.PostRedditService;
+import org.baeldung.persistence.service.IPostRedditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class RedditScheduler {
 
     @Autowired
-    private PostRedditService service;
+    private IPostRedditService service;
 
     @Autowired
     private PostRepository postReopsitory;

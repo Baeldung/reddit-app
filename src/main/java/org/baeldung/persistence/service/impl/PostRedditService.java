@@ -1,21 +1,18 @@
 package org.baeldung.persistence.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.IPostRedditService;
 import org.baeldung.reddit.util.RedditApiConstants;
-import org.baeldung.reddit.util.UserAgentInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-public class PostRedditService {
+class PostRedditService implements IPostRedditService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -38,10 +35,15 @@ public class PostRedditService {
     private OAuth2RestTemplate redditRestTemplate;
 
     @Autowired
+    @Qualifier("simpleRestTemplate")
+    private RestTemplate restTemplate;
+
+    @Autowired
     private PostRepository postReopsitory;
 
     // API
 
+    @Override
     public void submitPost(final Post post) {
         try {
             submitPostInternal(post);
@@ -50,12 +52,8 @@ public class PostRedditService {
         }
     }
 
+    @Override
     public int[] getPostScore(final Post post) {
-        final RestTemplate restTemplate = new RestTemplate();
-        final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
-        list.add(new UserAgentInterceptor());
-        restTemplate.setInterceptors(list);
-
         JsonNode node = restTemplate.getForObject("http://www.reddit.com/r/" + post.getSubreddit() + "/comments/" + post.getRedditID() + ".json", JsonNode.class);
 
         final int[] postInfo = new int[3];
@@ -69,6 +67,7 @@ public class PostRedditService {
         return postInfo;
     }
 
+    @Override
     public void deletePost(final String redditId) {
         logger.info("Deleting post with id = {}", redditId);
 
@@ -76,9 +75,10 @@ public class PostRedditService {
         param.add("id", "t3_" + redditId);
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/del.json", param, JsonNode.class);
 
-        logger.info("Deleted the post with id = {}", node.toString());
+        logger.info("Deleting post response = {}", node.toString());
     }
 
+    @Override
     public void checkAndReSubmit(final Post post) {
         try {
             checkAndReSubmitInternal(post);
@@ -87,11 +87,12 @@ public class PostRedditService {
         }
     }
 
+    @Override
     public void checkAndDelete(final Post post) {
         try {
             checkAndDeleteInternal(post);
         } catch (final Exception e) {
-            logger.error("Error occurred while check post " + post.toString(), e);
+            logger.error("Error occurred while checking and deleting post " + post.toString(), e);
         }
     }
 

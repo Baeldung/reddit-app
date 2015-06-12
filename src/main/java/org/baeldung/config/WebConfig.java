@@ -40,6 +40,7 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -72,7 +73,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
@@ -93,7 +94,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public OAuth2RestTemplate schedulerRedditTemplate(OAuth2ProtectedResourceDetails reddit) {
+    public OAuth2RestTemplate schedulerRedditTemplate(final OAuth2ProtectedResourceDetails reddit) {
         final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
         list.add(new UserAgentInterceptor());
         final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(reddit);
@@ -101,6 +102,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
                 new ClientCredentialsAccessTokenProvider()));
         restTemplate.setAccessTokenProvider(accessTokenProvider);
+        return restTemplate;
+    }
+
+    @Bean
+    public RestTemplate simpleRestTemplate() {
+        final RestTemplate restTemplate = new RestTemplate();
+        final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
+        list.add(new UserAgentInterceptor());
+        restTemplate.setInterceptors(list);
         return restTemplate;
     }
 
@@ -115,7 +125,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
@@ -159,7 +169,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         }
 
         @Bean
-        public OAuth2RestTemplate redditRestTemplate(OAuth2ClientContext clientContext) {
+        public OAuth2RestTemplate redditRestTemplate(final OAuth2ClientContext clientContext) {
             final OAuth2RestTemplate template = new OAuth2RestTemplate(reddit(), clientContext);
             final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
             list.add(new UserAgentInterceptor());
