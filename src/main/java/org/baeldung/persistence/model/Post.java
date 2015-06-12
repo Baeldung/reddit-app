@@ -56,11 +56,11 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    //
-
     public Post() {
         super();
     }
+
+    //
 
     public Long getId() {
         return id;
@@ -189,6 +189,8 @@ public class Post {
     public void setDeleteIfConsumeAttempts(final boolean deleteIfConsumeAttempts) {
         this.deleteIfConsumeAttempts = deleteIfConsumeAttempts;
     }
+
+    //
 
     @Override
     public String toString() {

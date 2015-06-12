@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.security;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -27,8 +27,10 @@ public class MyAuthorizationCodeAccessTokenProvider extends AuthorizationCodeAcc
 
     private final StateKeyGenerator stateKeyGenerator = new DefaultStateKeyGenerator();
 
+    //
+
     @Override
-    public OAuth2AccessToken obtainAccessToken(OAuth2ProtectedResourceDetails details, AccessTokenRequest request) throws UserRedirectRequiredException, UserApprovalRequiredException, AccessDeniedException, OAuth2AccessDeniedException {
+    public OAuth2AccessToken obtainAccessToken(final OAuth2ProtectedResourceDetails details, final AccessTokenRequest request) throws UserRedirectRequiredException, UserApprovalRequiredException, AccessDeniedException, OAuth2AccessDeniedException {
         final AuthorizationCodeResourceDetails resource = (AuthorizationCodeResourceDetails) details;
 
         if (request.getAuthorizationCode() == null) {
@@ -40,12 +42,12 @@ public class MyAuthorizationCodeAccessTokenProvider extends AuthorizationCodeAcc
         return retrieveToken(request, resource, getParametersForTokenRequest(resource, request), getHeadersForTokenRequest(request));
     }
 
-    private HttpHeaders getHeadersForTokenRequest(AccessTokenRequest request) {
+    private HttpHeaders getHeadersForTokenRequest(final AccessTokenRequest request) {
         final HttpHeaders headers = new HttpHeaders();
         return headers;
     }
 
-    private MultiValueMap<String, String> getParametersForTokenRequest(AuthorizationCodeResourceDetails resource, AccessTokenRequest request) {
+    private MultiValueMap<String, String> getParametersForTokenRequest(final AuthorizationCodeResourceDetails resource, final AccessTokenRequest request) {
         final MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
         form.set("grant_type", "authorization_code");
         form.set("code", request.getAuthorizationCode());
@@ -71,7 +73,7 @@ public class MyAuthorizationCodeAccessTokenProvider extends AuthorizationCodeAcc
         return form;
     }
 
-    private UserRedirectRequiredException getRedirectForAuthorization(AuthorizationCodeResourceDetails resource, AccessTokenRequest request) {
+    private UserRedirectRequiredException getRedirectForAuthorization(final AuthorizationCodeResourceDetails resource, final AccessTokenRequest request) {
         final TreeMap<String, String> requestParameters = new TreeMap<String, String>();
         requestParameters.put("response_type", "code");
         requestParameters.put("client_id", resource.getClientId());

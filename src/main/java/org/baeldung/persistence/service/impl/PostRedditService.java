@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service;
+package org.baeldung.persistence.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-public class RedditSchedulerService {
+public class PostRedditService {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     @Qualifier("schedulerRedditTemplate")
@@ -39,7 +40,7 @@ public class RedditSchedulerService {
     @Autowired
     private PostRepository postReopsitory;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    // API
 
     public void submitPost(final Post post) {
         try {
@@ -54,30 +55,35 @@ public class RedditSchedulerService {
         final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
         list.add(new UserAgentInterceptor());
         restTemplate.setInterceptors(list);
+
         JsonNode node = restTemplate.getForObject("http://www.reddit.com/r/" + post.getSubreddit() + "/comments/" + post.getRedditID() + ".json", JsonNode.class);
-        logger.info(node.toString());
+
         final int[] postInfo = new int[3];
         node = node.get(0).get("data").get("children").get(0).get("data");
         postInfo[0] = node.get("score").asInt();
+
         final double ratio = node.get("upvote_ratio").asDouble();
         postInfo[1] = (int) (ratio * 100);
         postInfo[2] = node.get("num_comments").asInt();
+
         return postInfo;
     }
 
     public void deletePost(final String redditId) {
-        logger.info("deleting post with id = " + redditId);
+        logger.info("Deleting post with id = {}", redditId);
+
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("id", "t3_" + redditId);
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/del.json", param, JsonNode.class);
-        logger.info(node.toString());
+
+        logger.info("Deleted the post with id = {}", node.toString());
     }
 
     public void checkAndReSubmit(final Post post) {
         try {
             checkAndReSubmitInternal(post);
         } catch (final Exception e) {
-            logger.error("Error occurred while checking and resubmitting post = {}", post.toString(), e);
+            logger.error("Error occurred while checking and resubmitting post = " + post.toString(), e);
         }
     }
 
@@ -113,7 +119,7 @@ public class RedditSchedulerService {
             param.add(RedditApiConstants.SENDREPLIES, "true");
         }
 
-        logger.info("Submit link with these parameters: " + param.entrySet());
+        logger.info("Submitting link with these parameters = {}", param.entrySet());
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/submit", param, JsonNode.class);
         parseResponse(node, post);
     }
@@ -126,7 +132,8 @@ public class RedditSchedulerService {
             post.setRedditID(node.get("json").get("data").get("id").asText());
             post.setNoOfAttempts(post.getNoOfAttempts() - 1);
             postReopsitory.save(post);
-            logger.info("Successfully sent " + post.toString());
+
+            logger.info("Successfully sent post = " + post.toString());
         } else {
             post.setSubmissionResponse(errorNode.toString());
             postReopsitory.save(post);
@@ -149,7 +156,7 @@ public class RedditSchedulerService {
     }
 
     private void checkAndDeleteInternal(final Post post) {
-        logger.info(post.toString());
+        logger.info("Checking and deleting post = {}", post.toString());
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
             if (didPostGoalFailed(post)) {
                 deletePost(post.getRedditID());

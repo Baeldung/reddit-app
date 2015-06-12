@@ -1,8 +1,12 @@
-package org.baeldung.config;
+package org.baeldung.web;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.baeldung.config.PersistenceJPAConfig;
+import org.baeldung.config.SecurityConfig;
+import org.baeldung.config.ThymeleafConfig;
+import org.baeldung.config.WebConfig;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;

@@ -13,6 +13,7 @@ import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.MyFeatures;
 import org.baeldung.reddit.util.UserAgentInterceptor;
+import org.baeldung.security.MyAuthorizationCodeAccessTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
