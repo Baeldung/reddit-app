@@ -1,6 +1,7 @@
 package org.baeldung.persistence.service;
 
 import org.baeldung.persistence.model.Post;
+import org.baeldung.reddit.util.PostScores;
 
 public interface IPostRedditService {
     void submitPost(final Post post);
@@ -9,7 +10,7 @@ public interface IPostRedditService {
 
     void checkAndDelete(final Post post);
 
-    int[] getPostScore(final Post post);
+    PostScores getPostScores(final Post post);
 
     void deletePost(final String redditId);
 }

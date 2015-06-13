@@ -8,6 +8,7 @@ import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IPostRedditService;
+import org.baeldung.reddit.util.PostScores;
 import org.baeldung.reddit.util.RedditApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,18 +54,18 @@ class PostRedditService implements IPostRedditService {
     }
 
     @Override
-    public int[] getPostScore(final Post post) {
+    public PostScores getPostScores(final Post post) {
         JsonNode node = restTemplate.getForObject("http://www.reddit.com/r/" + post.getSubreddit() + "/comments/" + post.getRedditID() + ".json", JsonNode.class);
 
-        final int[] postInfo = new int[3];
+        final PostScores postScore = new PostScores();
         node = node.get(0).get("data").get("children").get(0).get("data");
-        postInfo[0] = node.get("score").asInt();
+        postScore.setScore(node.get("score").asInt());
 
         final double ratio = node.get("upvote_ratio").asDouble();
-        postInfo[1] = (int) (ratio * 100);
-        postInfo[2] = node.get("num_comments").asInt();
+        postScore.setUpvoteRatio((int) (ratio * 100));
+        postScore.setNoOfComments(node.get("num_comments").asInt());
 
-        return postInfo;
+        return postScore;
     }
 
     @Override
@@ -190,10 +191,10 @@ class PostRedditService implements IPostRedditService {
     }
 
     private boolean didPostGoalFail(final Post post) {
-        final int[] postInfo = getPostScore(post);
-        final int score = postInfo[0];
-        final int upvoteRatio = postInfo[1];
-        final int noOfComments = postInfo[2];
+        final PostScores postScores = getPostScores(post);
+        final int score = postScores.getScore();
+        final int upvoteRatio = postScores.getUpvoteRatio();
+        final int noOfComments = postScores.getNoOfComments();
         return (((score < post.getMinScoreRequired()) || (upvoteRatio < post.getMinUpvoteRatio())) && !((noOfComments > 0) && post.isKeepIfHasComments()));
     }
 
