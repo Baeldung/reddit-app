@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
@@ -78,16 +79,7 @@ class RedditService implements IRedditService {
 
     @Override
     public List<String> searchSubreddit(final String query) {
-        final List<String> result = new ArrayList<String>();
-        for (final String subreddit : subreddits) {
-            if (subreddit.startsWith(query)) {
-                result.add(subreddit);
-                if (result.size() > 9) {
-                    break;
-                }
-            }
-        }
-        return result;
+        return subreddits.stream().filter(sr -> sr.startsWith(query)).limit(9).collect(Collectors.toList());
     }
 
     // === private
