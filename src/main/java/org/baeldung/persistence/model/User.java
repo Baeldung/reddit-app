@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,6 +29,10 @@ public class User {
     private Date tokenExpiration;
 
     private boolean needCaptcha;
+
+    @OneToOne
+    @JoinColumn(name = "preference_id")
+    private Preference preference;
 
     public User() {
         super();
@@ -80,6 +86,14 @@ public class User {
 
     public void setNeedCaptcha(final boolean needCaptcha) {
         this.needCaptcha = needCaptcha;
+    }
+
+    public Preference getPreference() {
+        return preference;
+    }
+
+    public void setPreference(final Preference preference) {
+        this.preference = preference;
     }
 
     //

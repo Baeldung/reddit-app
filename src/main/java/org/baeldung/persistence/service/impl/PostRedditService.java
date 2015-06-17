@@ -8,12 +8,14 @@ import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IPostRedditService;
+import org.baeldung.reddit.util.OnPostSubmittedEvent;
 import org.baeldung.reddit.util.PostScores;
 import org.baeldung.reddit.util.RedditApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +43,9 @@ class PostRedditService implements IPostRedditService {
 
     @Autowired
     private PostRepository postReopsitory;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     // API
 
@@ -136,6 +141,11 @@ class PostRedditService implements IPostRedditService {
             postReopsitory.save(post);
 
             logger.info("Successfully sent post = " + post.toString());
+            final String email = post.getUser().getPreference().getEmail();
+            if (email != null) {
+                logger.info("Sending notification email to " + email);
+                eventPublisher.publishEvent(new OnPostSubmittedEvent(post, email));
+            }
         } else {
             post.setSubmissionResponse(errorNode.toString());
             postReopsitory.save(post);

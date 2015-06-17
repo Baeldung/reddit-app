@@ -38,12 +38,14 @@ border-color: #ddd;
 <br/><br/>  
 <div class="form-group">
     <label class="col-sm-3">Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit (e.g. kitten)" class="form-control" data-minlength="3" required="required"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit (e.g. kitten)" th:value="${pref.getSubreddit()}" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
 <div>
 <label class="col-sm-3">Send replies to my inbox</label> 
-<span class="col-sm-9"><input type="checkbox" name="sendreplies" value="true"/></span> 
+ <span class="col-sm-9">
+<input th:if="${pref.isSendReplies()}" type="checkbox" name="sendReplies" value="true" checked="checked"/>
+<input th:if="${!pref.isSendReplies()}" type="checkbox" name="sendReplies" value="true"/> </span> 
 </div>
 <br/>
 <br/>

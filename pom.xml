@@ -87,6 +87,15 @@
             <version>${org.springframework.version}</version>
         </dependency>
 
+        <!-- java mail -->
+        
+        <dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>4.1.6.RELEASE</version>
+		</dependency>
+        
+        
         <!-- web -->
 
         <dependency>

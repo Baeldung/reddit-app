@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 class RedditService implements IRedditService {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private RedditTemplate redditTemplate;
@@ -38,8 +39,6 @@ class RedditService implements IRedditService {
     private UserRepository userReopsitory;
 
     private List<String> subreddits;
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public RedditService() {
         loadSubreddits();

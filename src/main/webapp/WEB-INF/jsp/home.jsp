@@ -9,7 +9,7 @@
 <div th:include="header"/>
 
 <div class="container">
-        <h1>Welcome, <small><span sec:authentication="principal.username">Bob</span></small></h1>
+        <h1>Welcome, <small><a href="user/profile" sec:authentication="principal.username">Bob</a></small></h1>
         <br/>
         <a href="sites" class="btn btn-primary">My Sites</a>
         <a href="scheduledPosts" class="btn btn-primary">My Scheduled Posts</a>

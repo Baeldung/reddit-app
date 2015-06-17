@@ -46,6 +46,7 @@ public class PostController {
             model.addAttribute("msg", "Sorry, You do not have enought karma");
             return "submissionResponse";
         }
+        model.addAttribute("pref", getCurrentUser().getPreference());
         return "schedulePostForm";
     }
 
@@ -100,7 +101,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/editPost/{id}", method = RequestMethod.GET)
-    public String showEditPostForm(final Model model, @PathVariable Long id) {
+    public String showEditPostForm(final Model model, @PathVariable final Long id) {
         final Post post = postReopsitory.findOne(id);
         model.addAttribute("post", post);
         model.addAttribute("dateValue", dateFormat.format(post.getSubmissionDate()));
@@ -108,7 +109,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/updatePost/{id}", method = RequestMethod.POST)
-    public String updatePost(Model model, @PathVariable("id") final Long id, @RequestParam final Map<String, String> formParams) throws ParseException {
+    public String updatePost(final Model model, @PathVariable("id") final Long id, @RequestParam final Map<String, String> formParams) throws ParseException {
         final Post post = postReopsitory.findOne(id);
         post.setTitle(formParams.get("title"));
         post.setSubreddit(formParams.get("sr"));

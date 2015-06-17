@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
@@ -28,6 +29,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -54,6 +56,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableScheduling
 @EnableAsync
 @ComponentScan({ "org.baeldung.web" })
+@PropertySource("classpath:email.properties")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
@@ -127,6 +130,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
+
+    @Bean
+    public JavaMailSenderImpl javaMailSenderImpl() {
+        final JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
+        mailSenderImpl.setHost(env.getProperty("smtp.host"));
+        mailSenderImpl.setPort(env.getProperty("smtp.port", Integer.class));
+        mailSenderImpl.setProtocol(env.getProperty("smtp.protocol"));
+        mailSenderImpl.setUsername(env.getProperty("smtp.username"));
+        mailSenderImpl.setPassword(env.getProperty("smtp.password"));
+        final Properties javaMailProps = new Properties();
+        javaMailProps.put("mail.smtp.auth", true);
+        javaMailProps.put("mail.smtp.starttls.enable", true);
+        mailSenderImpl.setJavaMailProperties(javaMailProps);
+        return mailSenderImpl;
     }
 
     @Configuration

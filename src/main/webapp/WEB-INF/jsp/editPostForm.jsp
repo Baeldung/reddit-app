@@ -52,7 +52,7 @@ border-color: #ddd;
 <label  class="col-sm-3">Send replies to my inbox</label>  
 <span class="col-sm-9"> 
 <input th:if="${post.isSendReplies()}" type="checkbox" name="sendReplies" value="true" checked="checked"/>
-<input th:if="${!post.isSendReplies()}" type="checkbox" name="sendReplies"/>
+<input th:if="${!post.isSendReplies()}" type="checkbox" name="sendReplies" value="true"/>
 </span> 
 </div>
 <br/><br/>
@@ -107,12 +107,12 @@ border-color: #ddd;
     
     <span class="col-sm-3">keep If Has Comments &nbsp;&nbsp;    
     <input th:if="${post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments" value="true" checked="checked"/>
-    <input th:if="${!post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments"/>
+    <input th:if="${!post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments" value="true"/>
     </span>
     
     <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;    
     <input th:if="${post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt" value="true" checked="checked"/>
-    <input th:if="${!post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt"/>
+    <input th:if="${!post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt" value="true"/>
     </span>
     
     
