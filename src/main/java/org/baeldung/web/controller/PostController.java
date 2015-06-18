@@ -46,7 +46,6 @@ public class PostController {
             model.addAttribute("msg", "Sorry, You do not have enought karma");
             return "submissionResponse";
         }
-        model.addAttribute("pref", getCurrentUser().getPreference());
         return "schedulePostForm";
     }
 

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +30,7 @@ public class SiteRestController {
 
     @RequestMapping(value = "/sites", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addSite(Site site) throws ParseException {
+    public void addSite(final Site site) throws ParseException {
         if (!service.isValidFeedUrl(site.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
@@ -55,15 +54,6 @@ public class SiteRestController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteSite(@PathVariable("id") final Long id) {
         service.deleteSiteById(id);
-    }
-
-    // === Non Restful
-
-    @RequestMapping("/sites")
-    public final String ShowSitesPage(final Model model) {
-        final List<Site> sites = service.getSitesByUser(getCurrentUser());
-        model.addAttribute("sites", sites);
-        return "siteListView";
     }
 
     // === private

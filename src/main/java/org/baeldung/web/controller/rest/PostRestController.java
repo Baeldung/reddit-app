@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,7 @@ public class PostRestController {
 
     @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void schedule(@RequestBody Post post) {
+    public void schedule(@RequestBody final Post post) {
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -59,7 +58,7 @@ public class PostRestController {
 
     @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@RequestBody Post post, @PathVariable Long id) throws ParseException {
+    public void updatePost(@RequestBody final Post post, @PathVariable final Long id) throws ParseException {
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -81,34 +80,6 @@ public class PostRestController {
         final User user = getCurrentUser();
         final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(page, PAGE_SIZE));
         return posts.getContent();
-    }
-
-    // === Non Restful
-
-    // @RequestMapping("/scheduledPosts")
-    // public final String showScheduledPostsPage(final Model model) {
-    // final User user = getCurrentUser();
-    // final Page<Post> posts = postReopsitory.findByUser(user, null);
-    // model.addAttribute("posts", posts);
-    // return "postListView";
-    // }
-
-    @RequestMapping("/postSchedule")
-    public final String showSchedulePostForm(final Model model) {
-        final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
-        if (isCaptchaNeeded) {
-            model.addAttribute("msg", "Sorry, You do not have enought karma");
-            return "submissionResponse";
-        }
-        return "schedulePostForm";
-    }
-
-    @RequestMapping(value = "/editPost/{id}", method = RequestMethod.GET)
-    public String showEditPostForm(final Model model, @PathVariable Long id) {
-        final Post post = postReopsitory.findOne(id);
-        model.addAttribute("post", post);
-        model.addAttribute("dateValue", dateFormat.format(post.getSubmissionDate()));
-        return "editPostForm";
     }
 
     // === private

@@ -11,7 +11,6 @@ import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +32,7 @@ public class RedditRestController {
 
     @RequestMapping(value = "/posts", method = RequestMethod.POST)
     @ResponseBody
-    public final List<String> submit(@Valid @RequestBody PostDto postDto) {
+    public final List<String> submit(@Valid @RequestBody final PostDto postDto) {
         return service.submitPost(postDto);
     }
 
@@ -48,25 +47,6 @@ public class RedditRestController {
     @ResponseBody
     public List<String> subredditAutoComplete(@RequestParam("term") final String term) {
         return service.searchSubreddit(term);
-    }
-
-    // === Non Restful
-
-    @RequestMapping("/login")
-    public final String redditLogin() {
-        final JsonNode node = redditTemplate.getUserInfo();
-        service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
-        return "redirect:home";
-    }
-
-    @RequestMapping("/post")
-    public final String showSubmissionForm(final Model model) {
-        final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
-        if (isCaptchaNeeded) {
-            final String iden = redditTemplate.getNewCaptcha();
-            model.addAttribute("iden", iden);
-        }
-        return "submissionForm";
     }
 
     // === private

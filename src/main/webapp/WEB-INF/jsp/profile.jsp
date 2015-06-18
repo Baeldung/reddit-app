@@ -118,6 +118,7 @@ border-color: #ddd;
     $( "#sr" ).autocomplete({
       source: "api/subredditAutoComplete"
     });
+    
     loadPref();
   });
   
@@ -131,7 +132,6 @@ border-color: #ddd;
 		          $('*[name="'+key+'"]').val(value);
 			  }
 		  });
-		  console.log($('*[name="timeInterval"]').val());
 	  });
   }
   /*]]>*/  

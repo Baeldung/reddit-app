@@ -70,7 +70,6 @@ public class RedditController {
             final String iden = redditTemplate.getNewCaptcha();
             model.addAttribute("iden", iden);
         }
-        model.addAttribute("pref", getCurrentUser().getPreference());
 
         return "submissionForm";
     }
