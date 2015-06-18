@@ -86,6 +86,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/home");
         registry.addViewController("/siteForm");
         registry.addViewController("/submissionResponse");
+        registry.addViewController("/profile");
     }
 
     @Override

@@ -6,7 +6,7 @@
     </div>
     
      <p class="navbar-text navbar-right">Logged in as 
-        <b><a th:href="@{/user/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
+        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
         <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
     </p>
     
