@@ -9,6 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 <script th:src="@{/resources/datetime-picker.js}"></script>
 <script th:src="@{/resources/validator.js}"></script>
+<script th:src="@{/resources/timezones.full.js}"></script>
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -40,7 +41,13 @@ border-color: #ddd;
 </div>
 
 <br/><br/>  
-<br/><br/>  
+<br/><br/> 
+<div class="form-group">
+    <label class="col-sm-3">Timezone</label>
+    <span class="col-sm-9"><select id="timezone" name="timezone" class="form-control"></select></span>
+</div>
+
+<br/><br/> 
 <div class="form-group">
     <label class="col-sm-3">Default Subreddit</label>
     <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control" required="required" data-minlength="3"/></span>
@@ -120,6 +127,9 @@ border-color: #ddd;
     });
     
     loadPref();
+    
+    $('#timezone').timezones();
+
   });
   
   function loadPref(){

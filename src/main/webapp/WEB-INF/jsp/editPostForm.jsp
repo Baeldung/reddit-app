@@ -9,6 +9,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 <script th:src="@{/resources/datetime-picker.js}"></script>
 <script th:src="@{/resources/validator.js}"></script>
+<script th:src="@{/resources/moment.min.js}"></script>
+<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -118,17 +120,17 @@ border-color: #ddd;
     
 </div>
 <br/><br/>
-<label class="col-sm-3">Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</label>
-<div class="col-sm-5"><input name="submissionDate" class="form-control" th:value="${dateValue}" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.preference.timezone">UTC</span>)</label>
+<div class="col-sm-5"><input id="date" name="date" class="form-control" th:value="${dateValue}" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
-            $('*[name=submissionDate]').appendDtpicker({"inline": true});
-            $('*[name=submissionDate]').handleDtpicker('hide');
+            $('*[name=date]').appendDtpicker({"inline": true});
+            $('*[name=date]').handleDtpicker('hide');
         });
         var toggle = "show";
         function togglePicker(){
-            $('*[name=submissionDate]').handleDtpicker(toggle);
+            $('*[name=date]').handleDtpicker(toggle);
             toggle = toggle=="show"?"hide":"show";
         }
         /*]]>*/
@@ -141,7 +143,7 @@ border-color: #ddd;
 </form>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
   $(function() {
     $( "#sr" ).autocomplete({
       source: "../api/subredditAutoComplete"
@@ -151,7 +153,18 @@ border-color: #ddd;
         $("#checkResult").hide();
     });
     
+    loadDate();
+    
   });
+  
+  function loadDate(){
+	  console.log($("#date").val());
+      var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
+      var serverDate = moment.tz($("#date").val(), serverTimezone);
+      var clientDate = serverDate.clone().tz($("#timezone").html());
+      var myformat = "YYYY-MM-DD HH:mm";
+      $("#date").val(clientDate.format(myformat));
+  }
 </script>
 <script>
 /*<![CDATA[*/
@@ -188,7 +201,7 @@ function editPost(){
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
 	$.ajax({
-        url: $('form').attr('action'),
+        url: $('form').attr('action')+"?date="+$("#date").val(),
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'

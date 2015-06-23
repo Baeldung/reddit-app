@@ -29,6 +29,8 @@ public class Preference {
 
     private boolean deleteAfterLastAttempt;
 
+    private String timezone;
+
     public Preference() {
         super();
     }
@@ -117,11 +119,19 @@ public class Preference {
 
     //
 
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(final String timezone) {
+        this.timezone = timezone;
+    }
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Preference [email=").append(email).append(", subreddit=").append(subreddit).append(", sendReplies=").append(sendReplies).append(", noOfAttempts=").append(noOfAttempts).append(", timeInterval=").append(timeInterval)
-                .append(", minScoreRequired=").append(minScoreRequired).append("]");
+        builder.append("Preference [id=").append(id).append(", email=").append(email).append(", subreddit=").append(subreddit).append(", sendReplies=").append(sendReplies).append(", noOfAttempts=").append(noOfAttempts).append(", timeInterval=")
+                .append(timeInterval).append(", minScoreRequired=").append(minScoreRequired).append(", timezone=").append(timezone).append("]");
         return builder.toString();
     }
 

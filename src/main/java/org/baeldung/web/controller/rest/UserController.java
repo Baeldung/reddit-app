@@ -26,15 +26,7 @@ public class UserController {
     @RequestMapping(value = "/user/preference")
     @ResponseBody
     public Preference getUserPreference() {
-        Preference pref = getCurrentUser().getPreference();
-        if (pref == null) {
-            pref = new Preference();
-            preferenceReopsitory.save(pref);
-            final User user = getCurrentUser();
-            user.setPreference(pref);
-            userReopsitory.save(user);
-        }
-        return pref;
+        return getCurrentUser().getPreference();
     }
 
     @RequestMapping(value = "/user/preference/{id}", method = RequestMethod.PUT)

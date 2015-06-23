@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
@@ -41,7 +42,8 @@ public class PostRestController {
 
     @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void schedule(@RequestBody final Post post) {
+    public void schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
+        post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -58,7 +60,8 @@ public class PostRestController {
 
     @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@RequestBody final Post post, @PathVariable final Long id) throws ParseException {
+    public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
+        post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -86,6 +89,11 @@ public class PostRestController {
 
     private User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
+        dateFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
+        return dateFormat.parse(dateString);
     }
 
 }

@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
+import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
@@ -38,6 +41,9 @@ class RedditService implements IRedditService {
     @Autowired
     private UserRepository userReopsitory;
 
+    @Autowired
+    private PreferenceRepository preferenceReopsitory;
+
     private List<String> subreddits;
 
     public RedditService() {
@@ -63,6 +69,11 @@ class RedditService implements IRedditService {
         user.setAccessToken(token.getValue());
         user.setRefreshToken(token.getRefreshToken().getValue());
         user.setTokenExpiration(token.getExpiration());
+
+        final Preference pref = new Preference();
+        pref.setTimezone(TimeZone.getDefault().getDisplayName());
+        preferenceReopsitory.save(pref);
+        user.setPreference(pref);
         userReopsitory.save(user);
 
         final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));

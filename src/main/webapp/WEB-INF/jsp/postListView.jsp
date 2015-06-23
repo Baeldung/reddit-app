@@ -3,7 +3,8 @@
 
 <title>Schedule to Reddit</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-
+<script th:src="@{/resources/moment.min.js}"></script>
+<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
 </head>
 <body>
 <div th:include="header"/>
@@ -14,7 +15,7 @@
 <thead>
 <tr>
 <th>Post title</th>
-<th>Submission Date (<span th:text="${#dates.format(#calendars.createToday(), 'z')}">UTC</span>)</th>
+<th>Submission Date (<span id="timezone" sec:authentication="principal.preference.timezone">UTC</span>)</th>
 <th>Status</th>
 <th>Resubmit Attempts left</th>
 <th>Actions</th>
@@ -29,7 +30,7 @@
 
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script>
+<script th:inline="javascript">
 /*<![CDATA[*/
 function confirmDelete(id) {
     if (confirm("Do you really want to delete this post?") == true) {
@@ -76,7 +77,7 @@ function loadPage(page){
 		$.each(data, function( index, post ) {
 		     attempt = post.noOfAttempts<1? '-':post.noOfAttempts;
 			$('.table').append('<tr><td>'+post.title+'</td><td>'+
-					post.submissionDate+'</td><td>'+post.submissionResponse+'</td><td>'+
+					convertDate(post.submissionDate)+'</td><td>'+post.submissionResponse+'</td><td>'+
 					attempt+'</td><td> <a class="btn btn-warning" href="/reddit-scheduler/editPost/'+post.id+
 					'">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+post.id
 							+') ">Delete</a> </td></tr>');
@@ -87,6 +88,14 @@ function loadPage(page){
 			$('#next').show();
 		}
 	});
+}
+
+function convertDate(date){
+	var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
+    var serverDate = moment.tz(date, serverTimezone);
+	var clientDate = serverDate.clone().tz($("#timezone").html());
+	var myformat = "YYYY-MM-DD HH:mm";
+	return clientDate.format(myformat);
 }
 
 /*]]>*/
