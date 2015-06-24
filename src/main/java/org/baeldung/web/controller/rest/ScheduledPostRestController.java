@@ -9,7 +9,6 @@ import java.util.TimeZone;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
-import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,23 +25,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api")
-public class PostRestController {
+@RequestMapping(value = "/api/scheduledPosts")
+public class ScheduledPostRestController {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
     private static final int PAGE_SIZE = 2;
 
     @Autowired
     private PostRepository postReopsitory;
 
-    @Autowired
-    private RedditClassifier redditClassifier;
-
     // === API Methods
 
-    @RequestMapping(value = "/scheduledPosts", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public final List<Post> getScheduledPosts(@RequestParam(value = "page", required = false) final int page) {
+        final User user = getCurrentUser();
+        final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(page, PAGE_SIZE));
+        return posts.getContent();
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public Post schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
@@ -50,15 +53,10 @@ public class PostRestController {
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
         postReopsitory.save(post);
+        return post;
     }
 
-    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@PathVariable("id") final Long id) {
-        postReopsitory.delete(id);
-    }
-
-    @RequestMapping(value = "/scheduledPosts/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
@@ -69,20 +67,10 @@ public class PostRestController {
         postReopsitory.save(post);
     }
 
-    @RequestMapping(value = "/predicatePostResponse", method = RequestMethod.POST)
-    @ResponseBody
-    public final String predicatePostResponse(@RequestParam(value = "title") final String title, @RequestParam(value = "domain") final String domain) {
-        final int hour = Integer.parseInt(dfHour.format(new Date()));
-        final int result = redditClassifier.classify(redditClassifier.convertPost(title, domain, hour));
-        return (result == RedditClassifier.GOOD) ? "{Good Response}" : "{Bad response}";
-    }
-
-    @RequestMapping("/scheduledPosts")
-    @ResponseBody
-    public final List<Post> getScheduledPosts(@RequestParam(value = "page", required = false) final int page) {
-        final User user = getCurrentUser();
-        final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(page, PAGE_SIZE));
-        return posts.getContent();
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable("id") final Long id) {
+        postReopsitory.delete(id);
     }
 
     // === private
