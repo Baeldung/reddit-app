@@ -1,4 +1,4 @@
-package org.baeldung.persistence;
+package org.baeldung.persistence.config;
 
 import java.util.Properties;
 

@@ -1,4 +1,4 @@
-package org.baeldung.persistence;
+package org.baeldung.persistence.test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIn.isIn;
@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.baeldung.persistence.config.TestJpaConfig;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Post;
@@ -25,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(classes = { TestJpaConfig.class })
 @Transactional
 @TransactionConfiguration
-// @Ignore
-public class PersistenceJPATest {
+public class PersistenceJpaTest {
 
 	@Autowired
 	private PostRepository postRepository;

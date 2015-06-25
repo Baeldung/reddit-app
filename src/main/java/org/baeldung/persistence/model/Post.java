@@ -205,4 +205,114 @@ public class Post implements IEntity {
 		return builder.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + (deleteAfterLastAttempt ? 1231 : 1237);
+		result = (prime * result) + (isSent ? 1231 : 1237);
+		result = (prime * result) + (keepIfHasComments ? 1231 : 1237);
+		result = (prime * result) + minScoreRequired;
+		result = (prime * result) + minUpvoteRatio;
+		result = (prime * result) + noOfAttempts;
+		result = (prime * result) + ((redditID == null) ? 0 : redditID.hashCode());
+		result = (prime * result) + (sendReplies ? 1231 : 1237);
+		result = (prime * result) + ((submissionDate == null) ? 0 : submissionDate.hashCode());
+		result = (prime * result) + ((submissionResponse == null) ? 0 : submissionResponse.hashCode());
+		result = (prime * result) + ((subreddit == null) ? 0 : subreddit.hashCode());
+		result = (prime * result) + timeInterval;
+		result = (prime * result) + ((title == null) ? 0 : title.hashCode());
+		result = (prime * result) + ((url == null) ? 0 : url.hashCode());
+		result = (prime * result) + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Post other = (Post) obj;
+		if (deleteAfterLastAttempt != other.deleteAfterLastAttempt) {
+			return false;
+		}
+		if (isSent != other.isSent) {
+			return false;
+		}
+		if (keepIfHasComments != other.keepIfHasComments) {
+			return false;
+		}
+		if (minScoreRequired != other.minScoreRequired) {
+			return false;
+		}
+		if (minUpvoteRatio != other.minUpvoteRatio) {
+			return false;
+		}
+		if (noOfAttempts != other.noOfAttempts) {
+			return false;
+		}
+		if (redditID == null) {
+			if (other.redditID != null) {
+				return false;
+			}
+		} else if (!redditID.equals(other.redditID)) {
+			return false;
+		}
+		if (sendReplies != other.sendReplies) {
+			return false;
+		}
+		if (submissionDate == null) {
+			if (other.submissionDate != null) {
+				return false;
+			}
+		} else if (!submissionDate.equals(other.submissionDate)) {
+			return false;
+		}
+		if (submissionResponse == null) {
+			if (other.submissionResponse != null) {
+				return false;
+			}
+		} else if (!submissionResponse.equals(other.submissionResponse)) {
+			return false;
+		}
+		if (subreddit == null) {
+			if (other.subreddit != null) {
+				return false;
+			}
+		} else if (!subreddit.equals(other.subreddit)) {
+			return false;
+		}
+		if (timeInterval != other.timeInterval) {
+			return false;
+		}
+		if (title == null) {
+			if (other.title != null) {
+				return false;
+			}
+		} else if (!title.equals(other.title)) {
+			return false;
+		}
+		if (url == null) {
+			if (other.url != null) {
+				return false;
+			}
+		} else if (!url.equals(other.url)) {
+			return false;
+		}
+		if (user == null) {
+			if (other.user != null) {
+				return false;
+			}
+		} else if (!user.equals(other.user)) {
+			return false;
+		}
+		return true;
+	}
+
 }

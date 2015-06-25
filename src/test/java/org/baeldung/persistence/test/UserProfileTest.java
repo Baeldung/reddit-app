@@ -1,8 +1,9 @@
-package org.baeldung.persistence;
+package org.baeldung.persistence.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.baeldung.persistence.config.TestJpaConfig;
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Preference;

@@ -1,11 +1,12 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.persistence.test;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import org.baeldung.common.AbstractPersistenceIntegrationTest;
-import org.baeldung.persistence.TestJpaConfig;
-import org.baeldung.persistence.dao.PreferenceRepository;
-import org.baeldung.persistence.model.Preference;
+import org.baeldung.persistence.config.TestJpaConfig;
+import org.baeldung.persistence.dao.PostRepository;
+import org.baeldung.persistence.model.Post;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,11 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
-public class PreferencePersistenceIntegrationTest extends AbstractPersistenceIntegrationTest<Preference> {
+@Ignore
+public class PostIntegrationTest extends AbstractPersistenceIntegrationTest<Post> {
 
 	@Autowired
-	private PreferenceRepository preferenceRepository;
+	private PostRepository repository;
 
 	// tests
 
@@ -30,21 +32,20 @@ public class PreferencePersistenceIntegrationTest extends AbstractPersistenceInt
 	// API - protected
 
 	@Override
-	protected final PreferenceRepository getApi() {
-		return preferenceRepository;
+	protected final PostRepository getApi() {
+		return repository;
 	}
 
 	@Override
-	protected final void invalidate(final Preference entity) {
-		entity.setEmail(null);
+	protected final void invalidate(final Post entity) {
+		entity.setSubreddit(null);
 	}
 
 	@Override
-	protected final Preference createNewEntity() {
-		final Preference preference = new Preference();
-		preference.setEmail(randomAlphabetic(6) + "@gmail.com");
-		preference.setSubreddit("java");
-		return preference;
+	protected final Post createNewEntity() {
+		final Post post = new Post();
+		post.setSubreddit(randomAlphabetic(6));
+		return post;
 	}
 
 }
