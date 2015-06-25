@@ -39,7 +39,7 @@ class RedditService implements IRedditService {
     private RedditTemplate redditTemplate;
 
     @Autowired
-    private UserRepository userReopsitory;
+    private UserRepository userRepository;
 
     @Autowired
     private PreferenceRepository preferenceReopsitory;
@@ -54,7 +54,7 @@ class RedditService implements IRedditService {
 
     @Override
     public void loadAuthentication(final String name, final OAuth2AccessToken token) {
-        User user = userReopsitory.findByUsername(name);
+        User user = userRepository.findByUsername(name);
         if (user == null) {
             user = new User();
             user.setUsername(name);
@@ -74,7 +74,7 @@ class RedditService implements IRedditService {
         pref.setTimezone(TimeZone.getDefault().getDisplayName());
         preferenceReopsitory.save(pref);
         user.setPreference(pref);
-        userReopsitory.save(user);
+        userRepository.save(user);
 
         final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(auth);
