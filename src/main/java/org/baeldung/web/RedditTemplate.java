@@ -35,26 +35,27 @@ public class RedditTemplate {
         return redditRestTemplate.getForObject("https://oauth.reddit.com/api/v1/me", JsonNode.class);
     }
 
-    public JsonNode submitPost(MultiValueMap<String, String> params) {
+    public JsonNode submitPost(final MultiValueMap<String, String> params) {
         rateLimiter.acquire();
         return redditRestTemplate.postForObject("https://oauth.reddit.com/api/submit", params, JsonNode.class);
     }
 
-    public JsonNode searchForLink(String url, String subreddit) {
+    public JsonNode searchForLink(final String url, final String subreddit) {
         rateLimiter.acquire();
         return redditRestTemplate.getForObject("https://oauth.reddit.com/r/" + subreddit + "/search?q=url:" + url + "&restrict_sr=on", JsonNode.class);
     }
 
-    public JsonNode subredditNameSearch(String query) {
+    public JsonNode subredditNameSearch(final String query) {
         rateLimiter.acquire();
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add("query", query);
         return redditRestTemplate.postForObject("https://oauth.reddit.com//api/search_reddit_names", param, JsonNode.class);
     }
 
-    public String needsCaptcha() {
+    public boolean needsCaptcha() {
         rateLimiter.acquire();
-        return redditRestTemplate.getForObject("https://oauth.reddit.com/api/needs_captcha.json", String.class);
+        final String result = redditRestTemplate.getForObject("https://oauth.reddit.com/api/needs_captcha.json", String.class);
+        return result.equalsIgnoreCase("true");
     }
 
     public String getNewCaptcha() {
@@ -68,4 +69,5 @@ public class RedditTemplate {
         rateLimiter.acquire();
         return redditRestTemplate.getAccessToken();
     }
+
 }

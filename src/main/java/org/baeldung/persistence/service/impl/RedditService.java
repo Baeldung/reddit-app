@@ -60,7 +60,7 @@ class RedditService implements IRedditService {
             user.setUsername(name);
         }
 
-        if (redditTemplate.needsCaptcha().equalsIgnoreCase("true")) {
+        if (redditTemplate.needsCaptcha()) {
             user.setNeedCaptcha(true);
         } else {
             user.setNeedCaptcha(false);

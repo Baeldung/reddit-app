@@ -71,7 +71,7 @@ border-color: #ddd;
     
     <span class="col-sm-2">Votes didn't exceed </span>
     <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" th:value="${post.getMinScoreRequired()}" name="minScoreRequired" required="required"/>
+    <input type="number" class="form-control input-sm" th:value="${post.getMinScoreRequired()}" name="minScoreRequired" />
     </span>
     
     <span class="col-sm-3">within &nbsp;&nbsp;

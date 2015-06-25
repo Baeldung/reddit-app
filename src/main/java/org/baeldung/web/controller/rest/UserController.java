@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
+@RequestMapping(value = "/user/preference")
 public class UserController {
 
     @Autowired
@@ -23,19 +24,17 @@ public class UserController {
     @Autowired
     private UserRepository userReopsitory;
 
-    @RequestMapping(value = "/user/preference")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Preference getUserPreference() {
         return getCurrentUser().getPreference();
     }
 
-    @RequestMapping(value = "/user/preference/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updateUserPreference(@RequestBody final Preference pref) {
         preferenceReopsitory.save(pref);
-        final User user = getCurrentUser();
         getCurrentUser().setPreference(pref);
-        userReopsitory.save(user);
     }
 
     // === private
