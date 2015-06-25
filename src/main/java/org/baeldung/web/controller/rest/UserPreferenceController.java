@@ -24,7 +24,7 @@ public class UserPreferenceController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public Preference getUserPreference() {
+	public Preference getCurrentUserPreference() {
 		return getCurrentUser().getPreference();
 	}
 
