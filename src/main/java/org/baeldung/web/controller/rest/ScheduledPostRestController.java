@@ -54,8 +54,7 @@ public class ScheduledPostRestController {
         post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
-        postReopsitory.save(post);
-        return post;
+        return postReopsitory.save(post);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -72,18 +71,18 @@ public class ScheduledPostRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("id") final Long id) {
         postReopsitory.delete(id);
     }
 
     // === private
 
-    private User getCurrentUser() {
+    private final User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
+    private final Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
         dateFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
         return dateFormat.parse(dateString);
     }
