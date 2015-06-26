@@ -46,10 +46,12 @@ public class ScheduledPostRestController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public Post schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
+        final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
+
+        post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
         postReopsitory.save(post);
@@ -59,10 +61,12 @@ public class ScheduledPostRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        post.setSubmissionDate(calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone()));
+        final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
         if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
+
+        post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         postReopsitory.save(post);
     }
