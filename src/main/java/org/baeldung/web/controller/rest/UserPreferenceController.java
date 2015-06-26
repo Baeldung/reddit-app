@@ -17,28 +17,28 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(value = "/user/preference")
 public class UserPreferenceController {
 
-	@Autowired
-	private PreferenceRepository preferenceReopsitory;
+    @Autowired
+    private PreferenceRepository preferenceReopsitory;
 
-	//
+    //
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public Preference getCurrentUserPreference() {
-		return getCurrentUser().getPreference();
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public Preference getCurrentUserPreference() {
+        return getCurrentUser().getPreference();
+    }
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.OK)
-	public void update(@RequestBody final Preference pref) {
-		preferenceReopsitory.save(pref);
-		getCurrentUser().setPreference(pref);
-	}
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody final Preference pref) {
+        preferenceReopsitory.save(pref);
+        getCurrentUser().setPreference(pref);
+    }
 
-	// === private
+    // === private
 
-	private User getCurrentUser() {
-		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
+    private User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
 }

@@ -7,20 +7,20 @@ import org.baeldung.persistence.model.User;
 
 public class EntityFixtureFactory {
 
-	// API
+    // API
 
-	public static final Site newSite(final User user) {
-		final Site site = new Site();
-		site.setUrl(randomAlphabetic(6));
-		site.setName(randomAlphabetic(6));
-		site.setUser(user);
-		return site;
-	}
+    public static final Site newSite(final User user) {
+        final Site site = new Site();
+        site.setUrl(randomAlphabetic(6));
+        site.setName(randomAlphabetic(6));
+        site.setUser(user);
+        return site;
+    }
 
-	public static final User newUser() {
-		final User user = new User();
-		user.setUsername(randomAlphabetic(6));
-		return user;
-	}
+    public static final User newUser() {
+        final User user = new User();
+        user.setUsername(randomAlphabetic(6));
+        return user;
+    }
 
 }

@@ -18,35 +18,35 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(classes = { TestJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class SiteIntegrationTest extends AbstractPersistenceIntegrationTest<Site> {
 
-	@Autowired
-	private SiteRepository repository;
+    @Autowired
+    private SiteRepository repository;
 
-	@Autowired
-	private UserRepository userApi;
+    @Autowired
+    private UserRepository userApi;
 
-	// tests
+    // tests
 
-	@Test
-	public final void whenContextIsBootstrapped_thenNoExceptions() {
-		//
-	}
+    @Test
+    public final void whenContextIsBootstrapped_thenNoExceptions() {
+        //
+    }
 
-	// API - protected
+    // API - protected
 
-	@Override
-	protected final SiteRepository getApi() {
-		return repository;
-	}
+    @Override
+    protected final SiteRepository getApi() {
+        return repository;
+    }
 
-	@Override
-	protected final void invalidate(final Site entity) {
-		entity.setName(null);
-	}
+    @Override
+    protected final void invalidate(final Site entity) {
+        entity.setName(null);
+    }
 
-	@Override
-	protected final Site createNewEntity() {
-		final User existingUser = userApi.save(EntityFixtureFactory.newUser());
-		return EntityFixtureFactory.newSite(existingUser);
-	}
+    @Override
+    protected final Site createNewEntity() {
+        final User existingUser = userApi.save(EntityFixtureFactory.newUser());
+        return EntityFixtureFactory.newSite(existingUser);
+    }
 
 }

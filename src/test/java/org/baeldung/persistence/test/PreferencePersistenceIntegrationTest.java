@@ -17,34 +17,34 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(classes = { TestJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class PreferencePersistenceIntegrationTest extends AbstractPersistenceIntegrationTest<Preference> {
 
-	@Autowired
-	private PreferenceRepository preferenceRepository;
+    @Autowired
+    private PreferenceRepository preferenceRepository;
 
-	// tests
+    // tests
 
-	@Test
-	public final void whenContextIsBootstrapped_thenNoExceptions() {
-		//
-	}
+    @Test
+    public final void whenContextIsBootstrapped_thenNoExceptions() {
+        //
+    }
 
-	// API - protected
+    // API - protected
 
-	@Override
-	protected final PreferenceRepository getApi() {
-		return preferenceRepository;
-	}
+    @Override
+    protected final PreferenceRepository getApi() {
+        return preferenceRepository;
+    }
 
-	@Override
-	protected final void invalidate(final Preference entity) {
-		entity.setEmail(null);
-	}
+    @Override
+    protected final void invalidate(final Preference entity) {
+        entity.setEmail(null);
+    }
 
-	@Override
-	protected final Preference createNewEntity() {
-		final Preference preference = new Preference();
-		preference.setEmail(randomAlphabetic(6) + "@gmail.com");
-		preference.setSubreddit("java");
-		return preference;
-	}
+    @Override
+    protected final Preference createNewEntity() {
+        final Preference preference = new Preference();
+        preference.setEmail(randomAlphabetic(6) + "@gmail.com");
+        preference.setSubreddit("java");
+        return preference;
+    }
 
 }

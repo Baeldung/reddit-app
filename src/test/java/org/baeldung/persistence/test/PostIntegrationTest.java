@@ -19,33 +19,33 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @Ignore
 public class PostIntegrationTest extends AbstractPersistenceIntegrationTest<Post> {
 
-	@Autowired
-	private PostRepository repository;
+    @Autowired
+    private PostRepository repository;
 
-	// tests
+    // tests
 
-	@Test
-	public final void whenContextIsBootstrapped_thenNoExceptions() {
-		//
-	}
+    @Test
+    public final void whenContextIsBootstrapped_thenNoExceptions() {
+        //
+    }
 
-	// API - protected
+    // API - protected
 
-	@Override
-	protected final PostRepository getApi() {
-		return repository;
-	}
+    @Override
+    protected final PostRepository getApi() {
+        return repository;
+    }
 
-	@Override
-	protected final void invalidate(final Post entity) {
-		entity.setSubreddit(null);
-	}
+    @Override
+    protected final void invalidate(final Post entity) {
+        entity.setSubreddit(null);
+    }
 
-	@Override
-	protected final Post createNewEntity() {
-		final Post post = new Post();
-		post.setSubreddit(randomAlphabetic(6));
-		return post;
-	}
+    @Override
+    protected final Post createNewEntity() {
+        final Post post = new Post();
+        post.setSubreddit(randomAlphabetic(6));
+        return post;
+    }
 
 }

@@ -16,31 +16,31 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(classes = { TestJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class UserIntegrationTest extends AbstractPersistenceIntegrationTest<User> {
 
-	@Autowired
-	private UserRepository repository;
+    @Autowired
+    private UserRepository repository;
 
-	// tests
+    // tests
 
-	@Test
-	public final void whenContextIsBootstrapped_thenNoExceptions() {
-		//
-	}
+    @Test
+    public final void whenContextIsBootstrapped_thenNoExceptions() {
+        //
+    }
 
-	// API - protected
+    // API - protected
 
-	@Override
-	protected final UserRepository getApi() {
-		return repository;
-	}
+    @Override
+    protected final UserRepository getApi() {
+        return repository;
+    }
 
-	@Override
-	protected final void invalidate(final User entity) {
-		entity.setUsername(null);
-	}
+    @Override
+    protected final void invalidate(final User entity) {
+        entity.setUsername(null);
+    }
 
-	@Override
-	protected final User createNewEntity() {
-		return EntityFixtureFactory.newUser();
-	}
+    @Override
+    protected final User createNewEntity() {
+        return EntityFixtureFactory.newUser();
+    }
 
 }

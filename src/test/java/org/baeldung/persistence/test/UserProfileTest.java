@@ -23,59 +23,59 @@ import org.springframework.transaction.annotation.Transactional;
 @TransactionConfiguration
 public class UserProfileTest {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private PreferenceRepository preferenceRepository;
+    @Autowired
+    private PreferenceRepository preferenceRepository;
 
-	private User userJohn, userTom;
+    private User userJohn, userTom;
 
-	private Preference prefJohn, prefTom;
+    private Preference prefJohn, prefTom;
 
-	@Before
-	public void init() {
-		prefJohn = new Preference();
-		prefJohn.setEmail("john@gmail.com");
-		preferenceRepository.save(prefJohn);
+    @Before
+    public void init() {
+        prefJohn = new Preference();
+        prefJohn.setEmail("john@gmail.com");
+        preferenceRepository.save(prefJohn);
 
-		prefTom = new Preference();
-		prefTom.setEmail("tom@gmail.com");
-		preferenceRepository.save(prefTom);
+        prefTom = new Preference();
+        prefTom.setEmail("tom@gmail.com");
+        preferenceRepository.save(prefTom);
 
-		userJohn = new User();
-		userJohn.setUsername("John");
-		userJohn.setPreference(prefJohn);
-		userRepository.save(userJohn);
+        userJohn = new User();
+        userJohn.setUsername("John");
+        userJohn.setPreference(prefJohn);
+        userRepository.save(userJohn);
 
-		userTom = new User();
-		userTom.setUsername("Tom");
-		userTom.setPreference(prefTom);
-		userRepository.save(userTom);
-	}
+        userTom = new User();
+        userTom.setUsername("Tom");
+        userTom.setPreference(prefTom);
+        userRepository.save(userTom);
+    }
 
-	// tests
+    // tests
 
-	@Test
-	public void whenGettingUserPreference_thenCorrect() {
-		final String emailJohn = userJohn.getPreference().getEmail();
-		final String emailTom = userTom.getPreference().getEmail();
+    @Test
+    public void whenGettingUserPreference_thenCorrect() {
+        final String emailJohn = userJohn.getPreference().getEmail();
+        final String emailTom = userTom.getPreference().getEmail();
 
-		assertTrue(emailJohn.contains("john"));
-		assertTrue(emailTom.contains("tom"));
-	}
+        assertTrue(emailJohn.contains("john"));
+        assertTrue(emailTom.contains("tom"));
+    }
 
-	@Test
-	public void whenUpdatingUserPreference_thenCorrect() {
-		prefJohn.setSubreddit("kitten");
-		preferenceRepository.save(prefJohn);
-		prefTom.setSubreddit("java");
-		preferenceRepository.save(prefTom);
+    @Test
+    public void whenUpdatingUserPreference_thenCorrect() {
+        prefJohn.setSubreddit("kitten");
+        preferenceRepository.save(prefJohn);
+        prefTom.setSubreddit("java");
+        preferenceRepository.save(prefTom);
 
-		final String srJohn = userJohn.getPreference().getSubreddit();
-		final String srTom = userTom.getPreference().getSubreddit();
-		assertEquals(srJohn, "kitten");
-		assertEquals(srTom, "java");
-	}
+        final String srJohn = userJohn.getPreference().getSubreddit();
+        final String srTom = userTom.getPreference().getSubreddit();
+        assertEquals(srJohn, "kitten");
+        assertEquals(srTom, "java");
+    }
 
 }
