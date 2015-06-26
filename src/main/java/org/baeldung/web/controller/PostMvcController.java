@@ -8,7 +8,6 @@ import java.util.Map;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
-import org.baeldung.reddit.classifier.RedditClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +21,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-public class PostController {
-
+public class PostMvcController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
     private static final int PAGE_SIZE = 2;
 
     @Autowired
     private PostRepository postReopsitory;
 
-    @Autowired
-    private RedditClassifier redditClassifier;
+    // API
 
     @RequestMapping("/postSchedule")
     public final String showSchedulePostForm(final Model model) {
@@ -85,14 +81,6 @@ public class PostController {
         return "postListView";
     }
 
-    @RequestMapping(value = "/predicatePostResponse", method = RequestMethod.POST)
-    @ResponseBody
-    public final String predicatePostResponse(@RequestParam(value = "title") final String title, @RequestParam(value = "domain") final String domain) {
-        final int hour = Integer.parseInt(dfHour.format(new Date()));
-        final int result = redditClassifier.classify(redditClassifier.convertPost(title, domain, hour));
-        return (result == RedditClassifier.GOOD) ? "{Good Response}" : "{Bad response}";
-    }
-
     @RequestMapping(value = "/deletePost/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deletePost(@PathVariable("id") final Long id) {
@@ -134,7 +122,7 @@ public class PostController {
 
     // === private
 
-    private User getCurrentUser() {
+    private final User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 

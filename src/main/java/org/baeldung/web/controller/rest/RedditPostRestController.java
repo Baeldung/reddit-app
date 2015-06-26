@@ -1,13 +1,10 @@
 package org.baeldung.web.controller.rest;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.baeldung.persistence.service.IRedditService;
-import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.PostDto;
 import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Controller
 @RequestMapping(value = "/api/posts")
 public class RedditPostRestController {
-    private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
-
-    @Autowired
-    private RedditClassifier redditClassifier;
 
     @Autowired
     private RedditTemplate redditTemplate;
@@ -49,11 +42,4 @@ public class RedditPostRestController {
         return node.get("data").get("children").toString();
     }
 
-    @RequestMapping(value = "/predicatePostResponse", method = RequestMethod.POST)
-    @ResponseBody
-    public final String predicatePostResponse(@RequestParam(value = "title") final String title, @RequestParam(value = "domain") final String domain) {
-        final int hour = Integer.parseInt(dfHour.format(new Date()));
-        final int result = redditClassifier.classify(redditClassifier.convertPost(title, domain, hour));
-        return (result == RedditClassifier.GOOD) ? "{Good Response}" : "{Bad response}";
-    }
 }
