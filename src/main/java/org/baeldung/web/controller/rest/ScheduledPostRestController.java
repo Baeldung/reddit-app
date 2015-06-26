@@ -47,7 +47,7 @@ public class ScheduledPostRestController {
     @ResponseBody
     public Post schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
-        if (post.getSubmissionDate().before(new Date())) {
+        if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
 
@@ -61,7 +61,7 @@ public class ScheduledPostRestController {
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
-        if (post.getSubmissionDate().before(new Date())) {
+        if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
 

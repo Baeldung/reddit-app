@@ -1,6 +1,5 @@
 package org.baeldung.persistence.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +11,7 @@ public class Preference implements IEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    // can be null for users who don't want notifications
     private String email;
 
     private String subreddit;
