@@ -49,8 +49,8 @@ $("#submitBut").click(function(event) {
 });
 
 function addSite(){
-	$.post("api/sites",$('form').serialize(), function(data){
-		 window.location.href="sites";
+	$.post("sites",$('form').serialize(), function(data){
+		 window.location.href="mysites";
 	}).fail(function(error){
         console.log(error);
         alert(error.responseText);

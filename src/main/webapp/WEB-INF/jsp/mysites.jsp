@@ -22,18 +22,23 @@
 <th>Actions</th>
 </tr>
 </thead>
-    <tr th:each="site  : ${sites}">
-        <td th:text="${site.getName()}"></td>
-        <td th:text="${site.getUrl()}"></td>
-        <td>
-            <a href="#" class="btn btn-danger" th:onclick="'javascript:confirmDelete(\'' +${site.getId()}+ '\') '">Delete</a>
-        </td>
-    </tr>
+
 </table>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 /*<![CDATA[*/
+           
+$(function(){
+	$.get("sites", function(data){
+        $.each(data, function( index, site ) {
+            $('.table').append('<tr><td>'+site.name+'</td><td>'+site.url+
+              '</td><td><a href="#" class="btn btn-danger" onclick="confirmDelete('+site.id+
+              ') ">Delete</a> </td></tr>');
+        });
+    });
+});
+
 function confirmDelete(id) {
     if (confirm("Do you really want to delete this site?") == true) {
         deleteSite(id);
@@ -45,7 +50,7 @@ function deleteSite(id){
         url: 'sites/'+id,
         type: 'DELETE',
         success: function(result) {
-            window.location.href="sites"
+            window.location.href="mysites"
         }
     });
 }

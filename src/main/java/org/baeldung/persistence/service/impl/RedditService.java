@@ -71,7 +71,7 @@ class RedditService implements IRedditService {
         user.setTokenExpiration(token.getExpiration());
 
         final Preference pref = new Preference();
-        pref.setTimezone(TimeZone.getDefault().getDisplayName());
+        pref.setTimezone(TimeZone.getDefault().getID());
         preferenceReopsitory.save(pref);
         user.setPreference(pref);
         userRepository.save(user);

@@ -1,6 +1,5 @@
 package org.baeldung.web.controller.rest;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.persistence.model.Site;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/sites")
 public class SiteRestController {
 
     @Autowired
@@ -28,9 +27,15 @@ public class SiteRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/sites", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public List<Site> getSitesList() {
+        return service.getSitesByUser(getCurrentUser());
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addSite(final Site site) throws ParseException {
+    public void addSite(final Site site) {
         if (!service.isValidFeedUrl(site.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
@@ -38,19 +43,13 @@ public class SiteRestController {
         service.saveSite(site);
     }
 
-    @RequestMapping(value = "/sites/list")
-    @ResponseBody
-    public List<Site> getSitesList() {
-        return service.getSitesByUser(getCurrentUser());
-    }
-
-    @RequestMapping(value = "/sites/articles")
+    @RequestMapping(value = "/articles")
     @ResponseBody
     public List<SiteArticle> getSiteArticles(@RequestParam("id") final Long siteId) {
         return service.getArticlesFromSite(siteId);
     }
 
-    @RequestMapping(value = "/sites/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteSite(@PathVariable("id") final Long id) {
         service.deleteSiteById(id);

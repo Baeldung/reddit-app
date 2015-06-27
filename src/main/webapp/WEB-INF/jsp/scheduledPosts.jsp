@@ -78,7 +78,7 @@ function loadPage(page){
 		     attempt = post.noOfAttempts<1? '-':post.noOfAttempts;
 			$('.table').append('<tr><td>'+post.title+'</td><td>'+
 					convertDate(post.submissionDate)+'</td><td>'+post.submissionResponse+'</td><td>'+
-					attempt+'</td><td> <a class="btn btn-warning" href="/reddit-scheduler/editPost/'+post.id+
+					attempt+'</td><td> <a class="btn btn-warning" href="editPost/'+post.id+
 					'">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+post.id
 							+') ">Delete</a> </td></tr>');
 		});
