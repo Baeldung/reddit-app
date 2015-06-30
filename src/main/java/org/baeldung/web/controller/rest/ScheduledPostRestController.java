@@ -82,7 +82,7 @@ public class ScheduledPostRestController {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    private final Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
+    private synchronized final Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
         dateFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
         return dateFormat.parse(dateString);
     }
