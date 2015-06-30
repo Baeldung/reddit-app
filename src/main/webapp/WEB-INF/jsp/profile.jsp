@@ -35,7 +35,7 @@ border-color: #ddd;
 <div class="form-group">
     <label class="col-sm-3">Email</label>
     <span class="col-sm-9">
-    <input name="email" type="email" placeholder="your email" class="form-control" required="required" data-minlength="10"/>
+    <input name="email" type="email" placeholder="your email" class="form-control"/>
     <span class="help-block">Provide your email to receive notifications when your scheduled posts are submitted</span>
     </span>
 </div>
@@ -50,7 +50,7 @@ border-color: #ddd;
 <br/><br/> 
 <div class="form-group">
     <label class="col-sm-3">Default Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control" /></span>
 </div>
 <br/><br/>
 <div>

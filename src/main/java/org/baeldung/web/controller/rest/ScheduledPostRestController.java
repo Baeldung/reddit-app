@@ -57,6 +57,12 @@ public class ScheduledPostRestController {
         return postReopsitory.save(post);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Post getPost(@PathVariable("id") final Long id) {
+        return postReopsitory.findOne(id);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {

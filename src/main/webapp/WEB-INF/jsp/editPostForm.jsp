@@ -28,33 +28,32 @@ border-color: #ddd;
 
 <div class="container">
 <h1>Edit Scheduled Post</h1>
-<form th:action="@{/api/scheduledPosts/{id}(id=${post.getId()})}" method="post" role="form" data-toggle="validator">
+<form method="post" role="form" data-toggle="validator">
 <div class="row">
-<input type="hidden" name="id" th:value="${post.getId()}"/>
-<input type="hidden" name="submissionResponse" th:value="${post.getSubmissionResponse()}"/>
-<input type="hidden" name="redditID" th:value="${post.getRedditID()}"/>
-<input type="hidden" name="Sent" th:value="${post.isSent()}"/>
+<input type="hidden" id="id" name="id"/>
+<input type="hidden" name="submissionResponse" />
+<input type="hidden" name="redditID" />
+<input type="hidden" name="Sent"/>
 
 <div class="form-group">
     <label class="col-sm-3">Title</label>
-    <span class="col-sm-9"><input name="title" placeholder="title" class="form-control" th:value="${post.getTitle()}" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input name="title" placeholder="title" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
 <div class="form-group">
     <label class="col-sm-3">Url</label>
-    <span class="col-sm-9"><input name="url" type="url" placeholder="url" class="form-control" th:value="${post.getUrl()}" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input name="url" type="url" placeholder="url" class="form-control"  required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>  
 <div class="form-group">
     <label class="col-sm-3">Subreddit</label>
-    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control" th:value="${post.getSubreddit()}" required="required" data-minlength="3"/></span>
+    <span class="col-sm-9"><input id="sr" name="subreddit" placeholder="Subreddit" class="form-control"  required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
 <div>
 <label  class="col-sm-3">Send replies to my inbox</label>  
 <span class="col-sm-9"> 
-<input th:if="${post.isSendReplies()}" type="checkbox" name="sendReplies" value="true" checked="checked"/>
-<input th:if="${!post.isSendReplies()}" type="checkbox" name="sendReplies" value="true"/>
+<input  type="checkbox" name="sendReplies" value="true"/>
 </span> 
 </div>
 <br/><br/>
@@ -71,26 +70,26 @@ border-color: #ddd;
     
     <span class="col-sm-2">Votes didn't exceed </span>
     <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" th:value="${post.getMinScoreRequired()}" name="minScoreRequired" />
+    <input type="number" class="form-control input-sm" name="minScoreRequired" />
     </span>
     
     <span class="col-sm-3">within &nbsp;&nbsp;
     <select name="timeInterval">
-        <option value="0" th:selected="${post.getTimeInterval() == 0}">None</option>
-        <option value="45" th:selected="${post.getTimeInterval() == 45}">45 minutes</option>
-        <option value="60" th:selected="${post.getTimeInterval() == 60}">1 hour</option>
-        <option value="120" th:selected="${post.getTimeInterval() == 120}">2 hours</option>
+        <option value="0" >None</option>
+        <option value="45" >45 minutes</option>
+        <option value="60" >1 hour</option>
+        <option value="120" >2 hours</option>
       </select>
     </span>
     
     <span class="col-sm-3">try resubmitting &nbsp;&nbsp;
     <select name="noOfAttempts">
-        <option value="0" th:selected="${post.getNoOfAttempts() == 0}">No</option>
-        <option value="1" th:selected="${post.getNoOfAttempts() == 1}">1</option>
-        <option value="2" th:selected="${post.getNoOfAttempts() == 2}">2</option>
-        <option value="3" th:selected="${post.getNoOfAttempts() == 3}">3</option>
-        <option value="4" th:selected="${post.getNoOfAttempts() == 4}">4</option>
-        <option value="5" th:selected="${post.getNoOfAttempts() == 5}">5</option>
+        <option value="0" >No</option>
+        <option value="1" >1</option>
+        <option value="2" >2</option>
+        <option value="3" >3</option>
+        <option value="4" >4</option>
+        <option value="5" >5</option>
       </select>
       &nbsp;&nbsp; times.
     </span>
@@ -104,24 +103,22 @@ border-color: #ddd;
     
     <span class="col-sm-2">Minimum Upvote Ratio</span>
     <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" value="98" name="minUpvoteRatio" data-min="0" data-max="100" th:value="${post.getMinUpvoteRatio()}" required="required"/>
+    <input type="number" class="form-control input-sm" value="98" name="minUpvoteRatio" data-min="0" data-max="100" required="required"/>
     </span>
     
     <span class="col-sm-3">keep If Has Comments &nbsp;&nbsp;    
-    <input th:if="${post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments" value="true" checked="checked"/>
-    <input th:if="${!post.isKeepIfHasComments()}" type="checkbox" name="keepIfHasComments" value="true"/>
+    <input  type="checkbox" name="keepIfHasComments" value="true"/>
     </span>
     
     <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;    
-    <input th:if="${post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt" value="true" checked="checked"/>
-    <input th:if="${!post.isDeleteAfterLastAttempt()}" type="checkbox" name="deleteAfterLastAttempt" value="true"/>
+    <input type="checkbox" name="deleteAfterLastAttempt" value="true"/>
     </span>
     
     
 </div>
 <br/><br/>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.preference.timezone">UTC</span>)</label>
-<div class="col-sm-5"><input id="date" name="date" class="form-control" th:value="${dateValue}" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<div class="col-sm-5"><input id="date" name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
@@ -153,17 +150,34 @@ border-color: #ddd;
         $("#checkResult").hide();
     });
     
-    loadDate();
+    loadPost();
     
   });
   
-  function loadDate(){
+  function loadPost(){
+	  var arr = window.location.href.split("/");
+	  var id = arr[arr.length-1];
+	  
+	  $.get("../api/scheduledPosts/"+id, function (data){
+          $.each(data, function(key, value) {
+              if(value == true){
+                  $('*[name="'+key+'"]')[0].checked=true;
+              }
+              if(value != false){
+                  $('*[name="'+key+'"]').val(value);
+              }
+          });
+          $("#date").val(loadDate(data.submissionDate));
+      });
+  }
+  
+  function loadDate(dateVal){
 	  console.log($("#date").val());
       var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
-      var serverDate = moment.tz($("#date").val(), serverTimezone);
+      var serverDate = moment.tz(dateVal, serverTimezone);
       var clientDate = serverDate.clone().tz($("#timezone").html());
       var myformat = "YYYY-MM-DD HH:mm";
-      $("#date").val(clientDate.format(myformat));
+      return clientDate.format(myformat);
   }
 </script>
 <script>
@@ -197,11 +211,12 @@ $("#submitBut").click(function(event) {
 });
 
 function editPost(){
+	var id = $("#id").val();
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
 	$.ajax({
-        url: $('form').attr('action')+"?date="+$("#date").val(),
+        url: "../api/scheduledPosts/"+id+"?date="+$("#date").val(),
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'
