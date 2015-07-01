@@ -70,6 +70,8 @@ class PostRedditService implements IPostRedditService {
         postScore.setUpvoteRatio((int) (ratio * 100));
         postScore.setNoOfComments(node.get("num_comments").asInt());
 
+        logger.info(postScore.toString());
+
         return postScore;
     }
 
@@ -135,12 +137,13 @@ class PostRedditService implements IPostRedditService {
         final JsonNode errorNode = node.get("json").get("errors").get(0);
         if (errorNode == null) {
             post.setSent(true);
-            post.setSubmissionResponse("Successfully sent");
+            post.setSubmissionResponse("Submitted to Reddit");
             post.setRedditID(node.get("json").get("data").get("id").asText());
             post.setNoOfAttempts(post.getNoOfAttempts() - 1);
             postReopsitory.save(post);
 
             logger.info("Successfully sent post = " + post.toString());
+
             final String email = post.getUser().getPreference().getEmail();
             if (email != null) {
                 logger.info("Sending notification email to " + email);
@@ -149,35 +152,37 @@ class PostRedditService implements IPostRedditService {
         } else {
             post.setSubmissionResponse(errorNode.toString());
             postReopsitory.save(post);
-            logger.info("Error occurred: " + errorNode.toString() + "while submitting post " + post.toString());
+            logger.error("Error occurred: " + errorNode.toString() + "while submitting post " + post.toString());
         }
     }
 
     private void checkAndReSubmitInternal(final Post post) {
-        logger.info("Checking and Resubmitting post = {}", post.toString());
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
+            logger.info("Checking and Resubmitting post = {}", post.toString());
             if (didPostGoalFail(post)) {
                 deletePost(post.getRedditID());
                 resetPost(post);
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
+                post.setSubmissionResponse("Post reached target score successfully");
                 postReopsitory.save(post);
             }
         }
     }
 
     private void checkAndDeleteInternal(final Post post) {
-        logger.info("Checking and deleting post = {}", post.toString());
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
+            logger.info("Checking and deleting post = {}", post.toString());
             if (didPostGoalFail(post)) {
                 deletePost(post.getRedditID());
-                post.setSubmissionResponse("Consumed Attempts without reaching score");
+                post.setSubmissionResponse("Deleted from reddit, consumed all attempts without reaching score");
                 post.setRedditID(null);
                 postReopsitory.save(post);
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
+                post.setSubmissionResponse("Post reached target score successfully");
                 postReopsitory.save(post);
             }
         }
@@ -196,7 +201,7 @@ class PostRedditService implements IPostRedditService {
         post.setRedditID(null);
         post.setSubmissionDate(new Date(time));
         post.setSent(false);
-        post.setSubmissionResponse("Not sent yet");
+        post.setSubmissionResponse("Deleted from Reddit, to be resubmitted");
         postReopsitory.save(post);
     }
 
