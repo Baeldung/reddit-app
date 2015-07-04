@@ -18,6 +18,11 @@ public class PostMvcController {
 
     @RequestMapping("/postSchedule")
     public final String showSchedulePostForm(final Model model) {
+        if (getCurrentUser().getAccessToken() == null) {
+            model.addAttribute("msg", "Sorry, You did not connect your account to Reddit yet");
+            return "submissionResponse";
+        }
+
         final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
         if (isCaptchaNeeded) {
             model.addAttribute("msg", "Sorry, You do not have enought karma");
@@ -33,7 +38,7 @@ public class PostMvcController {
 
     // === private
 
-    private final User getCurrentUser() {
+    private User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 

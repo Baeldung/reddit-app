@@ -11,6 +11,10 @@
 <div class="container">
         <h1>Welcome, <small><a href="profile" sec:authentication="principal.username">Bob</a></small></h1>
         <br/>
+        <div th:if="${#authentication.principal.accessToken == null}">
+        <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>
+        <br/> <br/>
+        </div>
         <a href="mysites" class="btn btn-primary">My Sites</a>
         <a href="scheduledPosts" class="btn btn-primary">My Scheduled Posts</a>
         <a href="post" class="btn btn-primary">Post to Reddit</a>

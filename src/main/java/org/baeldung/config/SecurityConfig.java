@@ -1,29 +1,38 @@
 package org.baeldung.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@ComponentScan({ "org.baeldung.security" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
+
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication();
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/**");
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
             http
                 .anonymous().disable()
@@ -31,7 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home","/post","/postSchedule","/posts").hasRole("USER")
                 .and()
-                .httpBasic().authenticationEntryPoint(oauth2AuthenticationEntryPoint())
+                .formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/j_spring_security_check")
+                .defaultSuccessUrl("/home")
+                .failureUrl("/?error=true")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .and()
                 .logout()
                 .deleteCookies("JSESSIONID")
@@ -40,8 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    private LoginUrlAuthenticationEntryPoint oauth2AuthenticationEntryPoint() {
-        return new LoginUrlAuthenticationEntryPoint("/login");
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder(11);
     }
 
 }

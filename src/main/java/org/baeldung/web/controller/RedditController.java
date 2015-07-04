@@ -6,6 +6,7 @@ import org.baeldung.persistence.service.IRedditService;
 import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,15 +33,25 @@ public class RedditController {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/redditLogin")
     public final String redditLogin() {
-        final JsonNode node = redditTemplate.getUserInfo();
-        service.loadAuthentication(node.get("name").asText(), redditTemplate.getAccessToken());
+        final OAuth2AccessToken token = redditTemplate.getAccessToken();
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            service.connectReddit(redditTemplate.needsCaptcha(), token);
+        } else {
+            final JsonNode node = redditTemplate.getUserInfo();
+            service.loadAuthentication(node.get("name").asText(), token);
+        }
         return "redirect:home";
     }
 
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {
+        if (getCurrentUser().getAccessToken() == null) {
+            model.addAttribute("msg", "Sorry, You did not connect your account to Reddit yet");
+            return "submissionResponse";
+        }
+
         final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
         if (isCaptchaNeeded) {
             final String iden = redditTemplate.getNewCaptcha();

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,8 @@ public class SiteRestController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addSite(final Site site) {
+    public void addSite(@RequestBody final Site site) {
+        System.out.println("here ==== " + site.getUrl());
         if (!service.isValidFeedUrl(site.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
@@ -60,4 +62,5 @@ public class SiteRestController {
     private User getCurrentUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
 }

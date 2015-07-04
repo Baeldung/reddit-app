@@ -49,12 +49,21 @@ $("#submitBut").click(function(event) {
 });
 
 function addSite(){
-	$.post("sites",$('form').serialize(), function(data){
-		 window.location.href="mysites";
-	}).fail(function(error){
-        console.log(error);
-        alert(error.responseText);
-    });
+	 var data = {};
+	    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
+	    console.log(JSON.stringify(data));
+	 $.ajax({
+	    url: 'sites',
+	    data: JSON.stringify(data),
+	    type: 'POST',
+	    contentType:'application/json',
+	    success: function(result) {
+	        window.location.href="mysites";
+	    },
+	    error: function(error) {
+	        alert(error.responseText);
+	    }   
+	 }); 
 }
 </script>
 </body>

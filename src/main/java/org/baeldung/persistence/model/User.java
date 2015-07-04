@@ -19,7 +19,7 @@ public class User implements IEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     private String accessToken;
@@ -29,6 +29,8 @@ public class User implements IEntity {
     private Date tokenExpiration;
 
     private boolean needCaptcha;
+
+    private String password;
 
     @OneToOne
     @JoinColumn(name = "preference_id")
@@ -88,6 +90,14 @@ public class User implements IEntity {
 
     public void setNeedCaptcha(final boolean needCaptcha) {
         this.needCaptcha = needCaptcha;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     public Preference getPreference() {

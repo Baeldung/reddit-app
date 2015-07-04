@@ -42,7 +42,7 @@ class RedditService implements IRedditService {
     private UserRepository userRepository;
 
     @Autowired
-    private PreferenceRepository preferenceReopsitory;
+    private PreferenceRepository preferenceRepository;
 
     private List<String> subreddits;
 
@@ -72,12 +72,22 @@ class RedditService implements IRedditService {
 
         final Preference pref = new Preference();
         pref.setTimezone(TimeZone.getDefault().getID());
-        preferenceReopsitory.save(pref);
+        preferenceRepository.save(pref);
         user.setPreference(pref);
         userRepository.save(user);
 
         final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    @Override
+    public void connectReddit(final boolean needsCaptcha, final OAuth2AccessToken token) {
+        final User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        currentUser.setNeedCaptcha(needsCaptcha);
+        currentUser.setAccessToken(token.getValue());
+        currentUser.setRefreshToken(token.getRefreshToken().getValue());
+        currentUser.setTokenExpiration(token.getExpiration());
+        userRepository.save(currentUser);
     }
 
     @Override

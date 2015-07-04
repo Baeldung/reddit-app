@@ -13,4 +13,6 @@ public interface IRedditService {
 
     List<String> searchSubreddit(final String query);
 
+    void connectReddit(final boolean needsCaptcha, final OAuth2AccessToken token);
+
 }

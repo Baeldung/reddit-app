@@ -50,7 +50,7 @@ public class ScheduledPostRestController {
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
-
+        System.out.println("scheduling");
         post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
@@ -84,13 +84,13 @@ public class ScheduledPostRestController {
 
     // === private
 
-    private final User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
     private synchronized final Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
         dateFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
         return dateFormat.parse(dateString);
+    }
+
+    private User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

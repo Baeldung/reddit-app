@@ -116,6 +116,10 @@ border-color: #ddd;
     <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>
    </div>
 </form>
+
+<br/>
+<a th:if="${#authentication.name == null}" th:href="/user/authReddit" class="btn btn-primary">Authenticate Reddit</a>
+
 </div>
 </body>
 <script>
