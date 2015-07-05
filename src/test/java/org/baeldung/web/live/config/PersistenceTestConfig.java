@@ -25,11 +25,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource({ "classpath:persistence-dev.properties" })
 @ComponentScan({ "org.baeldung.persistence.model", "org.baeldung.persistence.dao" })
 @EnableJpaRepositories(basePackages = "org.baeldung.persistence.dao")
-public class LiveTestConfig {
+public class PersistenceTestConfig {
     @Autowired
     private Environment env;
 
-    public LiveTestConfig() {
+    public PersistenceTestConfig() {
         super();
     }
 

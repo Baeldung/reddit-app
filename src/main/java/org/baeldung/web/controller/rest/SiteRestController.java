@@ -35,14 +35,13 @@ public class SiteRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void addSite(@RequestBody final Site site) {
-        System.out.println("here ==== " + site.getUrl());
+    @ResponseBody
+    public Site addSite(@RequestBody final Site site) {
         if (!service.isValidFeedUrl(site.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
         site.setUser(getCurrentUser());
-        service.saveSite(site);
+        return service.saveSite(site);
     }
 
     @RequestMapping(value = "/articles")
@@ -52,7 +51,7 @@ public class SiteRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSite(@PathVariable("id") final Long id) {
         service.deleteSiteById(id);
     }

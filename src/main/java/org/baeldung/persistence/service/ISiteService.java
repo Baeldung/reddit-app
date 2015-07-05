@@ -10,7 +10,7 @@ public interface ISiteService {
 
     List<Site> getSitesByUser(final User user);
 
-    void saveSite(final Site site);
+    Site saveSite(final Site site);
 
     Site findSiteById(final Long siteId);
 

@@ -1,94 +1,63 @@
 package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
-import org.baeldung.persistence.dao.SiteRepository;
-import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Site;
-import org.baeldung.persistence.model.User;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.restassured.response.Response;
 
 public class MySitesLiveTest extends AbstractLiveTest {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private SiteRepository siteRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private User userJohn;
-
-    private List<Site> sites;
-
-    @Before
-    public void init() {
-        userJohn = userRepository.findByUsername("john");
-        if (userJohn == null) {
-            userJohn = new User();
-            userJohn.setUsername("john");
-            userJohn.setPassword(passwordEncoder.encode("123"));
-            userJohn.setAccessToken("token");
-            userRepository.save(userJohn);
-        }
-        sites = siteRepository.findByUser(userJohn);
-        if (sites.size() == 0) {
-            final Site site = new Site("http://www.baeldung.com/feed/");
-            site.setName("baeldung");
-            site.setUser(userJohn);
-            siteRepository.save(site);
-        }
-
-    }
-
-    //
-
     @Test
-    public void whenGettingUserSites_thenCorrect() {
+    public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {
+        createSite();
         final Response response = givenAuth().get(URL_PREFIX + "/sites");
-
-        assertEquals(200, response.statusCode());
-        assertEquals(response.as(List.class).size(), sites.size());
-    }
-
-    @Test
-    public void whenGettingSiteArticles_thenCorrect() {
-        final Response response = givenAuth().get(URL_PREFIX + "/sites/articles?id=" + sites.get(0).getId());
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
     }
 
     @Test
-    public void whenAddingNewSite_thenCorrect() throws JsonProcessingException {
-        final Site site = new Site();
-        site.setName("doha");
-        site.setUrl("http://dohaesam.blogspot.com/feeds/posts/default");
-        Response response = withRequestBody(givenAuth(), site).post(URL_PREFIX + "/sites");
+    public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
+        final Site site = createSite();
+        final Response response = givenAuth().get(URL_PREFIX + "/sites/articles?id=" + site.getId());
 
         assertEquals(200, response.statusCode());
-        response = givenAuth().get(URL_PREFIX + "/sites");
+        assertTrue(response.as(List.class).size() > 0);
+    }
+
+    @Test
+    public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
+        final Site site = createSite();
+
+        final Response response = givenAuth().get(URL_PREFIX + "/sites");
         assertTrue(response.asString().contains(site.getUrl()));
     }
 
     @Test
-    public void whenDeletingSite_thenDeleted() {
-        final Site site = sites.get(0);
+    public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
+        final Site site = createSite();
+        assertTrue(givenAuth().get(URL_PREFIX + "/sites").as(List.class).size() == 1);
+
         final Response response = givenAuth().delete(URL_PREFIX + "/sites/" + site.getId());
 
-        assertEquals(200, response.statusCode());
-        assertNull(siteRepository.findOne(site.getId()));
+        assertEquals(204, response.statusCode());
+        assertTrue(givenAuth().get(URL_PREFIX + "/sites").as(List.class).size() == 0);
+    }
+
+    //
+
+    private Site createSite() throws ParseException, IOException {
+        final Site site = new Site("http://www.baeldung.com/feed/");
+        site.setName("baeldung");
+
+        final Response response = withRequestBody(givenAuth(), site).post(URL_PREFIX + "/sites");
+        return objectMapper.reader().forType(Site.class).readValue(response.asString());
     }
 }

@@ -37,8 +37,8 @@ class SiteService implements ISiteService {
     }
 
     @Override
-    public void saveSite(final Site site) {
-        repo.save(site);
+    public Site saveSite(final Site site) {
+        return repo.save(site);
     }
 
     @Override
