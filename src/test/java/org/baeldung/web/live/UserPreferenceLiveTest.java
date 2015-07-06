@@ -12,7 +12,8 @@ public class UserPreferenceLiveTest extends AbstractLiveTest {
 
     @Test
     public void whenGettingPrefernce_thenCorrect() {
-        final Response response = givenAuth().get(URL_PREFIX + "/user/preference");
+        System.out.println(urlPrefix);
+        final Response response = givenAuth().get(urlPrefix + "/user/preference");
 
         assertEquals(200, response.statusCode());
         assertEquals(response.as(Preference.class).getEmail(), userJohn.getPreference().getEmail());
@@ -20,12 +21,12 @@ public class UserPreferenceLiveTest extends AbstractLiveTest {
 
     @Test
     public void whenUpdattingPrefernce_thenCorrect() throws JsonProcessingException {
-        final Preference pref = givenAuth().get(URL_PREFIX + "/user/preference").as(Preference.class);
+        final Preference pref = givenAuth().get(urlPrefix + "/user/preference").as(Preference.class);
         pref.setEmail("john@xxxx.com");
-        Response response = withRequestBody(givenAuth(), pref).put(URL_PREFIX + "/user/preference/" + pref.getId());
+        Response response = withRequestBody(givenAuth(), pref).put(urlPrefix + "/user/preference/" + pref.getId());
 
         assertEquals(200, response.statusCode());
-        response = givenAuth().get(URL_PREFIX + "/user/preference");
+        response = givenAuth().get(urlPrefix + "/user/preference");
 
         assertEquals(response.as(Preference.class).getEmail(), pref.getEmail());
     }

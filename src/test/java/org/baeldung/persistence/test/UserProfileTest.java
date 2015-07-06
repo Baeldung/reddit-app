@@ -3,7 +3,7 @@ package org.baeldung.persistence.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.baeldung.persistence.config.TestJpaConfig;
+import org.baeldung.config.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Preference;
@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestJpaConfig.class })
+@ContextConfiguration(classes = { PersistenceJpaConfig.class })
 @Transactional
 @TransactionConfiguration
 public class UserProfileTest {

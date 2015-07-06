@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import org.baeldung.persistence.config.TestJpaConfig;
+import org.baeldung.config.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Post;
@@ -23,7 +23,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestJpaConfig.class })
+@ContextConfiguration(classes = { PersistenceJpaConfig.class })
 @Transactional
 @TransactionConfiguration
 public class PersistenceJpaTest {

@@ -2,7 +2,7 @@ package org.baeldung.web.controller.rest;
 
 import java.util.List;
 
-import org.baeldung.persistence.service.IRedditService;
+import org.baeldung.reddit.persistence.service.IRedditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

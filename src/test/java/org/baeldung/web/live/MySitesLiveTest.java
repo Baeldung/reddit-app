@@ -17,7 +17,7 @@ public class MySitesLiveTest extends AbstractLiveTest {
     @Test
     public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {
         createSite();
-        final Response response = givenAuth().get(URL_PREFIX + "/sites");
+        final Response response = givenAuth().get(urlPrefix + "/sites");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -26,7 +26,7 @@ public class MySitesLiveTest extends AbstractLiveTest {
     @Test
     public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
         final Site site = createSite();
-        final Response response = givenAuth().get(URL_PREFIX + "/sites/articles?id=" + site.getId());
+        final Response response = givenAuth().get(urlPrefix + "/sites/articles?id=" + site.getId());
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -36,19 +36,19 @@ public class MySitesLiveTest extends AbstractLiveTest {
     public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
         final Site site = createSite();
 
-        final Response response = givenAuth().get(URL_PREFIX + "/sites");
+        final Response response = givenAuth().get(urlPrefix + "/sites");
         assertTrue(response.asString().contains(site.getUrl()));
     }
 
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
         final Site site = createSite();
-        assertTrue(givenAuth().get(URL_PREFIX + "/sites").as(List.class).size() == 1);
+        assertTrue(givenAuth().get(urlPrefix + "/sites").as(List.class).size() == 1);
 
-        final Response response = givenAuth().delete(URL_PREFIX + "/sites/" + site.getId());
+        final Response response = givenAuth().delete(urlPrefix + "/sites/" + site.getId());
 
         assertEquals(204, response.statusCode());
-        assertTrue(givenAuth().get(URL_PREFIX + "/sites").as(List.class).size() == 0);
+        assertTrue(givenAuth().get(urlPrefix + "/sites").as(List.class).size() == 0);
     }
 
     //
@@ -57,7 +57,7 @@ public class MySitesLiveTest extends AbstractLiveTest {
         final Site site = new Site("http://www.baeldung.com/feed/");
         site.setName("baeldung");
 
-        final Response response = withRequestBody(givenAuth(), site).post(URL_PREFIX + "/sites");
+        final Response response = withRequestBody(givenAuth(), site).post(urlPrefix + "/sites");
         return objectMapper.reader().forType(Site.class).readValue(response.asString());
     }
 }

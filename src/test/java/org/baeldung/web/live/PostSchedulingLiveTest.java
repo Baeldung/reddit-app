@@ -19,7 +19,7 @@ public class PostSchedulingLiveTest extends AbstractLiveTest {
     public void whenGettingUserScheduledPosts_thenCorrect() throws ParseException, IOException {
         createPost();
 
-        final Response response = givenAuth().get(URL_PREFIX + "/api/scheduledPosts?page=0");
+        final Response response = givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -30,22 +30,22 @@ public class PostSchedulingLiveTest extends AbstractLiveTest {
         final Post post = createPost();
 
         post.setTitle("new title");
-        Response response = withRequestBody(givenAuth(), post).put(URL_PREFIX + "/api/scheduledPosts/" + post.getId() + "?date=" + date);
+        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId() + "?date=" + date);
 
         assertEquals(200, response.statusCode());
-        response = givenAuth().get(URL_PREFIX + "/api/scheduledPosts/" + post.getId());
+        response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getId());
         assertTrue(response.asString().contains(post.getTitle()));
     }
 
     @Test
     public void whenDeletingScheduledPost_thenDeleted() throws ParseException, IOException {
         final Post post = createPost();
-        assertTrue(givenAuth().get(URL_PREFIX + "/api/scheduledPosts?page=0").as(List.class).size() == 1);
+        assertTrue(givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0").as(List.class).size() == 1);
 
-        final Response response = givenAuth().delete(URL_PREFIX + "/api/scheduledPosts/" + post.getId());
+        final Response response = givenAuth().delete(urlPrefix + "/api/scheduledPosts/" + post.getId());
 
         assertEquals(204, response.statusCode());
-        assertTrue(givenAuth().get(URL_PREFIX + "/api/scheduledPosts?page=0").as(List.class).size() == 0);
+        assertTrue(givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0").as(List.class).size() == 0);
 
     }
 
@@ -57,7 +57,7 @@ public class PostSchedulingLiveTest extends AbstractLiveTest {
         post.setUrl("test.com");
         post.setSubreddit("test");
         post.setSubmissionDate(dateFormat.parse(date));
-        final Response response = withRequestBody(givenAuth(), post).post(URL_PREFIX + "/api/scheduledPosts?date=" + date);
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date);
         return objectMapper.reader().forType(Post.class).readValue(response.asString());
     }
 

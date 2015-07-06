@@ -1,4 +1,4 @@
-package org.baeldung.web;
+package org.baeldung.reddit.persistence.beans;
 
 import java.util.HashMap;
 import java.util.Map;

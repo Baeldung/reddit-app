@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
-import org.baeldung.persistence.service.IPostRedditService;
+import org.baeldung.reddit.persistence.service.IPostRedditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

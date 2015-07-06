@@ -3,7 +3,7 @@ package org.baeldung.persistence.test;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import org.baeldung.common.AbstractPersistenceIntegrationTest;
-import org.baeldung.persistence.config.TestJpaConfig;
+import org.baeldung.config.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.junit.Ignore;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = { PersistenceJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 @Ignore
 public class PostIntegrationTest extends AbstractPersistenceIntegrationTest<Post> {
 

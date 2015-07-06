@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.baeldung.persistence.service.IRedditService;
+import org.baeldung.reddit.persistence.beans.RedditTemplate;
+import org.baeldung.reddit.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
-import org.baeldung.web.RedditTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;

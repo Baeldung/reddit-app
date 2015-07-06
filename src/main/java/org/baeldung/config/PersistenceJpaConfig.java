@@ -1,4 +1,4 @@
-package org.baeldung.persistence.config;
+package org.baeldung.config;
 
 import java.util.Properties;
 
@@ -16,18 +16,21 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-test.properties" })
-@ComponentScan({ "org.baeldung.persistence.model", "org.baeldung.persistence.dao" })
+@PropertySource({ "classpath:persistence-${envTarget:dev}.properties" })
+@ComponentScan({ "org.baeldung.persistence" })
 @EnableJpaRepositories(basePackages = "org.baeldung.persistence.dao")
-public class TestJpaConfig {
+public class PersistenceJpaConfig {
+
     @Autowired
     private Environment env;
 
-    public TestJpaConfig() {
+    public PersistenceJpaConfig() {
         super();
     }
 
@@ -62,6 +65,11 @@ public class TestJpaConfig {
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder(11);
     }
 
     //

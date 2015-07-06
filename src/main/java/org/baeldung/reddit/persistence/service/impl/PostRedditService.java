@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.reddit.persistence.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.IPostRedditService;
+import org.baeldung.reddit.persistence.service.IPostRedditService;
 import org.baeldung.reddit.util.OnPostSubmittedEvent;
 import org.baeldung.reddit.util.PostScores;
 import org.baeldung.reddit.util.RedditApiConstants;

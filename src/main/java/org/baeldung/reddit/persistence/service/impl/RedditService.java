@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.reddit.persistence.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.IRedditService;
+import org.baeldung.reddit.persistence.beans.RedditTemplate;
+import org.baeldung.reddit.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
 import org.baeldung.reddit.util.RedditApiConstants;
-import org.baeldung.web.RedditTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
