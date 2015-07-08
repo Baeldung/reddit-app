@@ -1,5 +1,7 @@
 package org.baeldung.persistence.model;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,9 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Table(name = "APP_USER")
-public class User implements IEntity {
+public class User implements IEntity, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,6 +58,7 @@ public class User implements IEntity {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -92,6 +99,7 @@ public class User implements IEntity {
         this.needCaptcha = needCaptcha;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -139,6 +147,31 @@ public class User implements IEntity {
     @Override
     public String toString() {
         return "User [username=" + username + "]";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }

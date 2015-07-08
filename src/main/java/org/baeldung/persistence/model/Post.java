@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Post implements IEntity {
 
@@ -52,6 +54,7 @@ public class Post implements IEntity {
 
     private boolean deleteAfterLastAttempt;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

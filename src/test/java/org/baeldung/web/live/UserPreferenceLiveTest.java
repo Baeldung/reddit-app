@@ -1,6 +1,7 @@
 package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.baeldung.persistence.model.Preference;
 import org.junit.Test;
@@ -12,11 +13,10 @@ public class UserPreferenceLiveTest extends AbstractLiveTest {
 
     @Test
     public void whenGettingPrefernce_thenCorrect() {
-        System.out.println(urlPrefix);
         final Response response = givenAuth().get(urlPrefix + "/user/preference");
 
         assertEquals(200, response.statusCode());
-        assertEquals(response.as(Preference.class).getEmail(), userJohn.getPreference().getEmail());
+        assertTrue(response.as(Preference.class).getEmail().contains("john"));
     }
 
     @Test
