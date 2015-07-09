@@ -2,14 +2,10 @@ package org.baeldung.web.live;
 
 import java.text.SimpleDateFormat;
 
-import org.baeldung.persistence.dao.PostRepository;
-import org.baeldung.persistence.dao.SiteRepository;
-import org.baeldung.persistence.dao.UserRepository;
-import org.baeldung.persistence.model.User;
 import org.baeldung.web.live.config.CommonPaths;
 import org.baeldung.web.live.config.TestConfig;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,17 +21,9 @@ import com.jayway.restassured.specification.RequestSpecification;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class }, loader = AnnotationConfigContextLoader.class)
+@Ignore
 public class AbstractLiveTest {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postReopsitory;
-
-    @Autowired
-    private SiteRepository siteReopsitory;
 
     @Autowired
     private CommonPaths commonPaths;
@@ -49,14 +37,8 @@ public class AbstractLiveTest {
         urlPrefix = commonPaths.getServerRoot();
     }
 
-    @After
-    public void cleanup() {
-        final User userJohn = userRepository.findByUsername("john");
-        postReopsitory.delete(postReopsitory.findByUser(userJohn));
-        siteReopsitory.delete(siteReopsitory.findByUser(userJohn));
-    }
-
     //
+
     protected RequestSpecification givenAuth() {
         final FormAuthConfig formConfig = new FormAuthConfig(urlPrefix + "/j_spring_security_check", "username", "password");
         return RestAssured.given().auth().form("john", "123", formConfig);

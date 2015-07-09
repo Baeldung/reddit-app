@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
-public class PostSchedulingLiveTest extends AbstractLiveTest {
+public class ScheduledPostLiveTest extends AbstractLiveTest {
     private static final String date = "2016-01-01 00:00";
 
     @Test
@@ -40,13 +40,9 @@ public class PostSchedulingLiveTest extends AbstractLiveTest {
     @Test
     public void whenDeletingScheduledPost_thenDeleted() throws ParseException, IOException {
         final Post post = createPost();
-        assertTrue(givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0").as(List.class).size() == 1);
-
         final Response response = givenAuth().delete(urlPrefix + "/api/scheduledPosts/" + post.getId());
 
         assertEquals(204, response.statusCode());
-        assertTrue(givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0").as(List.class).size() == 0);
-
     }
 
     //

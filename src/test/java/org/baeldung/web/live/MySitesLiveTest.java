@@ -43,12 +43,9 @@ public class MySitesLiveTest extends AbstractLiveTest {
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
         final Site site = createSite();
-        assertTrue(givenAuth().get(urlPrefix + "/sites").as(List.class).size() == 1);
-
         final Response response = givenAuth().delete(urlPrefix + "/sites/" + site.getId());
 
         assertEquals(204, response.statusCode());
-        assertTrue(givenAuth().get(urlPrefix + "/sites").as(List.class).size() == 0);
     }
 
     //

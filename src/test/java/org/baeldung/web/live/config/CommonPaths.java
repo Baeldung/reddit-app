@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource({ "classpath:web-${envTarget:dev}.properties" })
+@PropertySource({ "classpath:web-${envTarget:locale}.properties" })
 public class CommonPaths {
 
     @Autowired

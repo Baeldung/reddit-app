@@ -1,5 +1,6 @@
 package org.baeldung.persistence.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Preference implements IEntity {
 
     private boolean deleteAfterLastAttempt;
 
+    @Column(nullable = false)
     private String timezone;
 
     public Preference() {

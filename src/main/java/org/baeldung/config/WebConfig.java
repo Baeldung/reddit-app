@@ -6,15 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
-import org.baeldung.persistence.dao.PreferenceRepository;
-import org.baeldung.persistence.dao.UserRepository;
-import org.baeldung.persistence.model.Preference;
-import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.MyFeatures;
 import org.baeldung.reddit.util.UserAgentInterceptor;
@@ -36,7 +31,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
@@ -136,6 +130,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return redditClassifier;
     }
 
+    @Bean
+    public Setup setup() {
+        return new Setup();
+    }
+
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
@@ -176,15 +175,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         @Value("${redirectUri}")
         private String redirectUri;
 
-        @Autowired
-        private UserRepository userRepository;
-
-        @Autowired
-        private PreferenceRepository preferenceRepository;
-
-        @Autowired
-        private PasswordEncoder passwordEncoder;
-
         @Bean
         public OAuth2ProtectedResourceDetails reddit() {
             final AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
@@ -217,24 +207,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         public void startupCheck() {
             if (StringUtils.isBlank(accessTokenUri) || StringUtils.isBlank(userAuthorizationUri) || StringUtils.isBlank(clientID) || StringUtils.isBlank(clientSecret)) {
                 throw new RuntimeException("Incomplete reddit properties");
-            }
-            createTestUser();
-        }
-
-        private void createTestUser() {
-            User userJohn = userRepository.findByUsername("john");
-            if (userJohn == null) {
-                userJohn = new User();
-                userJohn.setUsername("john");
-                userJohn.setPassword(passwordEncoder.encode("123"));
-                userJohn.setAccessToken("token");
-                userRepository.save(userJohn);
-                final Preference pref = new Preference();
-                pref.setTimezone(TimeZone.getDefault().getID());
-                pref.setEmail("john@test.com");
-                preferenceRepository.save(pref);
-                userJohn.setPreference(pref);
-                userRepository.save(userJohn);
             }
         }
 
