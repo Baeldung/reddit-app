@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-${envTarget:dev}.properties" })
+@PropertySource({ "classpath:persistence-${envTarget:test}.properties" })
 @ComponentScan({ "org.baeldung.persistence" })
 @EnableJpaRepositories(basePackages = "org.baeldung.persistence.dao")
 public class PersistenceJpaConfig {
