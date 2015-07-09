@@ -8,10 +8,12 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.persistence.model.Post;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
+@Ignore
 public class ScheduledPostLiveTest extends AbstractLiveTest {
     private static final String date = "2016-01-01 00:00";
 

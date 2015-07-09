@@ -8,10 +8,12 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.persistence.model.Site;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
+@Ignore
 public class MySitesLiveTest extends AbstractLiveTest {
 
     @Test
