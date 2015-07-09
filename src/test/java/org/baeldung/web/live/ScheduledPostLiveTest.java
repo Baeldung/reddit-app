@@ -18,6 +18,21 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
     private static final String date = "2016-01-01 00:00";
 
     @Test
+    public void whenScheduleANewPost_thenCreated() throws ParseException, IOException {
+        final Post post = new Post();
+        post.setTitle("test");
+        post.setUrl("test.com");
+        post.setSubreddit("test");
+        post.setSubmissionDate(dateFormat.parse(date));
+
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date);
+
+        assertEquals(200, response.statusCode());
+        final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
+        assertEquals(result.getUrl(), post.getUrl());
+    }
+
+    @Test
     public void whenGettingUserScheduledPosts_thenCorrect() throws ParseException, IOException {
         createPost();
 
