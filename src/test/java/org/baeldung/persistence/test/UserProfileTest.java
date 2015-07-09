@@ -33,14 +33,18 @@ public class UserProfileTest {
 
     private Preference prefJohn, prefTom;
 
+    private final String timezone = "GMT";
+
     @Before
     public void init() {
         prefJohn = new Preference();
         prefJohn.setEmail("john@gmail.com");
+        prefJohn.setTimezone(timezone);
         preferenceRepository.save(prefJohn);
 
         prefTom = new Preference();
         prefTom.setEmail("tom@gmail.com");
+        prefTom.setTimezone(timezone);
         preferenceRepository.save(prefTom);
 
         userJohn = new User();
@@ -67,6 +71,7 @@ public class UserProfileTest {
 
     @Test
     public void whenUpdatingUserPreference_thenCorrect() {
+
         prefJohn.setSubreddit("kitten");
         preferenceRepository.save(prefJohn);
         prefTom.setSubreddit("java");

@@ -36,7 +36,7 @@ public class PreferencePersistenceIntegrationTest extends AbstractPersistenceInt
 
     @Override
     protected final void invalidate(final Preference entity) {
-        entity.setEmail(null);
+        entity.setTimezone(null);
     }
 
     @Override
@@ -44,6 +44,7 @@ public class PreferencePersistenceIntegrationTest extends AbstractPersistenceInt
         final Preference preference = new Preference();
         preference.setEmail(randomAlphabetic(6) + "@gmail.com");
         preference.setSubreddit("java");
+        preference.setTimezone("GMT");
         return preference;
     }
 
