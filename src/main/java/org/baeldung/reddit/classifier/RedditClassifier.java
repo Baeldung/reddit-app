@@ -151,7 +151,12 @@ public class RedditClassifier {
         cal.setTimeInMillis(Long.parseLong(time) * 1000);
         internalVector.set(0, cal.get(Calendar.HOUR_OF_DAY)); // hour of day
 
-        internalVector.set(1, Integer.parseInt(numberOfWordInTitle)); // number of words in the title
+        internalVector.set(1, Integer.parseInt(numberOfWordInTitle)); // number
+                                                                      // of
+                                                                      // words
+                                                                      // in
+                                                                      // the
+                                                                      // title
 
         domainEncoder.addToVector(theRootDomain, internalVector);
         final List<String> words = Splitter.on(' ').splitToList(title);

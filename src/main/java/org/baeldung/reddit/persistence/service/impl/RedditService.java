@@ -158,7 +158,8 @@ class RedditService implements IRedditService {
 
     // old autocomplete subreddit
     // private JsonNode searchSubredditNames(String query) {
-    // final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
+    // final MultiValueMap<String, String> param = new
+    // LinkedMultiValueMap<String, String>();
     // param.add("query", query);
     // final JsonNode node = redditTemplate.subredditNameSearch(query);
     // return node.get("names");

@@ -35,25 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
-            http
-                .anonymous().disable()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/home","/post","/postSchedule","/posts").hasRole("USER")
-                .and()
-                .formLogin()
-                .loginPage("/")
-                .loginProcessingUrl("/j_spring_security_check")
-                .defaultSuccessUrl("/home")
-                .failureUrl("/?error=true")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .and()
-                .logout()
-                .deleteCookies("JSESSIONID")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/");
-        // @formatter:on
+		http.anonymous().disable().csrf().disable().authorizeRequests()
+				.antMatchers("/home", "/post", "/postSchedule", "/posts").hasRole("USER").and().formLogin()
+				.loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
+				.failureUrl("/?error=true").usernameParameter("username").passwordParameter("password").and().logout()
+				.deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/");
+		// @formatter:on
     }
 
 }

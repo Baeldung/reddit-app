@@ -41,7 +41,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         final ModelAndView model = new ModelAndView("submissionResponse");
         model.addObject("msg", response);
         return model;
-        // return handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+        // return handleExceptionInternal(ex, response, new HttpHeaders(),
+        // HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler({ HttpClientErrorException.class })
@@ -51,7 +52,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         final ModelAndView model = new ModelAndView("submissionResponse");
         model.addObject("msg", response);
         return model;
-        // return handleExceptionInternal(ex, response, new HttpHeaders(), HttpStatus.TOO_MANY_REQUESTS, request);
+        // return handleExceptionInternal(ex, response, new HttpHeaders(),
+        // HttpStatus.TOO_MANY_REQUESTS, request);
     }
 
     @ExceptionHandler({ InvalidDateException.class })
