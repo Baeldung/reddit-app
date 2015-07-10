@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
-import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
@@ -21,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
@@ -51,34 +47,6 @@ class RedditService implements IRedditService {
     }
 
     // API
-
-    @Override
-    public void loadAuthentication(final String name, final OAuth2AccessToken token) {
-        User user = userRepository.findByUsername(name);
-        if (user == null) {
-            user = new User();
-            user.setUsername(name);
-        }
-
-        if (redditTemplate.needsCaptcha()) {
-            user.setNeedCaptcha(true);
-        } else {
-            user.setNeedCaptcha(false);
-        }
-
-        user.setAccessToken(token.getValue());
-        user.setRefreshToken(token.getRefreshToken().getValue());
-        user.setTokenExpiration(token.getExpiration());
-
-        final Preference pref = new Preference();
-        pref.setTimezone(TimeZone.getDefault().getID());
-        preferenceRepository.save(pref);
-        user.setPreference(pref);
-        userRepository.save(user);
-
-        final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
 
     @Override
     public void connectReddit(final boolean needsCaptcha, final OAuth2AccessToken token) {

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 @Controller
 public class RedditController {
 
@@ -36,12 +34,7 @@ public class RedditController {
     @RequestMapping("/redditLogin")
     public final String redditLogin() {
         final OAuth2AccessToken token = redditTemplate.getAccessToken();
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            service.connectReddit(redditTemplate.needsCaptcha(), token);
-        } else {
-            final JsonNode node = redditTemplate.getUserInfo();
-            service.loadAuthentication(node.get("name").asText(), token);
-        }
+        service.connectReddit(redditTemplate.needsCaptcha(), token);
         return "redirect:home";
     }
 

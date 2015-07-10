@@ -26,22 +26,20 @@
 <div class="alert alert-danger" th:if="${param.containsKey('error')}">
 Invalid username or password
 </div>
-<form class="form-inline" method="post" action="j_spring_security_check">
+<form method="post" action="j_spring_security_check" class="form-horizontal col-sm-6">
   <div class="form-group">
-    <label class="sr-only" for="username">Username</label>
-    <input class="form-control" id="username" name="username" placeholder="Username"/>
+    <label for="username" class="control-label col-sm-3">Username</label>
+    <div class="col-sm-9"><input class="form-control" id="username" name="username" placeholder="Username"/></div>
   </div>
   <div class="form-group">
-    <label class="sr-only" for="password">Password</label>
-    <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
-  </div>
+    <label for="password" class="control-label col-sm-3">Password</label>
+   <div class="col-sm-9"> <input type="password" class="form-control" id="password" name="password" placeholder="Password"/></div>
+  </div>  
+  <button type="submit" class="btn btn-default pull-right">Login</button>
+  <br/><br/>
+    <a href="signup" class="btn btn-primary pull-right">Sign up</a>
   
-  <button type="submit" class="btn btn-default">Login</button>
 </form>
-<br/><br/>
-<a href="signup" class="btn btn-primary">Sign up</a>
-<br/><br/>
-<a href="redditLogin" class="btn btn-primary">Login with Reddit</a>
 </div>		
 </body>
 </html>

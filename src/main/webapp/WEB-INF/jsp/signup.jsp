@@ -48,6 +48,12 @@ border-color: #ddd;
     </div>
   </div>
   <div class="form-group">
+    <label for="email" class="col-sm-3 control-label">Email</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="email" placeholder="Email" type="email" required="required"/>
+    </div>
+  </div>
+  <div class="form-group">
     <label for="password" class="col-sm-3 control-label">Password</label>
     <div class="col-sm-9">
       <input type="password" class="form-control" id="password" placeholder="Password" required="required" data-minlength="3"/>
@@ -76,7 +82,7 @@ $("#submitBut").click(function(event) {
 
 function register(){
 	console.log("here");
-	$.post("user/register", {username: $("#username").val(), password: $("#password").val()}, function (data){
+	$.post("user/register", {username: $("#username").val(), email: $("#email").val(), password: $("#password").val()}, function (data){
 		window.location.href= "./";
 	}).fail(function(error){
         console.log(error);

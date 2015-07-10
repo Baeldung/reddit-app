@@ -18,7 +18,7 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void register(@RequestParam("username") final String username, @RequestParam("password") final String password) {
-        service.registerNewUser(username, password);
+    public void register(@RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
+        service.registerNewUser(username, email, password);
     }
 }

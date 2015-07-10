@@ -28,7 +28,7 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void registerNewUser(final String username, final String password) {
+    public void registerNewUser(final String username, final String email, final String password) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             throw new UsernameAlreadyExistsException("Username already exists");
@@ -38,6 +38,7 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(password));
         final Preference pref = new Preference();
         pref.setTimezone(TimeZone.getDefault().getID());
+        pref.setEmail(email);
         preferenceReopsitory.save(pref);
         user.setPreference(pref);
         userRepository.save(user);
