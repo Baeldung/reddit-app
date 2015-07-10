@@ -10,7 +10,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
-public class RedditClassifierTest {
+public class RedditClassifierIntegrationTest {
 
     @Test
     public void whenUsingDefaultClassifier_thenAccurate() throws IOException {

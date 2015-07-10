@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(classes = { PersistenceJpaConfig.class })
 @Transactional
 @TransactionConfiguration
-public class PersistenceJpaTest {
+public class PostPersistenceTest {
 
     @Autowired
     private PostRepository postRepository;

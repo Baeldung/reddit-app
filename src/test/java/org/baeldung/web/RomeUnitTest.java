@@ -15,7 +15,7 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
-public class RomeTest {
+public class RomeUnitTest {
 
     @Test
     public void whenUsingRomeToReadWordpressFeed_thenCorrect() throws IllegalArgumentException, FeedException, IOException {
