@@ -44,6 +44,7 @@ public class ScheduledPostRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Post schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());

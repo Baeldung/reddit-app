@@ -25,7 +25,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
 
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date);
 
-        assertEquals(200, response.statusCode());
+        assertEquals(201, response.statusCode());
         final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
