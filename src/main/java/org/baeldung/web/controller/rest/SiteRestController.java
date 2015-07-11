@@ -35,6 +35,7 @@ public class SiteRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Site addSite(@RequestBody final Site site) {
         if (!service.isValidFeedUrl(site.getUrl())) {
