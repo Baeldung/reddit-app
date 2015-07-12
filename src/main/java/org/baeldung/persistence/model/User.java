@@ -46,6 +46,11 @@ public class User implements IEntity, UserDetails {
         super();
     }
 
+    public User(final String username) {
+        super();
+        this.username = username;
+    }
+
     //
 
     @Override
