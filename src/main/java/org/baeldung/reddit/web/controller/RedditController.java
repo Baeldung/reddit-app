@@ -54,6 +54,13 @@ public class RedditController {
         return "submissionForm";
     }
 
+    //
+
+    @RequestMapping("*")
+    public final String fallback() {
+        return "home";
+    }
+
     // === private
 
     private User getCurrentUser() {
