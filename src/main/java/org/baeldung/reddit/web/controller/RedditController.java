@@ -56,10 +56,10 @@ public class RedditController {
 
     //
 
-    @RequestMapping("*")
-    public final String fallback() {
-        return "home";
-    }
+    // @RequestMapping("*")
+    // public final String fallback() {
+    // return "home";
+    // }
 
     // === private
 

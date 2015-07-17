@@ -36,11 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
 		http.anonymous().disable().csrf().disable().authorizeRequests()
-				.antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").hasRole("USER").and().formLogin()
-				.loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
-				.failureUrl("/?error=true").usernameParameter("username").passwordParameter("password").and().logout()
-				.deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/");
+				.antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
+			        .antMatchers("/users").hasAuthority("USER_READ_PRIVILEGE")
+				.and()
+				.formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
+				.failureUrl("/?error=true").usernameParameter("username").passwordParameter("password")
+				.and()
+				.logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/");
 		// @formatter:on
     }
-
 }

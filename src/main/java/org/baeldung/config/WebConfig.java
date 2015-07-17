@@ -89,6 +89,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/profile");
         registry.addViewController("/scheduledPosts");
         registry.addViewController("/mysites");
+        registry.addViewController("/users");
     }
 
     @Override
@@ -105,8 +106,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         list.add(new UserAgentInterceptor());
         final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(reddit);
         restTemplate.setInterceptors(list);
-        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                new ClientCredentialsAccessTokenProvider()));
         restTemplate.setAccessTokenProvider(accessTokenProvider);
         return restTemplate;
     }
@@ -197,8 +198,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
             list.add(new UserAgentInterceptor());
             template.setInterceptors(list);
-            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                    Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                    new ClientCredentialsAccessTokenProvider()));
             template.setAccessTokenProvider(accessTokenProvider);
             return template;
         }

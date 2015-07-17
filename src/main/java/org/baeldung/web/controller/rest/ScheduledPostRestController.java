@@ -2,10 +2,14 @@ package org.baeldung.web.controller.rest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ScheduledPostRestController {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static final int PAGE_SIZE = 2;
+    private static final int LIMIT_SCHEDULED_POSTS_PER_DAY = 3;
 
     @Autowired
     private PostRepository postReopsitory;
@@ -46,12 +51,14 @@ public class ScheduledPostRestController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Post schedule(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
+    public Post schedule(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
-        System.out.println("scheduling");
+        if (!checkIfCanSchedule(submissionDate, request)) {
+            throw new InvalidDateException("Scheduling Date exceeds daily limit");
+        }
         post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
@@ -66,12 +73,14 @@ public class ScheduledPostRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
+    public void updatePost(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
-
+        if (!checkIfCanSchedule(submissionDate, request)) {
+            throw new InvalidDateException("Scheduling Date exceeds daily limit");
+        }
         post.setSubmissionDate(submissionDate);
         post.setUser(getCurrentUser());
         postReopsitory.save(post);
@@ -88,6 +97,16 @@ public class ScheduledPostRestController {
     private synchronized final Date calculateSubmissionDate(final String dateString, final String userTimeZone) throws ParseException {
         dateFormat.setTimeZone(TimeZone.getTimeZone(userTimeZone));
         return dateFormat.parse(dateString);
+    }
+
+    private boolean checkIfCanSchedule(final Date date, final HttpServletRequest request) {
+        if (request.isUserInRole("POST_UNLIMITED_PRIVILEGE")) {
+            return true;
+        }
+        final Date start = DateUtils.truncate(date, Calendar.DATE);
+        final Date end = DateUtils.addDays(start, 1);
+        final long count = postReopsitory.countByUserAndSubmissionDateBetween(getCurrentUser(), start, end);
+        return count < LIMIT_SCHEDULED_POSTS_PER_DAY;
     }
 
     private User getCurrentUser() {
