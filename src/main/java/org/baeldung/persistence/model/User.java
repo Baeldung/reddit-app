@@ -1,9 +1,7 @@
 package org.baeldung.persistence.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,13 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 @Entity
 @Table(name = "APP_USER")
-public class User implements IEntity, UserDetails {
+public class User implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,7 +65,6 @@ public class User implements IEntity, UserDetails {
         this.id = id;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
@@ -112,7 +105,6 @@ public class User implements IEntity, UserDetails {
         this.needCaptcha = needCaptcha;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -168,37 +160,6 @@ public class User implements IEntity, UserDetails {
     @Override
     public String toString() {
         return "User [username=" + username + "]";
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for (final Role role : this.roles) {
-            for (final Privilege privilege : role.getPrivileges()) {
-                authorities.add(new SimpleGrantedAuthority(privilege.getName()));
-            }
-        }
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 }

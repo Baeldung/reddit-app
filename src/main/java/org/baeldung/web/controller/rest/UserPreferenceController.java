@@ -2,10 +2,9 @@ package org.baeldung.web.controller.rest;
 
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.model.Preference;
-import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,25 +19,22 @@ public class UserPreferenceController {
     @Autowired
     private PreferenceRepository preferenceReopsitory;
 
+    @Autowired
+    private IUserService userService;
+
     //
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Preference getCurrentUserPreference() {
-        return getCurrentUser().getPreference();
+        return userService.getCurrentUser().getPreference();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody final Preference pref) {
         preferenceReopsitory.save(pref);
-        getCurrentUser().setPreference(pref);
-    }
-
-    // === private
-
-    private User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.getCurrentUser().setPreference(pref);
     }
 
 }

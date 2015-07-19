@@ -14,4 +14,6 @@ public interface IUserService {
     List<Role> getRolesList();
 
     void modifyUserRoles(Long userId, String roleIds);
+
+    User getCurrentUser();
 }

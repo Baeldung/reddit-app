@@ -14,6 +14,7 @@ import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
 import org.baeldung.reddit.util.PostDto;
 import org.baeldung.reddit.util.RedditApiConstants;
+import org.baeldung.security.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,8 @@ class RedditService implements IRedditService {
 
     @Override
     public void connectReddit(final boolean needsCaptcha, final OAuth2AccessToken token) {
-        final User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User currentUser = userPrincipal.getUser();
         currentUser.setNeedCaptcha(needsCaptcha);
         currentUser.setAccessToken(token.getValue());
         currentUser.setRefreshToken(token.getRefreshToken().getValue());

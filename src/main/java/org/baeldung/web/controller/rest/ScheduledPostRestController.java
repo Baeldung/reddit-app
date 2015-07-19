@@ -13,12 +13,12 @@ import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.IUserService;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,12 +38,15 @@ public class ScheduledPostRestController {
     @Autowired
     private PostRepository postReopsitory;
 
+    @Autowired
+    private IUserService userService;
+
     // === API Methods
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public final List<Post> getScheduledPosts(@RequestParam(value = "page", required = false) final int page) {
-        final User user = getCurrentUser();
+        final User user = userService.getCurrentUser();
         final Page<Post> posts = postReopsitory.findByUser(user, new PageRequest(page, PAGE_SIZE));
         return posts.getContent();
     }
@@ -52,7 +55,7 @@ public class ScheduledPostRestController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Post schedule(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
+        final Date submissionDate = calculateSubmissionDate(date, userService.getCurrentUser().getPreference().getTimezone());
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -60,7 +63,7 @@ public class ScheduledPostRestController {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
         post.setSubmissionDate(submissionDate);
-        post.setUser(getCurrentUser());
+        post.setUser(userService.getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
         return postReopsitory.save(post);
     }
@@ -74,7 +77,7 @@ public class ScheduledPostRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        final Date submissionDate = calculateSubmissionDate(date, getCurrentUser().getPreference().getTimezone());
+        final Date submissionDate = calculateSubmissionDate(date, userService.getCurrentUser().getPreference().getTimezone());
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
@@ -82,7 +85,7 @@ public class ScheduledPostRestController {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
         post.setSubmissionDate(submissionDate);
-        post.setUser(getCurrentUser());
+        post.setUser(userService.getCurrentUser());
         postReopsitory.save(post);
     }
 
@@ -105,12 +108,8 @@ public class ScheduledPostRestController {
         }
         final Date start = DateUtils.truncate(date, Calendar.DATE);
         final Date end = DateUtils.addDays(start, 1);
-        final long count = postReopsitory.countByUserAndSubmissionDateBetween(getCurrentUser(), start, end);
+        final long count = postReopsitory.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
         return count < LIMIT_SCHEDULED_POSTS_PER_DAY;
-    }
-
-    private User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

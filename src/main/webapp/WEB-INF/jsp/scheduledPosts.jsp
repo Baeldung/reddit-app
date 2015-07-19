@@ -15,7 +15,7 @@
 <thead>
 <tr>
 <th>Post title</th>
-<th>Submission Date (<span id="timezone" sec:authentication="principal.preference.timezone">UTC</span>)</th>
+<th>Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</th>
 <th>Status</th>
 <th>Resubmit Attempts left</th>
 <th>Actions</th>

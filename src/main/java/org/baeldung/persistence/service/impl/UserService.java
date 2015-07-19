@@ -12,10 +12,12 @@ import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.service.IUserService;
+import org.baeldung.security.UserPrincipal;
 import org.baeldung.web.exceptions.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +82,11 @@ public class UserService implements IUserService {
         final User user = userRepository.findOne(userId);
         user.setRoles(roles);
         userRepository.save(user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userPrincipal.getUser();
     }
 }

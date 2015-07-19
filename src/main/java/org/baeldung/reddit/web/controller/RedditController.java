@@ -1,7 +1,7 @@
 package org.baeldung.reddit.web.controller;
 
 import org.baeldung.persistence.dao.UserRepository;
-import org.baeldung.persistence.model.User;
+import org.baeldung.persistence.service.IUserService;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,9 @@ public class RedditController {
     @Autowired
     private IRedditService service;
 
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping("/")
     public final String homePage() {
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
@@ -40,12 +43,12 @@ public class RedditController {
 
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {
-        if (getCurrentUser().getAccessToken() == null) {
+        if (userService.getCurrentUser().getAccessToken() == null) {
             model.addAttribute("msg", "Sorry, You did not connect your account to Reddit yet");
             return "submissionResponse";
         }
 
-        final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
+        final boolean isCaptchaNeeded = userService.getCurrentUser().isCaptchaNeeded();
         if (isCaptchaNeeded) {
             final String iden = redditTemplate.getNewCaptcha();
             model.addAttribute("iden", iden);
@@ -60,11 +63,5 @@ public class RedditController {
     // public final String fallback() {
     // return "home";
     // }
-
-    // === private
-
-    private User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 
 }

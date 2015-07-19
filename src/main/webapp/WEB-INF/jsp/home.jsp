@@ -11,7 +11,7 @@
 <div class="container">
         <h1>Welcome, <small><a href="profile" sec:authentication="principal.username">Bob</a></small></h1>
         <br/>
-        <div th:if="${#authentication.principal.accessToken == null}">
+        <div th:if="${#authentication.principal.user.accessToken == null}">
         <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>
         <br/> <br/>
         </div>
