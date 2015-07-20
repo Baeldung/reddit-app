@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -37,10 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
 		http.anonymous().disable().csrf().disable().authorizeRequests()
 				.antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
-			        .antMatchers("/users").hasAuthority("USER_READ_PRIVILEGE")
+			        .antMatchers("/adminHome","/users").hasAuthority("ADMIN_READ_PRIVILEGE")
 				.and()
 				.formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
 				.failureUrl("/?error=true").usernameParameter("username").passwordParameter("password")
+				.successHandler(successHandler)
 				.and()
 				.logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/");
 		// @formatter:on

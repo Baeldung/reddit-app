@@ -63,13 +63,13 @@ public class Setup {
     }
 
     private void createRoles() {
-        final Privilege userReadPrivilege = createPrivilegeIfNotFound("USER_READ_PRIVILEGE");
-        final Privilege userWritePrivilege = createPrivilegeIfNotFound("USER_WRITE_PRIVILEGE");
+        final Privilege adminReadPrivilege = createPrivilegeIfNotFound("ADMIN_READ_PRIVILEGE");
+        final Privilege adminWritePrivilege = createPrivilegeIfNotFound("ADMIN_WRITE_PRIVILEGE");
         final Privilege postLimitedPrivilege = createPrivilegeIfNotFound("POST_LIMITED_PRIVILEGE");
         final Privilege postUnlimitedPrivilege = createPrivilegeIfNotFound("POST_UNLIMITED_PRIVILEGE");
 
         // == create initial roles
-        createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(userReadPrivilege, userWritePrivilege));
+        createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(adminReadPrivilege, adminWritePrivilege));
         createRoleIfNotFound("ROLE_SUPER_USER", Arrays.asList(postUnlimitedPrivilege));
         createRoleIfNotFound("ROLE_USER", Arrays.asList(postLimitedPrivilege));
 

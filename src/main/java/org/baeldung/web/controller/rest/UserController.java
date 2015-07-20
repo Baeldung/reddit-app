@@ -17,37 +17,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
     private IUserService service;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void register(@RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
         service.registerNewUser(username, email, password);
     }
 
-    @PreAuthorize("hasRole('USER_READ_PRIVILEGE')")
-    @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
+    @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUsersList() {
         return service.getUsersList();
     }
 
-    @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.OK)
-    public void modifyUserRoles(@PathVariable("id") final Long id, @RequestParam(value = "roleIds") final String roleIds) {
-        service.modifyUserRoles(id, roleIds);
-    }
-
-    @PreAuthorize("hasRole('USER_READ_PRIVILEGE')")
-    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
+    @RequestMapping(value = "/admin/roles", method = RequestMethod.GET)
     @ResponseBody
     public List<Role> getRolesList() {
         return service.getRolesList();
+    }
+
+    @PreAuthorize("hasRole('ADMIN_WRITE_PRIVILEGE')")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void modifyUserRoles(@PathVariable("id") final Long id, @RequestParam(value = "roleIds") final String roleIds) {
+        service.modifyUserRoles(id, roleIds);
     }
 
 }

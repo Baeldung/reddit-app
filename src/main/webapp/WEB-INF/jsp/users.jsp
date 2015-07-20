@@ -49,7 +49,7 @@
            
 $(function(){
 	var userRoles="";
-	$.get("user", function(data){
+	$.get("admin/users", function(data){
         $.each(data, function( index, user ) {
         	userRoles = extractRolesName(user.roles);
             $('.table').append('<tr><td>'+user.username+'</td><td>'+userRoles+
@@ -68,7 +68,7 @@ function extractRolesName(roles){
 
 function showEditModal(userId, roleNames){
 	$("#userId").val(userId);
-	$.get("user/roles", function(data){
+	$.get("admin/roles", function(data){
         $.each(data, function( index, role ) {
         	if(roleNames.indexOf(role.name) != -1){
                 $('#allRoles').append('<input type="checkbox" name="roleIds" value="'+role.id+'" checked/> '+role.name+'<br/>')
