@@ -2,7 +2,7 @@ package org.baeldung.web.controller.rest;
 
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.model.Preference;
-import org.baeldung.persistence.service.IUserService;
+import org.baeldung.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

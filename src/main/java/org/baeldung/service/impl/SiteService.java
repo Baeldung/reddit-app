@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.service.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,8 +8,8 @@ import java.util.List;
 import org.baeldung.persistence.dao.SiteRepository;
 import org.baeldung.persistence.model.Site;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.ISiteService;
 import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.service.ISiteService;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

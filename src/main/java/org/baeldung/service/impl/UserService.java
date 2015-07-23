@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +11,8 @@ import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.IUserService;
 import org.baeldung.security.UserPrincipal;
+import org.baeldung.service.IUserService;
 import org.baeldung.web.exceptions.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

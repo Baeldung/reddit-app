@@ -1,17 +1,17 @@
-package org.baeldung.persistence.service.impl;
+package org.baeldung.service.impl;
 
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
 import org.baeldung.persistence.model.Site;
-import org.baeldung.persistence.service.ISiteService;
-import org.baeldung.persistence.service.impl.SiteService;
 import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.service.ISiteService;
+import org.baeldung.service.impl.SiteService;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SiteIntegrationTest {
+public class SiteUnitTest {
 
     private ISiteService service;
 

@@ -1,7 +1,7 @@
 package org.baeldung.web.controller;
 
 import org.baeldung.persistence.dao.PostRepository;
-import org.baeldung.persistence.service.IUserService;
+import org.baeldung.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

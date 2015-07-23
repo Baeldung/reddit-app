@@ -1,4 +1,4 @@
-package org.baeldung.persistence.service;
+package org.baeldung.service;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import org.baeldung.reddit.classifier.RedditDataCollector;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
+@Ignore("Classification work is on pause")
 public class RedditClassifierIntegrationTest {
 
     @Test

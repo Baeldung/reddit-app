@@ -3,9 +3,9 @@ package org.baeldung.web.controller.rest;
 import java.util.List;
 
 import org.baeldung.persistence.model.Site;
-import org.baeldung.persistence.service.ISiteService;
-import org.baeldung.persistence.service.IUserService;
 import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.service.ISiteService;
+import org.baeldung.service.IUserService;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

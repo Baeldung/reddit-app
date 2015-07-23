@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.IUserService;
+import org.baeldung.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

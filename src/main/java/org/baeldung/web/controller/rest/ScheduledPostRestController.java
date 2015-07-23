@@ -13,7 +13,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
-import org.baeldung.persistence.service.IUserService;
+import org.baeldung.service.IUserService;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

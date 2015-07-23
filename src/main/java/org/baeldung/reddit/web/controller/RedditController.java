@@ -1,9 +1,9 @@
 package org.baeldung.reddit.web.controller;
 
 import org.baeldung.persistence.dao.UserRepository;
-import org.baeldung.persistence.service.IUserService;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
+import org.baeldung.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
