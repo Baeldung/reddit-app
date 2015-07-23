@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import org.baeldung.config.PersistenceJpaConfig;
 import org.baeldung.config.RedditConfig;
 import org.baeldung.config.SecurityConfig;
+import org.baeldung.config.ServiceConfig;
 import org.baeldung.config.ThymeleafConfig;
 import org.baeldung.config.WebConfig;
 import org.springframework.web.context.WebApplicationContext;
@@ -18,7 +19,7 @@ public class ServletInitializer extends AbstractDispatcherServletInitializer {
     @Override
     protected WebApplicationContext createServletApplicationContext() {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(PersistenceJpaConfig.class, WebConfig.class, SecurityConfig.class, ThymeleafConfig.class, RedditConfig.class);
+        context.register(PersistenceJpaConfig.class, ServiceConfig.class, WebConfig.class, SecurityConfig.class, ThymeleafConfig.class, RedditConfig.class);
         return context;
     }
 
