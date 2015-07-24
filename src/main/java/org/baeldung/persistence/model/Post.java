@@ -271,7 +271,7 @@ public class Post implements IEntity {
             if (other.submissionDate != null) {
                 return false;
             }
-        } else if (!submissionDate.equals(other.submissionDate)) {
+        } else if ((submissionDate.getTime() - other.submissionDate.getTime()) != 0) {
             return false;
         }
         if (submissionResponse == null) {
