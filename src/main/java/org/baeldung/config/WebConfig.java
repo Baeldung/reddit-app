@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
+import org.baeldung.persistence.Setup;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.MyFeatures;
 import org.baeldung.reddit.util.UserAgentInterceptor;

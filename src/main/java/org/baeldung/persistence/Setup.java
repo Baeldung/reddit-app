@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.persistence;
 
 import java.util.Arrays;
 import java.util.Collection;
