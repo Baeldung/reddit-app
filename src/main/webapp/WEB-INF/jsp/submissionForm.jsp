@@ -6,7 +6,7 @@
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-<script th:src="@{/resources/validator.js}"></script>
+<script th:src="@{/resources/validator1.js}"></script>
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;

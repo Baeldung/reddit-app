@@ -23,4 +23,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Long countByUserAndSubmissionDateBetween(final User user, Date start, Date end);
 
+    Long countByUser(final User user);
+
 }

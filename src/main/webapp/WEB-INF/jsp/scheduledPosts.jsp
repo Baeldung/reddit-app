@@ -3,8 +3,13 @@
 
 <title>Schedule to Reddit</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"/>
 <script th:src="@{/resources/moment.min.js}"></script>
 <script th:src="@{/resources/moment-timezone-with-data.js}"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
 </head>
 <body>
 <div th:include="header"/>
@@ -24,14 +29,38 @@
     
 </table>
 
-<br/>
-  <button id="prev" type="button" class="btn btn-default" onclick="loadPrev()">Previous</button>
-  <button id="next" type="button" class="btn btn-default" onclick="loadNext()">Next</button>
-
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
+           
+$(document).ready(function() {
+    $('table').dataTable( {
+        "processing": true,
+        "searching":false,
+        "lengthMenu": [ 2, 5, 10, 20, 50 ],
+        "columnDefs": [
+                       { "name": "title",   "targets": 0 },
+                       { "name": "submissionDate",  "targets": 1 },
+                       { "name": "submissionResponse", "targets": 2 },
+                       { "name": "noOfAttempts",  "targets": 3 },
+                       { "targets": 4, "data": "id",
+                    	    "render": function ( data, type, full, meta ) {
+                    	        return '<a class="btn btn-warning" href="editPost/'+data+
+                                '">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
+                                +') ">Delete</a>';
+                    	      }}
+                     ],
+                     "columns": [
+                                 { "data": "title" },
+                                 { "data": "submissionDate" },
+                                 { "data": "submissionResponse" },
+                                 { "data": "noOfAttempts" }
+                             ],
+        "serverSide": true,
+        "ajax": "api/scheduledPosts"
+    } );
+} );
+
 function confirmDelete(id) {
     if (confirm("Do you really want to delete this post?") == true) {
     	deletePost(id);
@@ -46,56 +75,6 @@ function deletePost(id){
 	    	window.location.href="scheduledPosts"
 	    }
 	});
-}
-
-var currentPage = 0;
-
-$(function(){
-	loadPage(0);
-});
-
-function loadNext(){
-	loadPage(currentPage+1);
-	$("#next").blur();
-}
-
-function loadPrev(){
-    loadPage(currentPage-1);
-    $("#prev").blur();
-}
-
-function loadPage(page){
-	currentPage = page;
-	$('table').children().not(':first').remove();
-	if(page == 0){
-		$('#prev').hide();
-	}else{
-		$('#prev').show();
-	}
-	var attempt = '-';
-	$.get("api/scheduledPosts?page="+page, function(data){
-		$.each(data, function( index, post ) {
-		     attempt = post.noOfAttempts<1? '-':post.noOfAttempts;
-			$('.table').append('<tr><td>'+post.title+'</td><td>'+
-					convertDate(post.submissionDate)+'</td><td>'+post.submissionResponse+'</td><td>'+
-					attempt+'</td><td> <a class="btn btn-warning" href="editPost/'+post.id+
-					'">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+post.id
-							+') ">Delete</a> </td></tr>');
-		});
-		if(data.length == 0){
-			$('#next').hide();
-		}else{
-			$('#next').show();
-		}
-	});
-}
-
-function convertDate(date){
-	var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
-    var serverDate = moment.tz(date, serverTimezone);
-	var clientDate = serverDate.clone().tz($("#timezone").html());
-	var myformat = "YYYY-MM-DD HH:mm";
-	return clientDate.format(myformat);
 }
 
 /*]]>*/

@@ -8,7 +8,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 <script th:src="@{/resources/datetime-picker.js}"></script>
-<script th:src="@{/resources/validator.js}"></script>
+<script th:src="@{/resources/validator1.js}"></script>
 <script th:src="@{/resources/timezones.full.js}"></script>
 <style type="text/css">
 .btn.disabled{
@@ -61,57 +61,8 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <hr/>
-<br/>
-<div class="form-group">
-    <label class="col-sm-3">Default Resubmit Options:</label>
     
-    <span class="col-sm-2">Votes didn't exceed </span>
-    <span class="col-sm-1">
-    <input type="number" class="form-control input-sm"  name="minScoreRequired" />
-    </span>
-    
-    <span class="col-sm-3">within &nbsp;&nbsp;
-    <select name="timeInterval">
-        <option value="0" >None</option>
-        <option value="45" >45 minutes</option>
-        <option value="60" >1 hour</option>
-        <option value="120" >2 hours</option>
-      </select>
-    </span>
-    
-    <span class="col-sm-3">try resubmitting &nbsp;&nbsp;
-    <select name="noOfAttempts">
-        <option value="0" >No</option>
-        <option value="2" >2</option>
-        <option value="3" >3</option>
-        <option value="4" >4</option>
-        <option value="5" >5</option>
-      </select>
-      &nbsp;&nbsp; times.
-    </span>
-    
-    
-</div>
-<br/>
-
-<div class="form-group">
-    <label class="col-sm-3">&nbsp;</label>
-    
-    <span class="col-sm-2">Minimum Upvote Ratio</span>
-    <span class="col-sm-1">
-    <input type="number" class="form-control input-sm" value="98" name="minUpvoteRatio" data-min="0" data-max="100"  required="required"/>
-    </span>
-    
-    <span class="col-sm-3">keep If Has Comments &nbsp;&nbsp;    
-    <input type="checkbox" name="keepIfHasComments" value="true"/>
-    </span>
-    
-    <span class="col-sm-3">Delete If Consume Attempts &nbsp;&nbsp;    
-    <input  type="checkbox" name="deleteAfterLastAttempt" value="true"/>
-    </span>
-    
-    
-</div>
+    <div th:include="resubmit"/>
     
     <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>
    </div>

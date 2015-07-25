@@ -25,7 +25,7 @@ public class Preference implements IEntity {
 
     private int minScoreRequired;
 
-    private int minUpvoteRatio;
+    private int minTotalVotes;
 
     private boolean keepIfHasComments;
 
@@ -98,12 +98,12 @@ public class Preference implements IEntity {
         this.minScoreRequired = minScoreRequired;
     }
 
-    public int getMinUpvoteRatio() {
-        return minUpvoteRatio;
+    public int getMinTotalVotes() {
+        return minTotalVotes;
     }
 
-    public void setMinUpvoteRatio(final int minUpvoteRatio) {
-        this.minUpvoteRatio = minUpvoteRatio;
+    public void setMinTotalVotes(final int minTotalVotes) {
+        this.minTotalVotes = minTotalVotes;
     }
 
     public boolean isKeepIfHasComments() {
@@ -148,7 +148,7 @@ public class Preference implements IEntity {
         result = (prime * result) + ((email == null) ? 0 : email.hashCode());
         result = (prime * result) + (keepIfHasComments ? 1231 : 1237);
         result = (prime * result) + minScoreRequired;
-        result = (prime * result) + minUpvoteRatio;
+        result = (prime * result) + minTotalVotes;
         result = (prime * result) + noOfAttempts;
         result = (prime * result) + (sendReplies ? 1231 : 1237);
         result = (prime * result) + ((subreddit == null) ? 0 : subreddit.hashCode());
@@ -185,7 +185,7 @@ public class Preference implements IEntity {
         if (minScoreRequired != other.minScoreRequired) {
             return false;
         }
-        if (minUpvoteRatio != other.minUpvoteRatio) {
+        if (minTotalVotes != other.minTotalVotes) {
             return false;
         }
         if (noOfAttempts != other.noOfAttempts) {

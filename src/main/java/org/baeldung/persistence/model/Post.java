@@ -48,7 +48,7 @@ public class Post implements IEntity {
 
     private int minScoreRequired;
 
-    private int minUpvoteRatio;
+    private int minTotalVotes;
 
     private boolean keepIfHasComments;
 
@@ -171,12 +171,12 @@ public class Post implements IEntity {
         this.minScoreRequired = minScoreRequired;
     }
 
-    public int getMinUpvoteRatio() {
-        return minUpvoteRatio;
+    public int getMinTotalVotes() {
+        return minTotalVotes;
     }
 
-    public void setMinUpvoteRatio(final int minUpvoteRatio) {
-        this.minUpvoteRatio = minUpvoteRatio;
+    public void setMinTotalVotes(final int minTotalVotes) {
+        this.minTotalVotes = minTotalVotes;
     }
 
     public boolean isKeepIfHasComments() {
@@ -213,7 +213,7 @@ public class Post implements IEntity {
         result = (prime * result) + (isSent ? 1231 : 1237);
         result = (prime * result) + (keepIfHasComments ? 1231 : 1237);
         result = (prime * result) + minScoreRequired;
-        result = (prime * result) + minUpvoteRatio;
+        result = (prime * result) + minTotalVotes;
         result = (prime * result) + noOfAttempts;
         result = (prime * result) + ((redditID == null) ? 0 : redditID.hashCode());
         result = (prime * result) + (sendReplies ? 1231 : 1237);
@@ -251,7 +251,7 @@ public class Post implements IEntity {
         if (minScoreRequired != other.minScoreRequired) {
             return false;
         }
-        if (minUpvoteRatio != other.minUpvoteRatio) {
+        if (minTotalVotes != other.minTotalVotes) {
             return false;
         }
         if (noOfAttempts != other.noOfAttempts) {

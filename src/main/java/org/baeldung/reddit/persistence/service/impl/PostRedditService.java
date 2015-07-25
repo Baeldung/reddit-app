@@ -66,8 +66,8 @@ class PostRedditService implements IPostRedditService {
         node = node.get(0).get("data").get("children").get(0).get("data");
         postScore.setScore(node.get("score").asInt());
 
-        final double ratio = node.get("upvote_ratio").asDouble();
-        postScore.setUpvoteRatio((int) (ratio * 100));
+        final float ratio = node.get("upvote_ratio").floatValue();
+        postScore.setTotalVotes(Math.round(postScore.getScore() / ((2 * ratio) - 1)));
         postScore.setNoOfComments(node.get("num_comments").asInt());
 
         logger.info(postScore.toString());
@@ -208,9 +208,9 @@ class PostRedditService implements IPostRedditService {
     private boolean didPostGoalFail(final Post post) {
         final PostScores postScores = getPostScores(post);
         final int score = postScores.getScore();
-        final int upvoteRatio = postScores.getUpvoteRatio();
+        final int totalVotes = postScores.getTotalVotes();
         final int noOfComments = postScores.getNoOfComments();
-        return (((score < post.getMinScoreRequired()) || (upvoteRatio < post.getMinUpvoteRatio())) && !((noOfComments > 0) && post.isKeepIfHasComments()));
+        return (((score < post.getMinScoreRequired()) || (totalVotes < post.getMinTotalVotes())) && !((noOfComments > 0) && post.isKeepIfHasComments()));
     }
 
 }

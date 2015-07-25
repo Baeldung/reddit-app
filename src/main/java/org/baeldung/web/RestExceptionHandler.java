@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.web.exceptions.FeedServerException;
 import org.baeldung.web.exceptions.InvalidDateException;
+import org.baeldung.web.exceptions.InvalidResubmitOptionsException;
 import org.baeldung.web.exceptions.UsernameAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
 
     @ExceptionHandler({ InvalidDateException.class })
     public ResponseEntity<Object> handleInvalidDate(final RuntimeException ex, final WebRequest request) {
+        logger.error("400 Status Code", ex);
+        final String bodyOfResponse = ex.getLocalizedMessage();
+        return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ InvalidResubmitOptionsException.class })
+    public ResponseEntity<Object> handleInvalidResubmitOptions(final RuntimeException ex, final WebRequest request) {
         logger.error("400 Status Code", ex);
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
