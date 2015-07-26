@@ -20,33 +20,33 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserController {
 
     @Autowired
-    private IUserService service;
+    private IUserService userService;
 
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void register(@RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
-        service.registerNewUser(username, email, password);
+        userService.registerNewUser(username, email, password);
     }
 
     @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUsersList() {
-        return service.getUsersList();
+        return userService.getUsersList();
     }
 
     @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/roles", method = RequestMethod.GET)
     @ResponseBody
     public List<Role> getRolesList() {
-        return service.getRolesList();
+        return userService.getRolesList();
     }
 
     @PreAuthorize("hasRole('ADMIN_WRITE_PRIVILEGE')")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void modifyUserRoles(@PathVariable("id") final Long id, @RequestParam(value = "roleIds") final String roleIds) {
-        service.modifyUserRoles(id, roleIds);
+        userService.modifyUserRoles(id, roleIds);
     }
 
 }

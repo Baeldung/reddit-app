@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
@@ -38,9 +37,6 @@ class RedditService implements IRedditService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PreferenceRepository preferenceRepository;
-
     private List<String> subreddits;
 
     public RedditService() {
@@ -70,6 +66,12 @@ class RedditService implements IRedditService {
     @Override
     public List<String> searchSubreddit(final String query) {
         return subreddits.stream().filter(sr -> sr.startsWith(query)).limit(9).collect(Collectors.toList());
+    }
+
+    @Override
+    public String checkIfAlreadySubmittedfinal(final String url, final String subreddit) {
+        final JsonNode node = redditTemplate.searchForLink(url, subreddit);
+        return node.get("data").get("children").toString();
     }
 
     // === private

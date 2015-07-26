@@ -7,14 +7,18 @@ import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.reddit.persistence.service.IPostRedditService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@EnableScheduling
+@EnableAsync
 public class RedditScheduler {
 
     @Autowired
-    private IPostRedditService service;
+    private IPostRedditService postRedditService;
 
     @Autowired
     private PostRepository postReopsitory;
@@ -23,7 +27,7 @@ public class RedditScheduler {
     public void schedulePosts() {
         final List<Post> posts = postReopsitory.findBySubmissionDateBeforeAndIsSent(new Date(), false);
         for (final Post post : posts) {
-            service.submitPost(post);
+            postRedditService.submitPost(post);
         }
     }
 
@@ -31,7 +35,7 @@ public class RedditScheduler {
     public void checkAndReSubmitPosts() {
         final List<Post> submitted = postReopsitory.findByRedditIDNotNullAndNoOfAttemptsGreaterThan(0);
         for (final Post post : submitted) {
-            service.checkAndReSubmit(post);
+            postRedditService.checkAndReSubmit(post);
         }
     }
 
@@ -39,7 +43,7 @@ public class RedditScheduler {
     public void checkAndDeleteAfterLastAttempt() {
         final List<Post> submitted = postReopsitory.findByRedditIDNotNullAndNoOfAttemptsAndDeleteAfterLastAttemptTrue(0);
         for (final Post post : submitted) {
-            service.checkAndDelete(post);
+            postRedditService.checkAndDelete(post);
         }
     }
 

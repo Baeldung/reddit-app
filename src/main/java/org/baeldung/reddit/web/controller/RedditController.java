@@ -1,11 +1,9 @@
 package org.baeldung.reddit.web.controller;
 
-import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
 import org.baeldung.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,26 +16,15 @@ public class RedditController {
     private RedditTemplate redditTemplate;
 
     @Autowired
-    private UserRepository userReopsitory;
-
-    @Autowired
-    private IRedditService service;
+    private IRedditService redditService;
 
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("/")
-    public final String homePage() {
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            return "home";
-        }
-        return "index";
-    }
-
     @RequestMapping("/redditLogin")
     public final String redditLogin() {
         final OAuth2AccessToken token = redditTemplate.getAccessToken();
-        service.connectReddit(redditTemplate.needsCaptcha(), token);
+        redditService.connectReddit(redditTemplate.needsCaptcha(), token);
         return "redirect:home";
     }
 

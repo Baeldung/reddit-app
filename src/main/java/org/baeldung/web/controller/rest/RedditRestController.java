@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RedditRestController {
 
     @Autowired
-    private IRedditService service;
+    private IRedditService redditService;
 
     // === API Methods
 
     @RequestMapping(value = "/subredditAutoComplete")
     @ResponseBody
     public List<String> subredditAutoComplete(@RequestParam("term") final String term) {
-        return service.searchSubreddit(term);
+        return redditService.searchSubreddit(term);
     }
 
 }

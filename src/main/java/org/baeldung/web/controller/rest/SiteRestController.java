@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class SiteRestController {
 
     @Autowired
-    private ISiteService service;
+    private ISiteService siteService;
 
     @Autowired
     private IUserService userService;
@@ -33,30 +33,30 @@ public class SiteRestController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Site> getSitesList() {
-        return service.getSitesByUser(userService.getCurrentUser());
+        return siteService.getSitesByUser(userService.getCurrentUser());
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Site addSite(@RequestBody final Site site) {
-        if (!service.isValidFeedUrl(site.getUrl())) {
+        if (!siteService.isValidFeedUrl(site.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
         site.setUser(userService.getCurrentUser());
-        return service.saveSite(site);
+        return siteService.saveSite(site);
     }
 
     @RequestMapping(value = "/articles")
     @ResponseBody
     public List<SiteArticle> getSiteArticles(@RequestParam("id") final Long siteId) {
-        return service.getArticlesFromSite(siteId);
+        return siteService.getArticlesFromSite(siteId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSite(@PathVariable("id") final Long id) {
-        service.deleteSiteById(id);
+        siteService.deleteSiteById(id);
     }
 
 }

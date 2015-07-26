@@ -27,33 +27,34 @@ class SiteService implements ISiteService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SiteRepository repo;
+    private SiteRepository siteRepository;
 
     // API
 
     @Override
     public List<Site> getSitesByUser(final User user) {
-        return repo.findByUser(user);
+        return siteRepository.findByUser(user);
     }
 
     @Override
     public Site saveSite(final Site site) {
-        return repo.save(site);
+        logger.info("New site {} added", site.toString());
+        return siteRepository.save(site);
     }
 
     @Override
     public Site findSiteById(final Long siteId) {
-        return repo.findOne(siteId);
+        return siteRepository.findOne(siteId);
     }
 
     @Override
     public void deleteSiteById(final Long siteId) {
-        repo.delete(siteId);
+        siteRepository.delete(siteId);
     }
 
     @Override
     public List<SiteArticle> getArticlesFromSite(final Long siteId) {
-        final Site site = repo.findOne(siteId);
+        final Site site = siteRepository.findOne(siteId);
         return getArticlesFromSite(site);
     }
 
@@ -73,6 +74,7 @@ class SiteService implements ISiteService {
         try {
             return getFeedEntries(feedUrl).size() > 0;
         } catch (final Exception e) {
+            logger.error("Invalid feed url", e);
             return false;
         }
     }
@@ -82,7 +84,10 @@ class SiteService implements ISiteService {
     private List<SyndEntry> getFeedEntries(final String feedUrl) throws IllegalArgumentException, FeedException, IOException {
         final URL url = new URL(feedUrl);
         final SyndFeed feed = new SyndFeedInput().build(new XmlReader(url));
-        return feed.getEntries();
+        logger.info("Read feed from url : {}", feedUrl);
+        final List<SyndEntry> entries = feed.getEntries();
+        logger.info("{} entries extracted from url {}", entries.size(), feedUrl);
+        return entries;
     }
 
     private List<SiteArticle> parseFeed(final List<SyndEntry> entries) {
