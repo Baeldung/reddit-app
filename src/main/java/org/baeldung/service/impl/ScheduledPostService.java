@@ -29,7 +29,7 @@ public class ScheduledPostService implements IScheduledPostService {
     private static final int LIMIT_SCHEDULED_POSTS_PER_DAY = 3;
 
     @Autowired
-    private PostRepository postReopsitory;
+    private PostRepository postRepository;
 
     @Autowired
     private IUserService userService;
@@ -39,13 +39,13 @@ public class ScheduledPostService implements IScheduledPostService {
     @Override
     public List<SimplePost> getPostsList(final int page, final int size, final String sortDir, final String sort) {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
-        final Page<Post> posts = postReopsitory.findByUser(userService.getCurrentUser(), pageReq);
+        final Page<Post> posts = postRepository.findByUser(userService.getCurrentUser(), pageReq);
         return constructDataAccordingToUserTimezone(posts.getContent());
     }
 
     @Override
-    public PagingInfo getPagingInfo(final int page, final int size) {
-        final long total = postReopsitory.countByUser(userService.getCurrentUser());
+    public PagingInfo generatePagingInfo(final int page, final int size) {
+        final long total = postRepository.countByUser(userService.getCurrentUser());
         return new PagingInfo(page, size, total);
     }
 
@@ -64,7 +64,7 @@ public class ScheduledPostService implements IScheduledPostService {
         post.setSubmissionDate(submissionDate);
         post.setUser(userService.getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
-        return postReopsitory.save(post);
+        return postRepository.save(post);
     }
 
     @Override
@@ -81,17 +81,17 @@ public class ScheduledPostService implements IScheduledPostService {
         }
         post.setSubmissionDate(submissionDate);
         post.setUser(userService.getCurrentUser());
-        postReopsitory.save(post);
+        postRepository.save(post);
     }
 
     @Override
     public Post getPostById(final Long id) {
-        return postReopsitory.findOne(id);
+        return postRepository.findOne(id);
     }
 
     @Override
     public void deletePostById(final Long id) {
-        postReopsitory.delete(id);
+        postRepository.delete(id);
     }
 
     //
@@ -152,7 +152,7 @@ public class ScheduledPostService implements IScheduledPostService {
     private boolean checkIfCanSchedule(final Date date) {
         final Date start = DateUtils.truncate(date, Calendar.DATE);
         final Date end = DateUtils.addDays(start, 1);
-        final long count = postReopsitory.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
+        final long count = postRepository.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
         return count < LIMIT_SCHEDULED_POSTS_PER_DAY;
     }
 

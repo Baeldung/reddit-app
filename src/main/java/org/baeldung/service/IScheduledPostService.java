@@ -18,5 +18,5 @@ public interface IScheduledPostService {
 
     List<SimplePost> getPostsList(int page, int size, String sortDir, String sort);
 
-    PagingInfo getPagingInfo(int page, int size);
+    PagingInfo generatePagingInfo(int page, int size);
 }

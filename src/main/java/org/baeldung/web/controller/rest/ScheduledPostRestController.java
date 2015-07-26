@@ -33,7 +33,7 @@ public class ScheduledPostRestController {
     @ResponseBody
     public final List<SimplePost> getScheduledPosts(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "title") final String sort, final HttpServletResponse response) {
-        response.addHeader("PAGING_INFO", scheduledPostService.getPagingInfo(page, size).toString());
+        response.addHeader("PAGING_INFO", scheduledPostService.generatePagingInfo(page, size).toString());
         return scheduledPostService.getPostsList(page, size, sortDir, sort);
     }
 
