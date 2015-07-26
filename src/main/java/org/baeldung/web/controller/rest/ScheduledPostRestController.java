@@ -1,13 +1,14 @@
 package org.baeldung.web.controller.rest;
 
 import java.text.ParseException;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.persistence.model.Post;
 import org.baeldung.service.IScheduledPostService;
-import org.baeldung.web.DataTableWrapper;
+import org.baeldung.web.SimplePost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,39 +25,41 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ScheduledPostRestController {
 
     @Autowired
-    private IScheduledPostService service;
+    private IScheduledPostService scheduledPostService;
 
     // === API Methods
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public final DataTableWrapper getScheduledPosts(@RequestParam final Map<String, String> params) {
-        return service.constructScheduledPostsDataTable(params);
+    public final List<SimplePost> getScheduledPosts(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "title") final String sort, final HttpServletResponse response) {
+        response.addHeader("PAGING_INFO", scheduledPostService.getPagingInfo(page, size).toString());
+        return scheduledPostService.getPostsList(page, size, sortDir, sort);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Post schedule(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        return service.schedulePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date);
+        return scheduledPostService.schedulePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Post getPost(@PathVariable("id") final Long id) {
-        return service.getPostById(id);
+        return scheduledPostService.getPostById(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date) throws ParseException {
-        service.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date);
+        scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("id") final Long id) {
-        service.deletePostById(id);
+        scheduledPostService.deletePostById(id);
     }
 
 }

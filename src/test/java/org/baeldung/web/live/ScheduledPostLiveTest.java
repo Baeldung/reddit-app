@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 import org.baeldung.persistence.model.Post;
-import org.baeldung.web.DataTableWrapper;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
@@ -37,7 +37,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
         final Response response = givenAuth().get(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(200, response.statusCode());
-        assertTrue(response.as(DataTableWrapper.class).getData().size() > 0);
+        assertTrue(response.as(List.class).size() > 0);
     }
 
     @Test

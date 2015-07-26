@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
-import org.baeldung.persistence.model.User;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
-import org.baeldung.web.DataTableWrapper;
+import org.baeldung.web.PagingInfo;
 import org.baeldung.web.SimplePost;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.baeldung.web.exceptions.InvalidResubmitOptionsException;
@@ -39,29 +37,16 @@ public class ScheduledPostService implements IScheduledPostService {
     //
 
     @Override
-    public DataTableWrapper constructScheduledPostsDataTable(final Map<String, String> params) {
-        final User user = userService.getCurrentUser();
-        final long recordsTotal = postReopsitory.countByUser(user);
+    public List<SimplePost> getPostsList(final int page, final int size, final String sortDir, final String sort) {
+        final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
+        final Page<Post> posts = postReopsitory.findByUser(userService.getCurrentUser(), pageReq);
+        return constructDataAccordingToUserTimezone(posts.getContent());
+    }
 
-        int draw = 0, pageNum = 0, pageSize = 2;
-        if (params.containsKey("draw") && params.containsKey("length") && params.containsKey("start")) {
-            draw = Integer.parseInt(params.get("draw"));
-            pageSize = Integer.parseInt(params.get("length"));
-            pageNum = Integer.parseInt(params.get("start")) / pageSize;
-        }
-        final String sortDir = params.get("order[0][dir]");
-        final String sortColId = params.get("order[0][column]");
-        final String sortColName = params.get("columns[" + sortColId + "][name]");
-
-        PageRequest pageReq;
-        if ((sortDir == null) || (sortColName == null)) {
-            pageReq = new PageRequest(pageNum, pageSize);
-        } else {
-            pageReq = new PageRequest(pageNum, pageSize, Sort.Direction.fromString(sortDir), sortColName);
-        }
-        final Page<Post> posts = postReopsitory.findByUser(user, pageReq);
-        final List<SimplePost> data = constructDataAccordingToUserTimezone(posts.getContent());
-        return new DataTableWrapper(draw, recordsTotal, data);
+    @Override
+    public PagingInfo getPagingInfo(final int page, final int size) {
+        final long total = postReopsitory.countByUser(userService.getCurrentUser());
+        return new PagingInfo(page, size, total);
     }
 
     @Override

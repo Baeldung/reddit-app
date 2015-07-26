@@ -37,7 +37,6 @@ $(document).ready(function() {
     $('table').dataTable( {
         "processing": true,
         "searching":false,
-        "lengthMenu": [ 2, 5, 10, 20, 50 ],
         "columnDefs": [
                        { "name": "title",   "targets": 0 },
                        { "name": "submissionDate",  "targets": 1 },
@@ -57,7 +56,22 @@ $(document).ready(function() {
                                  { "data": "noOfAttempts" }
                              ],
         "serverSide": true,
-        "ajax": "api/scheduledPosts"
+        "ajax": function(data, callback, settings) {
+            $.get('api/scheduledPosts', {
+                size: data.length,
+                page: (data.start/data.length),
+                sortDir: data.order[0].dir,
+                sort: data.columns[data.order[0].column].name
+            }, function(res,textStatus, request) {
+            	var pagingInfo = request.getResponseHeader('PAGING_INFO');
+            	var total = pagingInfo.split(",")[0].split("=")[1];
+                callback({
+                    recordsTotal: total,
+                    recordsFiltered: total,
+                    data: res
+                });
+            });
+        }
     } );
 } );
 
