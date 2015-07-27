@@ -1,5 +1,6 @@
 package org.baeldung.web.live;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,12 +19,12 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
     @Test
     public void whenScheduleANewPost_thenCreated() throws ParseException, IOException {
         final Post post = new Post();
-        post.setTitle("test");
+        post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
-        post.setSubreddit("test");
+        post.setSubreddit(randomAlphabetic(6));
         post.setSubmissionDate(dateFormat.parse(date));
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date);
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=false");
 
         assertEquals(201, response.statusCode());
         final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
@@ -45,7 +46,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
         final Post post = createPost();
 
         post.setTitle("new title");
-        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId() + "?date=" + date);
+        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId() + "?date=" + date + "&resubmitOptionsActivated=false");
 
         assertEquals(200, response.statusCode());
         response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getId());
@@ -62,13 +63,13 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
 
     //
 
-    private Post createPost() throws ParseException, IOException {
+    protected Post createPost() throws ParseException, IOException {
         final Post post = new Post();
-        post.setTitle("test");
+        post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
-        post.setSubreddit("test");
+        post.setSubreddit(randomAlphabetic(6));
         post.setSubmissionDate(dateFormat.parse(date));
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date);
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=false");
         return objectMapper.reader().forType(Post.class).readValue(response.asString());
     }
 

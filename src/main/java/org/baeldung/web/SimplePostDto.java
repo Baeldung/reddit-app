@@ -1,6 +1,8 @@
 package org.baeldung.web;
 
-public class SimplePost {
+import org.baeldung.persistence.model.Post;
+
+public class SimplePostDto {
 
     private long id;
     private String title;
@@ -8,18 +10,27 @@ public class SimplePost {
     private String submissionResponse;
     private int noOfAttempts;
 
-    public SimplePost() {
+    public SimplePostDto() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public SimplePost(final long id, final String title, final String submissionDate, final String submissionResponse, final int noOfAttempts) {
+    public SimplePostDto(final long id, final String title, final String submissionDate, final String submissionResponse, final int noOfAttempts) {
         super();
         this.id = id;
         this.title = title;
         this.submissionDate = submissionDate;
         this.submissionResponse = submissionResponse;
         this.noOfAttempts = noOfAttempts;
+    }
+
+    public SimplePostDto(final Post post, final String date) {
+        super();
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.submissionDate = date;
+        this.submissionResponse = post.getSubmissionResponse();
+        this.noOfAttempts = post.getNoOfAttempts();
     }
 
     //

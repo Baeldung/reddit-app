@@ -61,7 +61,10 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <hr/>
-    
+    <div>
+        <h2 class="col-sm-12">Default Resubmit Options</h2>
+    </div>
+    <br/><br/><br/><br/>
     <div th:include="resubmit"/>
     
     <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>

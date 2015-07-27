@@ -42,7 +42,7 @@ public class PagingInfo {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("totalNoRecords=").append(totalNoRecords).append(", totalNoPages=").append(totalNoPages).append(", uriToNextPage=").append(uriToNextPage).append(", uriToPrevPage=").append(uriToPrevPage).append("]");
+        builder.append("totalNoRecords=").append(totalNoRecords).append(", totalNoPages=").append(totalNoPages).append(", uriToNextPage=").append(uriToNextPage).append(", uriToPrevPage=").append(uriToPrevPage);
         return builder.toString();
     }
 

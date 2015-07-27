@@ -65,10 +65,15 @@ border-color: #ddd;
 <br/><br/>
 <hr/>
 <br/>
-
+    <div class="form-group">
+        <h3 class="col-sm-12">Resubmit Options
+            <input type="checkbox" name="resubmitOptionsActivated" value="true" checked="checked"/>
+        </h3>
+    </div>
+    <br/><br/>
 <div th:include="resubmit"/>
 
-<br/><br/>
+<br/>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
 <div class="col-sm-5"><input id="date" name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
@@ -121,6 +126,10 @@ border-color: #ddd;
               }
           });
           $("#date").val(loadDate(data.submissionDate));
+          if(data.minScoreRequired == 0){
+              $('input[name="resubmitOptionsActivated"]')[0].checked=false;
+              $("#resubmit").hide();
+          }
       });
   }
   
@@ -157,6 +166,18 @@ function checkIfAlreadySubmitted(){
 </script>
 
 <script>
+$('input[name="resubmitOptionsActivated"]').change(function() {
+  if($(this)[0].checked){
+      $("#resubmit").show();
+  }else{
+      resetResubmitOptions();
+      $("#resubmit").hide();
+  }
+});
+</script>
+
+
+<script>
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
@@ -168,8 +189,9 @@ function editPost(){
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
+    var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
 	$.ajax({
-        url: "../api/scheduledPosts/"+id+"?date="+$("#date").val(),
+        url: "../api/scheduledPosts/"+id+"?date="+$("#date").val()+"&resubmitOptionsActivated="+resubmitActivated,
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'

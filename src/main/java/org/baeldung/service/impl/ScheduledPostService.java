@@ -2,11 +2,11 @@ package org.baeldung.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
@@ -14,7 +14,7 @@ import org.baeldung.persistence.model.Post;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
 import org.baeldung.web.PagingInfo;
-import org.baeldung.web.SimplePost;
+import org.baeldung.web.SimplePostDto;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.baeldung.web.exceptions.InvalidResubmitOptionsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class ScheduledPostService implements IScheduledPostService {
     //
 
     @Override
-    public List<SimplePost> getPostsList(final int page, final int size, final String sortDir, final String sort) {
+    public List<SimplePostDto> getPostsList(final int page, final int size, final String sortDir, final String sort) {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
         final Page<Post> posts = postRepository.findByUser(userService.getCurrentUser(), pageReq);
         return constructDataAccordingToUserTimezone(posts.getContent());
@@ -50,10 +50,10 @@ public class ScheduledPostService implements IScheduledPostService {
     }
 
     @Override
-    public Post schedulePost(final boolean isSuperUser, final Post post, final String dateStr) throws ParseException {
+    public Post schedulePost(final boolean isSuperUser, final Post post, final String dateStr, final boolean resubmitOptionsActivated) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(dateStr, userService.getCurrentUser().getPreference().getTimezone());
-        if (!checkIfValidResubmitOptions(post)) {
-            throw new InvalidResubmitOptionsException("Invalid Resubmit options");
+        if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
+            throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
@@ -68,10 +68,10 @@ public class ScheduledPostService implements IScheduledPostService {
     }
 
     @Override
-    public void updatePost(final boolean isSuperUser, final Post post, final String dateStr) throws ParseException {
+    public void updatePost(final boolean isSuperUser, final Post post, final String dateStr, final boolean resubmitOptionsActivated) throws ParseException {
         final Date submissionDate = calculateSubmissionDate(dateStr, userService.getCurrentUser().getPreference().getTimezone());
-        if (!checkIfValidResubmitOptions(post)) {
-            throw new InvalidResubmitOptionsException("Invalid Resubmit options");
+        if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
+            throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
         if (submissionDate.before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
@@ -97,26 +97,11 @@ public class ScheduledPostService implements IScheduledPostService {
     //
 
     private boolean checkIfValidResubmitOptions(final Post post) {
-        final boolean isResubmitActivated = !checkIfAllEqualZero(post.getNoOfAttempts(), post.getTimeInterval(), post.getMinScoreRequired(), post.getMinTotalVotes()) || post.isKeepIfHasComments() || post.isDeleteAfterLastAttempt();
-
-        if (isResubmitActivated) {
-            if (checkIfAllNonZero(post.getNoOfAttempts(), post.getTimeInterval(), post.getMinScoreRequired())) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (checkIfAllNonZero(post.getNoOfAttempts(), post.getTimeInterval(), post.getMinScoreRequired())) {
             return true;
+        } else {
+            return false;
         }
-    }
-
-    private boolean checkIfAllEqualZero(final int... args) {
-        for (final int tmp : args) {
-            if (tmp != 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private boolean checkIfAllNonZero(final int... args) {
@@ -133,15 +118,9 @@ public class ScheduledPostService implements IScheduledPostService {
         return dateFormat.format(date);
     }
 
-    private List<SimplePost> constructDataAccordingToUserTimezone(final List<Post> posts) {
-        final List<SimplePost> data = new ArrayList<SimplePost>(posts.size());
+    private List<SimplePostDto> constructDataAccordingToUserTimezone(final List<Post> posts) {
         final String timeZone = userService.getCurrentUser().getPreference().getTimezone();
-        String date;
-        for (final Post post : posts) {
-            date = convertToUserTomeZone(post.getSubmissionDate(), timeZone);
-            data.add(new SimplePost(post.getId(), post.getTitle(), date, post.getSubmissionResponse(), post.getNoOfAttempts()));
-        }
-        return data;
+        return posts.stream().map(post -> new SimplePostDto(post, convertToUserTomeZone(post.getSubmissionDate(), timeZone))).collect(Collectors.toList());
     }
 
     private synchronized final Date calculateSubmissionDate(final String dateString, final String timeZone) throws ParseException {

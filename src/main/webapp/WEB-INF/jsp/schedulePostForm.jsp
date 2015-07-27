@@ -62,10 +62,14 @@ border-color: #ddd;
 <br/><br/>
 <hr/>
 
+    <div class="form-group">
+        <h3 class="col-sm-12">Resubmit Options
+            <input type="checkbox" name="resubmitOptionsActivated" value="true" checked="checked"/>
+        </h3>
+    </div>
+    <br/><br/>
 <div th:include="resubmit"/>
-
-<br/><br/>
-<br/><br/>
+<br/>
 
 <div>
 <label class="col-sm-3">Submission Date (<span sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
@@ -153,6 +157,10 @@ border-color: #ddd;
                   $('*[name="'+key+'"]').val(value);
               }
           });
+          if(data.minScoreRequired == 0){
+        	  $('input[name="resubmitOptionsActivated"]')[0].checked=false;
+        	  $("#resubmit").hide();
+          }
       });
   }
   
@@ -221,6 +229,17 @@ function checkIfAlreadySubmitted(){
 </script>
 
 <script>
+$('input[name="resubmitOptionsActivated"]').change(function() {
+  if($(this)[0].checked){
+	  $("#resubmit").show();
+  }else{
+	  resetResubmitOptions();
+	  $("#resubmit").hide();
+  }
+});
+</script>
+
+<script>
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
@@ -231,8 +250,10 @@ function schedulePost(){
     var data = {};
     $('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
+    var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
+
  $.ajax({
-    url: 'api/scheduledPosts?date='+$("#date").val(),
+    url: 'api/scheduledPosts?date='+$("#date").val()+"&resubmitOptionsActivated="+resubmitActivated,
     data: JSON.stringify(data),
     type: 'POST',
     contentType:'application/json',

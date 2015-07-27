@@ -1,11 +1,4 @@
-<div id="resubmit">
-    <div >
-    <h2 class="col-sm-12">Resubmit Options
-    <a href="#" class="btn btn-default" onclick="resetResubmitOptions()">Reset</a>
-    </h2>
-    </div>
-    <br/><br/><br/><br/>
-    
+<div id="resubmit"> 
     <div class="form-group">
         <label class="col-sm-3">Resubmit If:</label>
 
@@ -35,7 +28,7 @@
 
 
     </div>
-    <br />
+    <br /><br />
 
     <div class="form-group">
         <label class="col-sm-3">Keep If:</label>
@@ -61,7 +54,7 @@
         </div>
 
     </div>
-    
+    <br /> 
 <script>
 function resetResubmitOptions(){
     $('#resubmit  select').each(function () { $(this).val(0)});
