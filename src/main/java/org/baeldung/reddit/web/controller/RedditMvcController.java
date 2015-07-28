@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class RedditController {
+public class RedditMvcController {
 
     @Autowired
     private RedditTemplate redditTemplate;
@@ -20,6 +20,8 @@ public class RedditController {
 
     @Autowired
     private IUserService userService;
+
+    // === API Methods
 
     @RequestMapping("/redditLogin")
     public final String redditLogin() {
@@ -43,12 +45,5 @@ public class RedditController {
 
         return "submissionForm";
     }
-
-    //
-
-    // @RequestMapping("*")
-    // public final String fallback() {
-    // return "home";
-    // }
 
 }

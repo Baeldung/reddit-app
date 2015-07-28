@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/sites")
-public class SiteRestController {
+class SiteRestController {
 
     @Autowired
     private ISiteService siteService;

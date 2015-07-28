@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/api/scheduledPosts")
-public class ScheduledPostRestController {
+class ScheduledPostRestController {
 
     @Autowired
     private IScheduledPostService scheduledPostService;

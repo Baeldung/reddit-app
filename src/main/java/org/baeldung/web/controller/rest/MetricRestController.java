@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class MetricController {
+class MetricRestController {
+
     @Autowired
     private IMetricService metricService;
+
+    //
 
     @RequestMapping(value = "/metric", method = RequestMethod.GET)
     @ResponseBody

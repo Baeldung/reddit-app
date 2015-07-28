@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-public class UserController {
+class UserRestController {
 
     @Autowired
     private IUserService userService;
+
+    // === API Methods
 
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)

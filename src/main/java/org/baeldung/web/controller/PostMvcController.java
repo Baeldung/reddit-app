@@ -13,7 +13,7 @@ public class PostMvcController {
     @Autowired
     private IUserService userService;
 
-    // API
+    // === API Methods
 
     @RequestMapping("/postSchedule")
     public final String showSchedulePostForm(final Model model) {

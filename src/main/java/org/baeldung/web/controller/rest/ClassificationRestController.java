@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 // @Controller
 @RequestMapping(value = "/api/classification")
-public class ClassificationController {
+class ClassificationRestController {
     private final SimpleDateFormat dfHour = new SimpleDateFormat("HH");
 
     @Autowired
