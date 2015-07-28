@@ -145,10 +145,8 @@ class PostRedditService implements IPostRedditService {
             logger.info("Successfully sent post = " + post.toString());
 
             final String email = post.getUser().getPreference().getEmail();
-            if (email != null) {
-                logger.info("Sending notification email to " + email);
-                eventPublisher.publishEvent(new OnPostSubmittedEvent(post, email));
-            }
+            logger.info("Sending notification email to " + email);
+            eventPublisher.publishEvent(new OnPostSubmittedEvent(post, email));
         } else {
             post.setSubmissionResponse(errorNode.toString());
             postReopsitory.save(post);

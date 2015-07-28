@@ -13,6 +13,9 @@
 
 <h2 th:if="${param.containsKey('url')}"><a th:href="${param.url[0]}">Here</a></h2>
 
+<br/>
+<a href="./" class="btn btn-primary">Back to Home</a>
+
 </div>
 </body>
 </html>

@@ -12,7 +12,7 @@ public class Preference implements IEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // can be null for users who don't want notifications
+    @Column(nullable = false)
     private String email;
 
     private String subreddit;
