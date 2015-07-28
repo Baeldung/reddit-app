@@ -24,7 +24,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
         post.setSubreddit(randomAlphabetic(6));
         post.setSubmissionDate(dateFormat.parse(date));
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=false");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
         final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
@@ -46,7 +46,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
         final Post post = createPost();
 
         post.setTitle("new title");
-        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId() + "?date=" + date + "&resubmitOptionsActivated=false");
+        Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", false).put(urlPrefix + "/api/scheduledPosts/" + post.getId());
 
         assertEquals(200, response.statusCode());
         response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getId());
@@ -69,7 +69,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest {
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
         post.setSubmissionDate(dateFormat.parse(date));
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=false");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
         return objectMapper.reader().forType(Post.class).readValue(response.asString());
     }
 

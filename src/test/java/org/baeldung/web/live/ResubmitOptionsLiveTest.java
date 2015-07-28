@@ -19,7 +19,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
     public void givenResubmitOptionsDeactivated_whenScheduleANewPost_thenCreated() throws ParseException, IOException {
         final Post post = createPost();
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=false");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
         final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
@@ -33,7 +33,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         post.setMinScoreRequired(5);
         post.setTimeInterval(60);
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=true");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -46,7 +46,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=true");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -59,7 +59,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=true");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -72,7 +72,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
 
-        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts?date=" + date + "&resubmitOptionsActivated=true");
+        final Response response = withRequestBody(givenAuth(), post).queryParams("date", date, "resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
         final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());

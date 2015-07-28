@@ -19,7 +19,7 @@ public class PaginationLiveTest extends ScheduledPostLiveTest {
         createPost();
         createPost();
 
-        final Response response = givenAuth().get(urlPrefix + "/api/scheduledPosts?page=0&size=2");
+        final Response response = givenAuth().params("page", 0, "size", 2).get(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -38,7 +38,7 @@ public class PaginationLiveTest extends ScheduledPostLiveTest {
         createPost();
         createPost();
 
-        final Response response = givenAuth().get(urlPrefix + "/api/scheduledPosts?page=1&size=2");
+        final Response response = givenAuth().params("page", 1, "size", 2).get(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
