@@ -50,36 +50,32 @@ public class ScheduledPostService implements IScheduledPostService {
     }
 
     @Override
-    public Post schedulePost(final boolean isSuperUser, final Post post, final String dateStr, final boolean resubmitOptionsActivated) throws ParseException {
-        final Date submissionDate = calculateSubmissionDate(dateStr, userService.getCurrentUser().getPreference().getTimezone());
+    public Post schedulePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
             throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
-        if (submissionDate.before(new Date())) {
+        if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
-        if (!(isSuperUser || checkIfCanSchedule(submissionDate))) {
+        if (!(isSuperUser || checkIfCanSchedule(post.getSubmissionDate()))) {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
-        post.setSubmissionDate(submissionDate);
         post.setUser(userService.getCurrentUser());
         post.setSubmissionResponse("Not sent yet");
         return postRepository.save(post);
     }
 
     @Override
-    public void updatePost(final boolean isSuperUser, final Post post, final String dateStr, final boolean resubmitOptionsActivated) throws ParseException {
-        final Date submissionDate = calculateSubmissionDate(dateStr, userService.getCurrentUser().getPreference().getTimezone());
+    public void updatePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
             throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
-        if (submissionDate.before(new Date())) {
+        if (post.getSubmissionDate().before(new Date())) {
             throw new InvalidDateException("Scheduling Date already passed");
         }
-        if (!(isSuperUser || checkIfCanSchedule(submissionDate))) {
+        if (!(isSuperUser || checkIfCanSchedule(post.getSubmissionDate()))) {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
-        post.setSubmissionDate(submissionDate);
         post.setUser(userService.getCurrentUser());
         postRepository.save(post);
     }
@@ -121,11 +117,6 @@ public class ScheduledPostService implements IScheduledPostService {
     private List<SimplePostDto> constructDataAccordingToUserTimezone(final List<Post> posts) {
         final String timeZone = userService.getCurrentUser().getPreference().getTimezone();
         return posts.stream().map(post -> new SimplePostDto(post, convertToUserTomeZone(post.getSubmissionDate(), timeZone))).collect(Collectors.toList());
-    }
-
-    private synchronized final Date calculateSubmissionDate(final String dateString, final String timeZone) throws ParseException {
-        dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
-        return dateFormat.parse(dateString);
     }
 
     private boolean checkIfCanSchedule(final Date date) {

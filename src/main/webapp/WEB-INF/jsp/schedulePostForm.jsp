@@ -10,6 +10,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script th:src="@{/resources/datetime-picker.js}"></script>
 <script th:src="@{/resources/validator1.js}"></script>
+<script th:src="@{/resources/moment.min.js}"></script>
+<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -72,7 +74,7 @@ border-color: #ddd;
 <br/>
 
 <div>
-<label class="col-sm-3">Submission Date (<span sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
+<label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
 <div class="col-sm-5"><input id="date" name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
     /*<![CDATA[*/
@@ -89,7 +91,7 @@ border-color: #ddd;
     </script>
 </div>
 <br/><br/>
-
+<input type="hidden" name="submissionDate" />
     
    <div class="col-sm-12"> <button id="submitBut" type="submit" class="btn btn-primary">Schedule</button></div>
    </div>
@@ -239,10 +241,21 @@ $('input[name="resubmitOptionsActivated"]').change(function() {
 });
 </script>
 
+<script th:inline="javascript">
+function convertToServerDate(date){
+    var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
+    var clentTimezone = $("#timezone").html();
+    var clientDate = moment.tz(date, clentTimezone);
+    var serverDate = clientDate.clone().tz(serverTimezone);
+    var myformat = "YYYY-MM-DD HH:mm";
+    return serverDate.format(myformat);
+}
+</script>
 <script>
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
+    $('input[name="submissionDate"]').val(convertToServerDate($("#date").val()));
     schedulePost();
 });
 
@@ -253,7 +266,7 @@ function schedulePost(){
     var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
 
  $.ajax({
-    url: 'api/scheduledPosts?date='+$("#date").val()+"&resubmitOptionsActivated="+resubmitActivated,
+    url: 'api/scheduledPosts?resubmitOptionsActivated='+resubmitActivated,
     data: JSON.stringify(data),
     type: 'POST',
     contentType:'application/json',

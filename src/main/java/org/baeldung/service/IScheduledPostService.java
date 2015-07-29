@@ -8,9 +8,9 @@ import org.baeldung.web.PagingInfo;
 import org.baeldung.web.SimplePostDto;
 
 public interface IScheduledPostService {
-    Post schedulePost(boolean isSuperUser, Post post, String dateStr, boolean resubmitOptionsActivated) throws ParseException;
+    Post schedulePost(boolean isSuperUser, Post post, boolean resubmitOptionsActivated) throws ParseException;
 
-    void updatePost(final boolean isSuperUser, final Post post, final String dateStr, boolean resubmitOptionsActivated) throws ParseException;
+    void updatePost(final boolean isSuperUser, final Post post, boolean resubmitOptionsActivated) throws ParseException;
 
     Post getPostById(Long id);
 

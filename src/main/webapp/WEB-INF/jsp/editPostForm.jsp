@@ -91,6 +91,7 @@ border-color: #ddd;
     </script>
 
     <br/><br/>
+ <input type="hidden" name="submissionDate" />
     
     <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>
    </div>
@@ -141,6 +142,16 @@ border-color: #ddd;
       var myformat = "YYYY-MM-DD HH:mm";
       return clientDate.format(myformat);
   }
+  
+  function convertToServerDate(date){
+	    var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
+	    var clentTimezone = $("#timezone").html();
+	    var clientDate = moment.tz(date, clentTimezone);
+	    var serverDate = clientDate.clone().tz(serverTimezone);
+	    var myformat = "YYYY-MM-DD HH:mm";
+	    return serverDate.format(myformat);
+	}
+  
 </script>
 <script>
 /*<![CDATA[*/
@@ -181,6 +192,7 @@ $('input[name="resubmitOptionsActivated"]').change(function() {
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
+    $('input[name="submissionDate"]').val(convertToServerDate($("#date").val()));
     editPost();
 });
 

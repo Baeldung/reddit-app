@@ -40,8 +40,9 @@ class ScheduledPostRestController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Post schedule(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
-        return scheduledPostService.schedulePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date, resubmitOptionsActivated);
+    public Post schedule(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
+        System.out.println(post.getSubmissionDate() + "====pppp");
+        return scheduledPostService.schedulePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, resubmitOptionsActivated);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -52,8 +53,8 @@ class ScheduledPostRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "date") final String date, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
-        scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, date, resubmitOptionsActivated);
+    public void updatePost(final HttpServletRequest request, @RequestBody final Post post, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
+        scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, resubmitOptionsActivated);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
