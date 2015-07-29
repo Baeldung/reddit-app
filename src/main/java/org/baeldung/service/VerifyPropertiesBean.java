@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyPropertiesBean implements PriorityOrdered, BeanFactoryPostProcessor {
 
-    private static String[] requiredProperties = new String[] { "reddit.clientID", "smtp.password", "jdbc.url" };
+    private static String[] requiredProperties = new String[] { "reddit.clientID", "reddit.clientSecret", "reddit.accessTokenUri", "reddit.userAuthorizationUri", "reddit.redirectUri", "smtp.host", "smtp.port", "smtp.protocol", "smtp.username",
+            "smtp.password", "support.email", "jdbc.driverClassName", "jdbc.url", "jdbc.user", "jdbc.pass", "init-db", "hibernate.dialect", "hibernate.show_sql", "hibernate.hbm2ddl.auto" };
 
     public VerifyPropertiesBean() {
         super();
@@ -33,6 +34,10 @@ public class VerifyPropertiesBean implements PriorityOrdered, BeanFactoryPostPro
             if (environment.getProperty(requiredProp) == null) {
                 throw new ApplicationContextException("The following required property is missing: " + requiredProp);
             }
+        }
+
+        if ((environment.getProperty("envTarget") == "production") && (environment.getProperty("hibernate.hbm2ddl.auto") == "create-drop")) {
+            throw new ApplicationContextException("hibernate.hbm2ddl.auto can not be create-drop for production");
         }
     }
 

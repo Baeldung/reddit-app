@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang.StringUtils;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.MyFeatures;
 import org.baeldung.reddit.util.UserAgentInterceptor;
@@ -69,7 +66,7 @@ public class RedditConfig {
 
     @Configuration
     @EnableOAuth2Client
-    @PropertySource("classpath:reddit.properties")
+    @PropertySource("classpath:reddit-${envTarget:test}.properties")
     protected static class ResourceConfiguration {
 
         @Value("${reddit.accessTokenUri}")
@@ -113,13 +110,6 @@ public class RedditConfig {
                     new ClientCredentialsAccessTokenProvider()));
             template.setAccessTokenProvider(accessTokenProvider);
             return template;
-        }
-
-        @PostConstruct
-        public void startupCheck() {
-            if (StringUtils.isBlank(accessTokenUri) || StringUtils.isBlank(userAuthorizationUri) || StringUtils.isBlank(clientID) || StringUtils.isBlank(clientSecret)) {
-                throw new RuntimeException("Incomplete reddit properties");
-            }
         }
 
     }
