@@ -3,3 +3,18 @@
 src/main/resources/email.properties
 
 *.properties
+src/main/resources/persistence-local.properties
+
+src/main/resources/persistence-local.properties
+
+src/main/resources/persistence-production.properties
+
+src/main/resources/persistence-test.properties
+
+src/main/resources/reddit-local.properties
+
+src/main/resources/web-local.properties
+
+src/main/resources/web-production.properties
+
+src/main/resources/web-test.properties
