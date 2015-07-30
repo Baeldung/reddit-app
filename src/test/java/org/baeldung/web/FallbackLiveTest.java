@@ -3,8 +3,10 @@ package org.baeldung.web;
 import static org.junit.Assert.assertEquals;
 
 import org.baeldung.web.live.AbstractLiveTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class FallbackLiveTest extends AbstractLiveTest {
 
     @Test
