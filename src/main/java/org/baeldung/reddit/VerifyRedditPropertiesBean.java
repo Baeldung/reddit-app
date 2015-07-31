@@ -1,4 +1,4 @@
-package org.baeldung.service;
+package org.baeldung.reddit;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -10,12 +10,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VerifyPropertiesBean implements PriorityOrdered, BeanFactoryPostProcessor {
+public class VerifyRedditPropertiesBean implements PriorityOrdered, BeanFactoryPostProcessor {
 
-    private static String[] requiredProperties = new String[] { "reddit.clientID", "reddit.clientSecret", "reddit.accessTokenUri", "reddit.userAuthorizationUri", "reddit.redirectUri", "smtp.host", "smtp.port", "smtp.protocol", "smtp.username",
-            "smtp.password", "support.email", "jdbc.driverClassName", "jdbc.url", "jdbc.user", "jdbc.pass", "init-db", "hibernate.dialect", "hibernate.show_sql", "hibernate.hbm2ddl.auto" };
+    private static String[] requiredProperties = new String[] { // @formatter:off
+        "reddit.clientID", "reddit.clientSecret", "reddit.accessTokenUri", "reddit.userAuthorizationUri", "reddit.redirectUri"
+    }; // @formatter:on
 
-    public VerifyPropertiesBean() {
+    public VerifyRedditPropertiesBean() {
         super();
     }
 
