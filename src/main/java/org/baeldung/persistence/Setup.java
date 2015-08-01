@@ -45,13 +45,13 @@ public class Setup {
     }
 
     private void loadRolesAndPrivileges() {
-        privilegeRepository.save(csvDataLoader.loadObjectList(Privilege.class, CsvDataLoader.PRIVILEGES_FILE));
-        roleRepository.save(csvDataLoader.loadObjectList(Role.class, CsvDataLoader.ROLES_FILE));
+        privilegeRepository.save(csvDataLoader.loadObjectList(Privilege.class, SetupData.PRIVILEGES_FILE));
+        roleRepository.save(csvDataLoader.loadObjectList(Role.class, SetupData.ROLES_FILE));
         loadRolesPrivilegesRelationship();
     }
 
     private void loadUsers() {
-        final List<User> users = csvDataLoader.loadObjectList(User.class, CsvDataLoader.USERS_FILE);
+        final List<User> users = csvDataLoader.loadObjectList(User.class, SetupData.USERS_FILE);
 
         for (final User user : users) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -68,7 +68,7 @@ public class Setup {
     }
 
     private void loadRolesPrivilegesRelationship() {
-        final List<long[]> rolesPrivileges = csvDataLoader.loadManyToManyRelationship(CsvDataLoader.ROLES_PRIVILEGES_FILE);
+        final List<long[]> rolesPrivileges = csvDataLoader.loadManyToManyRelationship(SetupData.ROLES_PRIVILEGES_FILE);
         for (final long[] arr : rolesPrivileges) {
             final Role role = roleRepository.findOne(arr[0]);
             final Collection<Privilege> privileges = role.getPrivileges();
@@ -79,7 +79,7 @@ public class Setup {
     }
 
     private void loadUsersRolesRelationship() {
-        final List<long[]> usersRoles = csvDataLoader.loadManyToManyRelationship(CsvDataLoader.USERS_ROLES_FILE);
+        final List<long[]> usersRoles = csvDataLoader.loadManyToManyRelationship(SetupData.USERS_ROLES_FILE);
         for (final long[] arr : usersRoles) {
             final User user = userRepository.findOne(arr[0]);
             final Collection<Role> roles = user.getRoles();

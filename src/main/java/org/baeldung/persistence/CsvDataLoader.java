@@ -15,14 +15,10 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 @Component
-public class CsvDataLoader {
+public final class CsvDataLoader {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public final static String USERS_FILE = "users.csv";
-    public final static String ROLES_FILE = "roles.csv";
-    public final static String PRIVILEGES_FILE = "privileges.csv";
-    public final static String ROLES_PRIVILEGES_FILE = "roles_privileges.csv";
-    public final static String USERS_ROLES_FILE = "users_roles.csv";
+    // API
 
     public <T> List<T> loadObjectList(final Class<T> type, final String fileName) {
         try {
@@ -50,4 +46,5 @@ public class CsvDataLoader {
             return Collections.emptyList();
         }
     }
+
 }
