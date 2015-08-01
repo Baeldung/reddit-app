@@ -12,7 +12,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 @ComponentScan({ "org.baeldung.service" })
-@PropertySource("classpath:email-${envTarget:test}.properties")
+@PropertySource("classpath:email.properties")
 public class ServiceConfig {
 
     @Autowired
@@ -36,4 +36,5 @@ public class ServiceConfig {
         mailSenderImpl.setJavaMailProperties(javaMailProps);
         return mailSenderImpl;
     }
+
 }

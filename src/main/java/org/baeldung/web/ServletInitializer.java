@@ -3,6 +3,7 @@ package org.baeldung.web;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.baeldung.config.CommonConfig;
 import org.baeldung.config.PersistenceJpaConfig;
 import org.baeldung.config.RedditConfig;
 import org.baeldung.config.SecurityConfig;
@@ -19,7 +20,7 @@ public class ServletInitializer extends AbstractDispatcherServletInitializer {
     @Override
     protected WebApplicationContext createServletApplicationContext() {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(PersistenceJpaConfig.class, ServiceConfig.class, WebConfig.class, SecurityConfig.class, ThymeleafConfig.class, RedditConfig.class);
+        context.register(CommonConfig.class, PersistenceJpaConfig.class, ServiceConfig.class, WebConfig.class, SecurityConfig.class, ThymeleafConfig.class, RedditConfig.class);
         return context;
     }
 
