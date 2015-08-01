@@ -14,12 +14,16 @@ import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.Privilege;
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Setup {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private CsvDataLoader csvDataLoader;
 
@@ -52,19 +56,32 @@ public class Setup {
 
     private void loadUsers() {
         final List<User> users = csvDataLoader.loadObjectList(User.class, SetupData.USERS_FILE);
-
         for (final User user : users) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            final Preference pref = new Preference();
-            pref.setId(user.getId());
-            pref.setTimezone(TimeZone.getDefault().getID());
-            pref.setEmail(user.getUsername() + "@test.com");
-            preferenceRepository.save(pref);
-            user.setPreference(pref);
-            userRepository.save(user);
+            loadUser(user);
         }
-
         loadUsersRolesRelationship();
+    }
+
+    private void loadUser(final User user) {
+        try {
+            loadUserInternal(user);
+        } catch (final Exception e) {
+            logger.error("Error occurred while loading user " + user.toString(), e);
+        }
+    }
+
+    private void loadUserInternal(final User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPreference(createSimplePreference(user));
+        userRepository.save(user);
+    }
+
+    private Preference createSimplePreference(final User user) {
+        final Preference pref = new Preference();
+        pref.setId(user.getId());
+        pref.setTimezone(TimeZone.getDefault().getID());
+        pref.setEmail(user.getUsername() + "@test.com");
+        return preferenceRepository.save(pref);
     }
 
     private void loadRolesPrivilegesRelationship() {
