@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class Setup {
@@ -65,6 +66,7 @@ public class Setup {
         }
     }
 
+    @Transactional
     private void setupUserInternal(final User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setPreference(createSimplePreference(user));

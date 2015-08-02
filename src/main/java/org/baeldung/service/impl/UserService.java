@@ -1,7 +1,7 @@
 package org.baeldung.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Sets;
 
 @Service
 public class UserService implements IUserService {
@@ -53,7 +55,7 @@ public class UserService implements IUserService {
         preferenceReopsitory.save(pref);
         user.setPreference(pref);
         final Role role = roleRepository.findByName("ROLE_USER");
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(Sets.newHashSet(role));
         userRepository.save(user);
         logger.info("Register new User {}", user);
     }
@@ -80,7 +82,7 @@ public class UserService implements IUserService {
         }
         final List<Role> roles = roleRepository.findAll(roleIds);
         final User user = userRepository.findOne(userId);
-        user.setRoles(roles);
+        user.setRoles(new HashSet<Role>(roles));
         userRepository.save(user);
     }
 

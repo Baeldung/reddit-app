@@ -1,8 +1,8 @@
 package org.baeldung.persistence;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.baeldung.persistence.model.IEntity;
 import org.baeldung.persistence.model.Privilege;
@@ -32,13 +32,13 @@ public final class SetupData {
         final List<Role> roles = csvDataLoader.loadObjectList(Role.class, ROLES_FILE);
         final List<long[]> rolesPrivileges = csvDataLoader.loadManyToManyRelationship(SetupData.ROLES_PRIVILEGES_FILE);
 
-        for (final long[] arr : rolesPrivileges) {
-            final Role role = findById(roles, arr[0]);
-            Collection<Privilege> privileges = role.getPrivileges();
+        for (final long[] rolePrivilege : rolesPrivileges) {
+            final Role role = findById(roles, rolePrivilege[0]);
+            Set<Privilege> privileges = role.getPrivileges();
             if (privileges == null) {
-                privileges = new ArrayList<Privilege>();
+                privileges = new HashSet<Privilege>();
             }
-            privileges.add(findById(allPrivileges, arr[1]));
+            privileges.add(findById(allPrivileges, rolePrivilege[1]));
             role.setPrivileges(privileges);
         }
         return roles;
@@ -49,13 +49,13 @@ public final class SetupData {
         final List<User> users = csvDataLoader.loadObjectList(User.class, SetupData.USERS_FILE);
         final List<long[]> usersRoles = csvDataLoader.loadManyToManyRelationship(SetupData.USERS_ROLES_FILE);
 
-        for (final long[] arr : usersRoles) {
-            final User user = findById(users, arr[0]);
-            Collection<Role> roles = user.getRoles();
+        for (final long[] userRole : usersRoles) {
+            final User user = findById(users, userRole[0]);
+            Set<Role> roles = user.getRoles();
             if (roles == null) {
-                roles = new ArrayList<Role>();
+                roles = new HashSet<Role>();
             }
-            roles.add(findById(allRoles, arr[1]));
+            roles.add(findById(allRoles, userRole[1]));
             user.setRoles(roles);
         }
         return users;
