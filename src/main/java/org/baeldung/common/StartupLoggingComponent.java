@@ -4,16 +4,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.Preconditions;
-
 @Component
-public class StartupLoggingComponent implements ApplicationListener<ContextRefreshedEvent> {
+public class StartupLoggingComponent implements InitializingBean {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String ENV_KEY = "envTarget";
@@ -30,7 +27,7 @@ public class StartupLoggingComponent implements ApplicationListener<ContextRefre
     //
 
     @Override
-    public final void onApplicationEvent(final ContextRefreshedEvent event) {
+    public void afterPropertiesSet() {
         logger.info("============================================================================");
         try {
             logEnvTarget(env);
@@ -70,9 +67,16 @@ public class StartupLoggingComponent implements ApplicationListener<ContextRefre
         }
 
         if (acceptablePropertyValues != null) {
-            Preconditions.checkState(acceptablePropertyValues.contains(propValue), "Could not get value of property. propValue=" + propertyDefaultValue);
+            if (!acceptablePropertyValues.contains(propValue)) {
+                logger.warn("The property = {} has an invalid value = {}", propertyKey, propValue);
+            }
         }
-        return Preconditions.checkNotNull(propValue, "Property was null.");
+
+        if (propValue == null) {
+            logger.warn("The property = {} is null", propertyKey);
+        }
+
+        return propValue;
     }
 
 }
