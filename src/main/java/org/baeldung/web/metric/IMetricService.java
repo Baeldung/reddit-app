@@ -1,14 +1,15 @@
 package org.baeldung.web.metric;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public interface IMetricService {
 
     void increaseCount(final String request, final int status);
 
-    Map getFullMetric();
+    Map<String, HashMap<Integer, Integer>> getFullMetric();
 
-    Map getStatusMetric();
+    Map<Integer, Integer> getStatusMetric();
 
     Object[][] getGraphData();
 }

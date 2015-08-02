@@ -1,16 +1,12 @@
 /bin/
 /target/
 
-src/main/resources/persistence-production.properties
+src/main/resources/*-production.properties
 
-src/main/resources/persistence-staging.properties
+src/main/resources/*-staging.properties
 
 src/main/resources/reddit-local.properties
 
-src/main/resources/reddit-production.properties
+src/main/resources/users.csv
 
-src/main/resources/reddit-staging.properties
 
-src/main/resources/web-production.properties
-
-src/main/resources/web-staging.properties

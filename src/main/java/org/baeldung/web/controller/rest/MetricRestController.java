@@ -1,5 +1,6 @@
 package org.baeldung.web.controller.rest;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.baeldung.web.metric.IMetricService;
@@ -19,13 +20,13 @@ class MetricRestController {
 
     @RequestMapping(value = "/metric", method = RequestMethod.GET)
     @ResponseBody
-    public Map getMetric() {
+    public Map<String, HashMap<Integer, Integer>> getMetric() {
         return metricService.getFullMetric();
     }
 
     @RequestMapping(value = "/status-metric", method = RequestMethod.GET)
     @ResponseBody
-    public Map getStatusMetric() {
+    public Map<Integer, Integer> getStatusMetric() {
         return metricService.getStatusMetric();
     }
 

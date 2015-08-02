@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetricService implements IMetricService {
 
-    private Map<String, HashMap<Integer, Integer>> metricMap;
-    private Map<Integer, Integer> statusMetric;
-    private Map<String, HashMap<Integer, Integer>> timeMap;
+    private final Map<String, HashMap<Integer, Integer>> metricMap;
+    private final Map<Integer, Integer> statusMetric;
+    private final Map<String, HashMap<Integer, Integer>> timeMap;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public MetricService() {
@@ -34,12 +34,12 @@ public class MetricService implements IMetricService {
     }
 
     @Override
-    public Map getFullMetric() {
+    public Map<String, HashMap<Integer, Integer>> getFullMetric() {
         return metricMap;
     }
 
     @Override
-    public Map getStatusMetric() {
+    public Map<Integer, Integer> getStatusMetric() {
         return statusMetric;
     }
 
