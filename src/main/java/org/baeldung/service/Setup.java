@@ -1,13 +1,13 @@
-package org.baeldung.persistence;
+package org.baeldung.service;
 
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.baeldung.persistence.SetupData;
 import org.baeldung.persistence.dao.PrivilegeRepository;
 import org.baeldung.persistence.dao.RoleRepository;
 import org.baeldung.persistence.model.User;
-import org.baeldung.service.ISetupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

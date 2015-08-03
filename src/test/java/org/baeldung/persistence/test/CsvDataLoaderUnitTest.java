@@ -1,11 +1,10 @@
-package org.baeldung.service.test;
+package org.baeldung.persistence.test;
 
 import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
 import org.baeldung.config.PersistenceJpaConfig;
-import org.baeldung.config.ServiceConfig;
 import org.baeldung.persistence.CsvDataLoader;
 import org.baeldung.persistence.SetupData;
 import org.baeldung.persistence.model.Privilege;
@@ -19,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { PersistenceJpaConfig.class, ServiceConfig.class }, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = { PersistenceJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class CsvDataLoaderUnitTest {
 
     @Autowired

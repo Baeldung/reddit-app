@@ -7,6 +7,4 @@ src/main/resources/*-staging.properties
 
 src/main/resources/reddit-local.properties
 
-src/main/resources/users.csv
-
 
