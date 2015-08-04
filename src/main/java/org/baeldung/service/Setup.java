@@ -5,8 +5,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.baeldung.persistence.SetupData;
-import org.baeldung.persistence.dao.PrivilegeRepository;
-import org.baeldung.persistence.dao.RoleRepository;
+import org.baeldung.persistence.model.Privilege;
+import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,12 +20,6 @@ public class Setup {
     @Autowired
     private ISetupService setupService;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
-
     @PostConstruct
     private void setupData() {
         setupRolesAndPrivileges();
@@ -33,8 +27,15 @@ public class Setup {
     }
 
     private void setupRolesAndPrivileges() {
-        privilegeRepository.save(setupData.getPrivileges());
-        roleRepository.save(setupData.getRoles());
+        final List<Privilege> privileges = setupData.getPrivileges();
+        for (final Privilege privilege : privileges) {
+            setupService.setupPrivilege(privilege);
+        }
+
+        final List<Role> roles = setupData.getRoles();
+        for (final Role role : roles) {
+            setupService.setupRole(role);
+        }
     }
 
     private void setupUsers() {
