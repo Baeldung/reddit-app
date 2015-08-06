@@ -205,10 +205,10 @@ class PostRedditService implements IPostRedditService {
 
     private boolean didPostGoalFail(final Post post) {
         final PostScores postScores = getPostScores(post);
-        final int score = postScores.getScore();
-        final int totalVotes = postScores.getTotalVotes();
-        final int noOfComments = postScores.getNoOfComments();
-        return (((score < post.getMinScoreRequired()) || (totalVotes < post.getMinTotalVotes())) && !((noOfComments > 0) && post.isKeepIfHasComments()));
+        final boolean failToReachRequiredScore = postScores.getScore() < post.getMinScoreRequired();
+        final boolean enoughTotalVotes = (postScores.getTotalVotes() >= post.getMinTotalVotes()) && (post.getMinTotalVotes() > 0);
+        final boolean keepBecauseOfComments = (postScores.getNoOfComments() > 0) && post.isKeepIfHasComments();
+        return (failToReachRequiredScore && !(keepBecauseOfComments || enoughTotalVotes));
     }
 
 }
