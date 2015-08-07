@@ -11,6 +11,7 @@ import org.baeldung.config.ServiceConfig;
 import org.baeldung.config.ThymeleafConfig;
 import org.baeldung.config.WebConfig;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
@@ -38,6 +39,7 @@ public class ServletInitializer extends AbstractDispatcherServletInitializer {
     public void onStartup(final ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         servletContext.addListener(new SessionListener());
+        servletContext.addListener(new RequestContextListener());
         registerProxyFilter(servletContext, "oauth2ClientContextFilter");
         registerProxyFilter(servletContext, "springSecurityFilterChain");
         registerProxyFilter(servletContext, "metricFilter");
