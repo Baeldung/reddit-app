@@ -68,6 +68,7 @@ function extractRolesName(roles){
 
 function showEditModal(userId, roleNames){
 	$("#userId").val(userId);
+	 $('#allRoles').html("");
 	$.get("admin/roles", function(data){
         $.each(data, function( index, role ) {
         	if(roleNames.indexOf(role.name) != -1){
