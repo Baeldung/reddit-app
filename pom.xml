@@ -173,7 +173,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
-            <scope>runtime</scope>
+             <scope>runtime</scope>
         </dependency>
 
         <!-- h2 -->
@@ -191,6 +191,19 @@
             <artifactId>postgresql</artifactId>
             <version>9.4-1201-jdbc41</version>
         </dependency>
+        
+        <!-- liquibase  -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+                     
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-maven-plugin</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>                        
 
         <!-- logback email -->
 
@@ -249,7 +262,7 @@
             <artifactId>jackson-dataformat-csv</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
+        
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
@@ -348,92 +361,120 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <pluginManagement>
+            <plugins>
 
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <excludes>
-                        <exclude>**/*IntegrationTest.java</exclude>
-                        <exclude>**/*LiveTest.java</exclude>
-                    </excludes>
-                    <systemPropertyVariables>
-                        <!-- <provPersistenceTarget>h2</provPersistenceTarget> -->
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>${cargo-maven2-plugin.version}</version>
-                <configuration>
-                    <wait>true</wait>
-                    <container>
-                        <containerId>tomcat8x</containerId>
-                        <type>embedded</type>
-                        <systemProperties>
-                            <!-- <provPersistenceTarget>cargo</provPersistenceTarget> -->
-                        </systemProperties>
-                    </container>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <properties>
-                            <cargo.servlet.port>8081</cargo.servlet.port>
-                        </properties>
+                        <source>1.8</source>
+                        <target>1.8</target>
                     </configuration>
-                </configuration>
-            </plugin>
+                </plugin>
 
-            <!-- webapp runner -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <excludes>
+                            <exclude>**/*IntegrationTest.java</exclude>
+                            <exclude>**/*LiveTest.java</exclude>
+                        </excludes>
+                        <systemPropertyVariables>
+                            <!-- <provPersistenceTarget>h2</provPersistenceTarget> -->
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven2-plugin</artifactId>
+                    <version>${cargo-maven2-plugin.version}</version>
+                    <configuration>
+                        <wait>true</wait>
+                        <container>
+                            <containerId>tomcat8x</containerId>
+                            <type>embedded</type>
+                            <systemProperties>
+                                <!-- <provPersistenceTarget>cargo</provPersistenceTarget> -->
+                            </systemProperties>
+                        </container>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.github.jsimone</groupId>
-                                    <artifactId>webapp-runner</artifactId>
-                                    <version>7.0.57.2</version>
-                                    <destFileName>webapp-runner.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
+                            <properties>
+                                <cargo.servlet.port>8081</cargo.servlet.port>
+                            </properties>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                    </configuration>
+                </plugin>
 
-        </plugins>
+                <!-- webapp runner -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.3</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.github.jsimone</groupId>
+                                        <artifactId>webapp-runner</artifactId>
+                                        <version>7.0.57.2</version>
+                                        <destFileName>webapp-runner.jar</destFileName>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
 
+            <!-- liquibase  -->
+                <plugin>
+                   <groupId>org.liquibase</groupId>
+                   <artifactId>liquibase-maven-plugin</artifactId>
+                   <version>${liquibase.version}</version>
+                   
+                   <configuration>                  
+                      <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                   </configuration>                
+                    <dependencies>
+                        <dependency>
+                                <groupId>org.liquibase.ext</groupId>
+                                <artifactId>liquibase-hibernate4</artifactId>
+                                <version>3.5</version>
+                                
+                            </dependency>
+                        <dependency>
+                                <groupId>org.springframework</groupId>
+                                <artifactId>spring-beans</artifactId>
+                                <version>${org.springframework.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework.data</groupId>
+                                <artifactId>spring-data-jpa</artifactId>
+                                <version>${spring-data-jpa.version}</version>
+                            </dependency>
+                    </dependencies>
+                </plugin>      
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -550,6 +591,7 @@
         <hibernate.version>4.3.11.Final</hibernate.version>
         <mysql-connector-java.version>5.1.36</mysql-connector-java.version>
         <spring-data-jpa.version>1.7.3.RELEASE</spring-data-jpa.version>
+        <liquibase.version>3.4.1</liquibase.version>
 
         <!-- marshalling -->
 
