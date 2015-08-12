@@ -1,5 +1,7 @@
 package org.baeldung.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.baeldung.persistence.dao.PreferenceRepository;
@@ -50,14 +52,20 @@ public class SetupService implements ISetupService {
 
     @Override
     public void setupPrivilege(final Privilege privilege) {
-        if (privilegeRepository.findOne(privilege.getId()) != privilege) {
+        if (privilegeRepository.findByName(privilege.getName()) == null) {
             privilegeRepository.save(privilege);
         }
     }
 
     @Override
     public void setupRole(final Role role) {
-        if (roleRepository.findOne(role.getId()) != role) {
+        if (roleRepository.findByName(role.getName()) == null) {
+            final Set<Privilege> privileges = role.getPrivileges();
+            final Set<Privilege> persistedPrivileges = new HashSet<Privilege>();
+            for (final Privilege privilege : privileges) {
+                persistedPrivileges.add(privilegeRepository.findByName(privilege.getName()));
+            }
+            role.setPrivileges(persistedPrivileges);
             roleRepository.save(role);
         }
     }
@@ -67,6 +75,12 @@ public class SetupService implements ISetupService {
         if (userRepository.findOne(user.getId()) != user) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setPreference(createSimplePreference(user));
+            final Set<Role> roles = user.getRoles();
+            final Set<Role> persistedRoles = new HashSet<Role>();
+            for (final Role role : roles) {
+                persistedRoles.add(roleRepository.findByName(role.getName()));
+            }
+            user.setRoles(persistedRoles);
             userRepository.save(user);
         }
     }
