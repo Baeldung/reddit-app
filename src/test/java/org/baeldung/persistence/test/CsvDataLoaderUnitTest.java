@@ -44,13 +44,13 @@ public class CsvDataLoaderUnitTest {
 
     @Test
     public void whenLoadingUsersRolesRelationFromCsvFile_thenLoaded() {
-        final List<long[]> usersRoles = csvDataLoader.loadManyToManyRelationship(SetupData.USERS_ROLES_FILE);
+        final List<String[]> usersRoles = csvDataLoader.loadManyToManyRelationship(SetupData.USERS_ROLES_FILE);
         assertFalse(usersRoles.isEmpty());
     }
 
     @Test
     public void whenLoadingRolesPrivilegesRelationFromCsvFile_thenLoaded() {
-        final List<long[]> rolesPrivileges = csvDataLoader.loadManyToManyRelationship(SetupData.ROLES_PRIVILEGES_FILE);
+        final List<String[]> rolesPrivileges = csvDataLoader.loadManyToManyRelationship(SetupData.ROLES_PRIVILEGES_FILE);
         assertFalse(rolesPrivileges.isEmpty());
     }
 }

@@ -33,13 +33,13 @@ public final class CsvDataLoader {
         }
     }
 
-    public List<long[]> loadManyToManyRelationship(final String fileName) {
+    public List<String[]> loadManyToManyRelationship(final String fileName) {
         try {
             final CsvMapper mapper = new CsvMapper();
             final CsvSchema bootstrapSchema = CsvSchema.emptySchema().withSkipFirstDataRow(true);
             mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
             final File file = new ClassPathResource(fileName).getFile();
-            final MappingIterator<long[]> readValues = mapper.reader(long[].class).with(bootstrapSchema).readValues(file);
+            final MappingIterator<String[]> readValues = mapper.reader(String[].class).with(bootstrapSchema).readValues(file);
             return readValues.readAll();
         } catch (final Exception e) {
             logger.error("Error ocurred while loading many to many relationship from file " + fileName, e);
