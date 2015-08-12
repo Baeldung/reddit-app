@@ -72,7 +72,7 @@ public class SetupService implements ISetupService {
 
     //
     private void setupUserInternal(final User user) {
-        if (userRepository.findOne(user.getId()) != user) {
+        if (userRepository.findByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setPreference(createSimplePreference(user));
             final Set<Role> roles = user.getRoles();
