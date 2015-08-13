@@ -119,8 +119,10 @@ border-color: #ddd;
 	  
 	  $.get("../api/scheduledPosts/"+id, function (data){
           $.each(data, function(key, value) {
-              if(value == true){
-                  $('*[name="'+key+'"]')[0].checked=true;
+              if(value == true ){
+            	  if($('*[name="'+key+'"]').length > 0){
+            		  $('*[name="'+key+'"]')[0].checked=true;
+            	  }              
               }
               if(value != false){
                   $('*[name="'+key+'"]').val(value);
