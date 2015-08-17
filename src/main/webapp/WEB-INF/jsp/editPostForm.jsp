@@ -75,7 +75,7 @@ border-color: #ddd;
 
 <br/>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
-<div class="col-sm-5"><input id="date" name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
@@ -91,7 +91,6 @@ border-color: #ddd;
     </script>
 
     <br/><br/>
- <input type="hidden" name="submissionDate" />
     
     <div class="col-sm-12"><button id="submitBut" type="submit" class="btn btn-primary">Save Changes</button></div>
    </div>
@@ -128,7 +127,6 @@ border-color: #ddd;
                   $('*[name="'+key+'"]').val(value);
               }
           });
-          $("#date").val(loadDate(data.submissionDate));
           if(data.minScoreRequired == 0){
               $('input[name="resubmitOptionsActivated"]')[0].checked=false;
               $("#resubmit").hide();
@@ -136,23 +134,6 @@ border-color: #ddd;
       });
   }
   
-  function loadDate(dateVal){
-	  console.log($("#date").val());
-      var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
-      var serverDate = moment.tz(dateVal, serverTimezone);
-      var clientDate = serverDate.clone().tz($("#timezone").html());
-      var myformat = "YYYY-MM-DD HH:mm";
-      return clientDate.format(myformat);
-  }
-  
-  function convertToServerDate(date){
-	    var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
-	    var clentTimezone = $("#timezone").html();
-	    var clientDate = moment.tz(date, clentTimezone);
-	    var serverDate = clientDate.clone().tz(serverTimezone);
-	    var myformat = "YYYY-MM-DD HH:mm";
-	    return serverDate.format(myformat);
-	}
   
 </script>
 <script>
@@ -194,7 +175,6 @@ $('input[name="resubmitOptionsActivated"]').change(function() {
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
-    $('input[name="submissionDate"]').val(convertToServerDate($("#date").val()));
     editPost();
 });
 
@@ -205,7 +185,7 @@ function editPost(){
     console.log(JSON.stringify(data));
     var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
 	$.ajax({
-        url: "../api/scheduledPosts/"+id+"?date="+$("#date").val()+"&resubmitOptionsActivated="+resubmitActivated,
+        url: "../api/scheduledPosts/"+id+"?resubmitOptionsActivated="+resubmitActivated,
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'

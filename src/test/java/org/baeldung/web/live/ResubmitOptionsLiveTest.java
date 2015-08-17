@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.baeldung.persistence.model.Post;
+import org.baeldung.web.ScheduledPostDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
@@ -17,18 +17,18 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
 
     @Test
     public void givenResubmitOptionsDeactivated_whenScheduleANewPost_thenCreated() throws ParseException, IOException {
-        final Post post = createPost();
+        final ScheduledPostDto post = createPost();
 
         final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
+        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroAttempts_thenInvalid() throws ParseException, IOException {
-        final Post post = createPost();
+        final ScheduledPostDto post = createPost();
         post.setNoOfAttempts(0);
         post.setMinScoreRequired(5);
         post.setTimeInterval(60);
@@ -41,7 +41,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroMinScore_thenInvalid() throws ParseException, IOException {
-        final Post post = createPost();
+        final ScheduledPostDto post = createPost();
         post.setMinScoreRequired(0);
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
@@ -54,7 +54,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroTimeInterval_thenInvalid() throws ParseException, IOException {
-        final Post post = createPost();
+        final ScheduledPostDto post = createPost();
         post.setTimeInterval(0);
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
@@ -67,7 +67,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithValidResubmitOptions_thenCreated() throws ParseException, IOException {
-        final Post post = createPost();
+        final ScheduledPostDto post = createPost();
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
@@ -75,18 +75,18 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final Post result = objectMapper.reader().forType(Post.class).readValue(response.asString());
+        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
     //
 
-    private Post createPost() throws ParseException {
-        final Post post = new Post();
+    private ScheduledPostDto createPost() throws ParseException {
+        final ScheduledPostDto post = new ScheduledPostDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
-        post.setSubmissionDate(dateFormat.parse(date));
+        post.setDate(date);
         return post;
     }
 }

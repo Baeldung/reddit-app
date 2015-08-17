@@ -39,7 +39,7 @@ $(document).ready(function() {
         "searching":false,
         "columnDefs": [
                        { "name": "title",   "targets": 0 },
-                       { "name": "submissionDate",  "targets": 1 },
+                       { "name": "date",  "targets": 1 },
                        { "name": "submissionResponse", "targets": 2 },
                        { "name": "noOfAttempts",  "targets": 3 },
                        { "targets": 4, "data": "id",
@@ -51,7 +51,7 @@ $(document).ready(function() {
                      ],
                      "columns": [
                                  { "data": "title" },
-                                 { "data": "submissionDate" },
+                                 { "data": "date" },
                                  { "data": "submissionResponse" },
                                  { "data": "noOfAttempts" }
                              ],

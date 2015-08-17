@@ -203,7 +203,14 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-maven-plugin</artifactId>
             <version>${liquibase.version}</version>
-        </dependency>                        
+        </dependency>  
+        
+        <!-- model mapper -->
+        <dependency>
+          <groupId>org.modelmapper</groupId>
+          <artifactId>modelmapper</artifactId>
+          <version>0.7.4</version>
+        </dependency>                      
 
         <!-- logback email -->
 

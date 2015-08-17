@@ -75,7 +75,7 @@ border-color: #ddd;
 
 <div>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
-<div class="col-sm-5"><input id="date" name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
@@ -90,9 +90,7 @@ border-color: #ddd;
         /*]]>*/
     </script>
 </div>
-<br/><br/>
-<input type="hidden" name="submissionDate" />
-    
+<br/><br/>    
    <div class="col-sm-12"> <button id="submitBut" type="submit" class="btn btn-primary">Schedule</button></div>
    </div>
 </form>
@@ -241,21 +239,10 @@ $('input[name="resubmitOptionsActivated"]').change(function() {
 });
 </script>
 
-<script th:inline="javascript">
-function convertToServerDate(date){
-    var serverTimezone = [[${#dates.format(#calendars.createToday(), 'z')}]];
-    var clentTimezone = $("#timezone").html();
-    var clientDate = moment.tz(date, clentTimezone);
-    var serverDate = clientDate.clone().tz(serverTimezone);
-    var myformat = "YYYY-MM-DD HH:mm";
-    return serverDate.format(myformat);
-}
-</script>
 <script>
 /*<![CDATA[*/
 $("#submitBut").click(function(event) {
     event.preventDefault();
-    $('input[name="submissionDate"]').val(convertToServerDate($("#date").val()));
     schedulePost();
 });
 
