@@ -34,8 +34,7 @@ public class AbstractLiveTest {
 
     @Before
     public void setup() {
-        urlPrefix = "http://localhost:8080/reddit-scheduler";// commonPaths.getServerRoot();
-        System.out.println(urlPrefix);
+        urlPrefix = commonPaths.getServerRoot();
     }
 
     //
