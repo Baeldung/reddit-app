@@ -5,10 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.baeldung.persistence.model.User;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ScheduledPostDto {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -37,9 +33,6 @@ public class ScheduledPostDto {
     private boolean keepIfHasComments;
 
     private boolean deleteAfterLastAttempt;
-
-    @JsonIgnore
-    private User user;
 
     public ScheduledPostDto() {
         super();
@@ -111,14 +104,6 @@ public class ScheduledPostDto {
 
     public void setSubmissionResponse(final String submissionResponse) {
         this.submissionResponse = submissionResponse;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(final User user) {
-        this.user = user;
     }
 
     public int getNoOfAttempts() {

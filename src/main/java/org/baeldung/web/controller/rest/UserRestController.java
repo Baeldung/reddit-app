@@ -1,10 +1,13 @@
 package org.baeldung.web.controller.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.baeldung.service.IUserService;
+import org.baeldung.web.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +25,9 @@ class UserRestController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     // === API Methods
 
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
@@ -33,8 +39,9 @@ class UserRestController {
     @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     @ResponseBody
-    public List<User> getUsersList() {
-        return userService.getUsersList();
+    public List<UserDto> getUsersList() {
+        final List<User> users = userService.getUsersList();
+        return users.stream().map(user -> convertUserEntityToDto(user)).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
@@ -51,4 +58,9 @@ class UserRestController {
         userService.modifyUserRoles(id, roleIds);
     }
 
+    //
+
+    private UserDto convertUserEntityToDto(final User user) {
+        return modelMapper.map(user, UserDto.class);
+    }
 }
