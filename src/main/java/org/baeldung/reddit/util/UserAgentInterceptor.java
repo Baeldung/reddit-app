@@ -11,9 +11,9 @@ import org.springframework.http.client.ClientHttpResponse;
 public class UserAgentInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException {
         final HttpHeaders headers = request.getHeaders();
-        headers.add("User-Agent", "Reddit Scheduler v2.0");
+        headers.add("User-Agent", "Reddit Scheduler v3.0");
 
         final ClientHttpResponse response = execution.execute(request, body);
         // System.out.println(response.getHeaders());

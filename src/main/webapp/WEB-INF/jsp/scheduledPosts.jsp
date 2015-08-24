@@ -9,6 +9,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -29,6 +30,19 @@
     
 </table>
 
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Detailed Status</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </div>
 <script th:inline="javascript">
 /*<![CDATA[*/
@@ -38,10 +52,14 @@ $(document).ready(function() {
         "processing": true,
         "searching":false,
         "columnDefs": [
-                       { "name": "title",   "targets": 0 },
+                       { "name": "title",   "targets": 0},
                        { "name": "date",  "targets": 1 },
-                       { "name": "submissionResponse", "targets": 2 },
-                       { "name": "noOfAttempts",  "targets": 3 },
+                       { "targets": 2, "data": "status","width":"20%","orderable": false,
+                           "render": function ( data, type, full, meta ) {
+                               return data+' <a href="#" onclick="showDetailedStatus(\''+full.detailedStatus+'\' )">More Details</a>';
+                             }
+                       },
+                       { "name": "noOfAttempts",  "targets": 3},
                        { "targets": 4, "data": "id",
                     	    "render": function ( data, type, full, meta ) {
                     	        return '<a class="btn btn-warning" href="editPost/'+data+
@@ -52,7 +70,7 @@ $(document).ready(function() {
                      "columns": [
                                  { "data": "title" },
                                  { "data": "date" },
-                                 { "data": "submissionResponse" },
+                                 { "data": "status" },
                                  { "data": "noOfAttempts" }
                              ],
         "serverSide": true,
@@ -89,6 +107,11 @@ function deletePost(id){
 	    	window.location.href="scheduledPosts"
 	    }
 	});
+}
+
+function showDetailedStatus(detailedStatus){
+	$(".modal-body").html(detailedStatus.replace(/---/g, '<br/>'));
+	$('.modal').modal();
 }
 
 /*]]>*/

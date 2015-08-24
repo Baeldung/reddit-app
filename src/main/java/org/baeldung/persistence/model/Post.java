@@ -1,14 +1,17 @@
 package org.baeldung.persistence.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,7 +41,8 @@ public class Post implements IEntity {
 
     private boolean isSent;
 
-    private String submissionResponse;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
+    private List<SubmissionResponse> submissionsResponse;
 
     private String redditID;
 
@@ -131,12 +135,12 @@ public class Post implements IEntity {
         this.isSent = isSent;
     }
 
-    public String getSubmissionResponse() {
-        return submissionResponse;
+    public List<SubmissionResponse> getSubmissionsResponse() {
+        return submissionsResponse;
     }
 
-    public void setSubmissionResponse(final String submissionResponse) {
-        this.submissionResponse = submissionResponse;
+    public void setSubmissionsResponse(final List<SubmissionResponse> submissionResponse) {
+        this.submissionsResponse = submissionResponse;
     }
 
     public String getRedditID() {
@@ -200,8 +204,8 @@ public class Post implements IEntity {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Post [title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", submissionDate=").append(submissionDate).append(", isSent=").append(isSent).append(", submissionResponse=")
-                .append(submissionResponse).append(", redditID=").append(redditID).append(", noOfAttempts=").append(noOfAttempts).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append("]");
+        builder.append("Post [title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", submissionDate=").append(submissionDate).append(", isSent=").append(isSent).append(", submissionsResponse=")
+                .append(submissionsResponse).append(", redditID=").append(redditID).append(", noOfAttempts=").append(noOfAttempts).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append("]");
         return builder.toString();
     }
 
@@ -218,7 +222,7 @@ public class Post implements IEntity {
         result = (prime * result) + ((redditID == null) ? 0 : redditID.hashCode());
         result = (prime * result) + (sendReplies ? 1231 : 1237);
         result = (prime * result) + ((submissionDate == null) ? 0 : submissionDate.hashCode());
-        result = (prime * result) + ((submissionResponse == null) ? 0 : submissionResponse.hashCode());
+        result = (prime * result) + ((submissionsResponse == null) ? 0 : submissionsResponse.hashCode());
         result = (prime * result) + ((subreddit == null) ? 0 : subreddit.hashCode());
         result = (prime * result) + timeInterval;
         result = (prime * result) + ((title == null) ? 0 : title.hashCode());
@@ -274,13 +278,7 @@ public class Post implements IEntity {
         } else if ((submissionDate.getTime() - other.submissionDate.getTime()) != 0) {
             return false;
         }
-        if (submissionResponse == null) {
-            if (other.submissionResponse != null) {
-                return false;
-            }
-        } else if (!submissionResponse.equals(other.submissionResponse)) {
-            return false;
-        }
+
         if (subreddit == null) {
             if (other.subreddit != null) {
                 return false;

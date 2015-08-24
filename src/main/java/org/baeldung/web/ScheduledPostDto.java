@@ -20,8 +20,6 @@ public class ScheduledPostDto {
 
     private String date;
 
-    private String submissionResponse;
-
     private int noOfAttempts;
 
     private int timeInterval;
@@ -33,6 +31,10 @@ public class ScheduledPostDto {
     private boolean keepIfHasComments;
 
     private boolean deleteAfterLastAttempt;
+
+    private String status;
+
+    private String detailedStatus;
 
     public ScheduledPostDto() {
         super();
@@ -98,12 +100,12 @@ public class ScheduledPostDto {
         this.date = dateFormat.format(date);
     }
 
-    public String getSubmissionResponse() {
-        return submissionResponse;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSubmissionResponse(final String submissionResponse) {
-        this.submissionResponse = submissionResponse;
+    public void setStatus(final String status) {
+        this.status = status;
     }
 
     public int getNoOfAttempts() {
@@ -152,6 +154,14 @@ public class ScheduledPostDto {
 
     public void setDeleteAfterLastAttempt(final boolean deleteAfterLastAttempt) {
         this.deleteAfterLastAttempt = deleteAfterLastAttempt;
+    }
+
+    public String getDetailedStatus() {
+        return detailedStatus;
+    }
+
+    public void setDetailedStatus(final String detailedStatus) {
+        this.detailedStatus = detailedStatus;
     }
 
     //

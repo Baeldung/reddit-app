@@ -2,10 +2,13 @@ package org.baeldung.reddit.persistence.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.baeldung.persistence.dao.PostRepository;
+import org.baeldung.persistence.dao.SubmissionResponseRepository;
 import org.baeldung.persistence.model.Post;
+import org.baeldung.persistence.model.SubmissionResponse;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.persistence.service.IPostRedditService;
 import org.baeldung.reddit.util.OnPostSubmittedEvent;
@@ -32,6 +35,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Service
 class PostRedditService implements IPostRedditService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final static String SCORE_TEMPLATE = "score  %d %s minimum score %d";
+    private final static String TOTAL_VOTES_TEMPLATE = "total votes  %d %s minimum total votes %d";
 
     @Autowired
     @Qualifier("schedulerRedditTemplate")
@@ -43,6 +48,9 @@ class PostRedditService implements IPostRedditService {
 
     @Autowired
     private PostRepository postReopsitory;
+
+    @Autowired
+    private SubmissionResponseRepository submissionResponseReopsitory;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -137,7 +145,7 @@ class PostRedditService implements IPostRedditService {
         final JsonNode errorNode = node.get("json").get("errors").get(0);
         if (errorNode == null) {
             post.setSent(true);
-            post.setSubmissionResponse("Submitted to Reddit");
+            post.setSubmissionsResponse(addAttemptResponse(post, "Submitted to Reddit"));
             post.setRedditID(node.get("json").get("data").get("id").asText());
             post.setNoOfAttempts(post.getNoOfAttempts() - 1);
             postReopsitory.save(post);
@@ -148,7 +156,7 @@ class PostRedditService implements IPostRedditService {
             logger.info("Sending notification email to " + email);
             eventPublisher.publishEvent(new OnPostSubmittedEvent(post, email));
         } else {
-            post.setSubmissionResponse(errorNode.toString());
+            post.setSubmissionsResponse(addAttemptResponse(post, errorNode.toString()));
             postReopsitory.save(post);
             logger.error("Error occurred: " + errorNode.toString() + "while submitting post " + post.toString());
         }
@@ -157,13 +165,14 @@ class PostRedditService implements IPostRedditService {
     private void checkAndReSubmitInternal(final Post post) {
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
             logger.info("Checking and Resubmitting post = {}", post.toString());
-            if (didPostGoalFail(post)) {
+            final PostScores postScores = getPostScores(post);
+            if (didPostGoalFail(post, postScores)) {
                 deletePost(post.getRedditID());
-                resetPost(post);
+                resetPost(post, getFailReason(post, postScores));
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                post.setSubmissionResponse("Post reached target score successfully");
+                modifyLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
                 postReopsitory.save(post);
             }
         }
@@ -172,15 +181,16 @@ class PostRedditService implements IPostRedditService {
     private void checkAndDeleteInternal(final Post post) {
         if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
             logger.info("Checking and deleting post = {}", post.toString());
-            if (didPostGoalFail(post)) {
+            final PostScores postScores = getPostScores(post);
+            if (didPostGoalFail(post, postScores)) {
                 deletePost(post.getRedditID());
-                post.setSubmissionResponse("Deleted from reddit, consumed all attempts without reaching score");
+                modifyLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores));
                 post.setRedditID(null);
                 postReopsitory.save(post);
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                post.setSubmissionResponse("Post reached target score successfully");
+                modifyLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
                 postReopsitory.save(post);
             }
         }
@@ -193,22 +203,56 @@ class PostRedditService implements IPostRedditService {
         return intervalInMinutes > postInterval;
     }
 
-    private void resetPost(final Post post) {
+    private void resetPost(final Post post, final String failReason) {
         long time = new Date().getTime();
         time += TimeUnit.MILLISECONDS.convert(post.getTimeInterval(), TimeUnit.MINUTES);
         post.setRedditID(null);
         post.setSubmissionDate(new Date(time));
         post.setSent(false);
-        post.setSubmissionResponse("Deleted from Reddit, to be resubmitted");
+        modifyLastAttemptResponse(post, "Deleted from Reddit, to be resubmitted " + failReason);
         postReopsitory.save(post);
     }
 
-    private boolean didPostGoalFail(final Post post) {
-        final PostScores postScores = getPostScores(post);
+    private boolean didPostGoalFail(final Post post, final PostScores postScores) {
         final boolean failToReachRequiredScore = postScores.getScore() < post.getMinScoreRequired();
         final boolean enoughTotalVotes = (postScores.getTotalVotes() >= post.getMinTotalVotes()) && (post.getMinTotalVotes() > 0);
         final boolean keepBecauseOfComments = (postScores.getNoOfComments() > 0) && post.isKeepIfHasComments();
         return (failToReachRequiredScore && !(keepBecauseOfComments || enoughTotalVotes));
     }
 
+    private String getFailReason(final Post post, final PostScores postScores) {
+        String result = "Failed because " + String.format(SCORE_TEMPLATE, postScores.getScore(), "<", post.getMinScoreRequired());
+        if (post.getMinTotalVotes() > 0) {
+            result += " and " + String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), "<", post.getMinTotalVotes());
+        }
+        if (post.isKeepIfHasComments()) {
+            result += " and has no comments";
+        }
+        return result;
+    }
+
+    private String getSuccessReason(final Post post, final PostScores postScores) {
+        if (postScores.getScore() >= post.getMinScoreRequired()) {
+            return "Succeed because " + String.format(SCORE_TEMPLATE, postScores.getScore(), ">=", post.getMinScoreRequired());
+        }
+        if ((post.getMinTotalVotes() > 0) && (postScores.getTotalVotes() >= post.getMinTotalVotes())) {
+            return "Succeed because " + String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), ">=", post.getMinTotalVotes());
+        }
+        return "Succeed because has comments";
+    }
+
+    private List<SubmissionResponse> addAttemptResponse(final Post post, final String response) {
+        final List<SubmissionResponse> fullResponse = post.getSubmissionsResponse();
+        final SubmissionResponse newResponse = new SubmissionResponse(fullResponse.size() + 1, response, post);
+        submissionResponseReopsitory.save(newResponse);
+        fullResponse.add(newResponse);
+        return fullResponse;
+    }
+
+    private void modifyLastAttemptResponse(final Post post, final String response) {
+        final int attemptNo = post.getSubmissionsResponse().size();
+        final SubmissionResponse oldResponse = submissionResponseReopsitory.findOneByPostAndAttemptNumber(post, attemptNo);
+        oldResponse.setContent(response);
+        submissionResponseReopsitory.save(oldResponse);
+    }
 }

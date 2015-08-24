@@ -56,7 +56,6 @@ public class ScheduledPostService implements IScheduledPostService {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
         post.setUser(userService.getCurrentUser());
-        post.setSubmissionResponse("Not sent yet");
         return postRepository.save(post);
     }
 

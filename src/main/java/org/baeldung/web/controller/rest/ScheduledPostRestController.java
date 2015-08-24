@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.persistence.model.Post;
+import org.baeldung.persistence.model.SubmissionResponse;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
 import org.baeldung.web.ScheduledPostDto;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.google.common.base.Joiner;
 
 @Controller
 @RequestMapping(value = "/api/scheduledPosts")
@@ -80,6 +83,14 @@ class ScheduledPostRestController {
     private ScheduledPostDto convertToDto(final Post post) {
         final ScheduledPostDto postDto = modelMapper.map(post, ScheduledPostDto.class);
         postDto.setSubmissionDate(post.getSubmissionDate(), userService.getCurrentUser().getPreference().getTimezone());
+        final List<SubmissionResponse> response = post.getSubmissionsResponse();
+        if ((response != null) && (response.size() > 0)) {
+            postDto.setStatus(response.get(response.size() - 1).toString().substring(0, 30));
+            postDto.setDetailedStatus(Joiner.on(" --- ").join(response));
+        } else {
+            postDto.setStatus("Not sent yet");
+            postDto.setDetailedStatus("Not sent yet");
+        }
         return postDto;
     }
 
@@ -90,6 +101,7 @@ class ScheduledPostRestController {
             final Post oldPost = scheduledPostService.getPostById(postDto.getId());
             post.setRedditID(oldPost.getRedditID());
             post.setSent(oldPost.isSent());
+            post.setSubmissionsResponse(post.getSubmissionsResponse());
         }
         return post;
     }

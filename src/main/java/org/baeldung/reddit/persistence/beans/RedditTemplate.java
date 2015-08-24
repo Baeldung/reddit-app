@@ -27,7 +27,7 @@ public class RedditTemplate {
     private final RateLimiter rateLimiter;
 
     public RedditTemplate() {
-        rateLimiter = RateLimiter.create(0.5);
+        rateLimiter = RateLimiter.create(0.25);
     }
 
     public JsonNode getUserInfo() {
