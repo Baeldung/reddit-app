@@ -78,6 +78,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({ IllegalArgumentException.class })
+    public ResponseEntity<Object> handleIllegalArgumentException(final RuntimeException ex, final WebRequest request) {
+        logger.error("400 Status Code", ex);
+        final String bodyOfResponse = ex.getLocalizedMessage();
+        return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
         logger.error("400 Status Code", ex);

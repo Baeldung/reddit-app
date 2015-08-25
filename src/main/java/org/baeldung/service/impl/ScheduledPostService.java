@@ -19,6 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Preconditions;
+
 @Service
 public class ScheduledPostService implements IScheduledPostService {
     private static final int LIMIT_SCHEDULED_POSTS_PER_DAY = 3;
@@ -46,6 +48,8 @@ public class ScheduledPostService implements IScheduledPostService {
 
     @Override
     public Post schedulePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
+        Preconditions.checkArgument(post.getMinScoreRequired() >= 0, "Minimum Score can not be negative");
+        Preconditions.checkArgument(post.getMinTotalVotes() >= 0, "Minimum Total votes can not be negative");
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
             throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
@@ -61,6 +65,9 @@ public class ScheduledPostService implements IScheduledPostService {
 
     @Override
     public void updatePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
+        Preconditions.checkArgument(post.getMinScoreRequired() >= 0, "Minimum Score can not be negative");
+        Preconditions.checkArgument(post.getMinTotalVotes() >= 0, "Minimum Total votes can not be negative");
+
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
             throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
         }
