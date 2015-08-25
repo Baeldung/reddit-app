@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-class PostRedditService implements IPostRedditService {
+public class PostRedditService implements IPostRedditService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final static String SCORE_TEMPLATE = "score  %d %s minimum score %d";
     private final static String TOTAL_VOTES_TEMPLATE = "total votes  %d %s minimum total votes %d";
@@ -213,30 +213,38 @@ class PostRedditService implements IPostRedditService {
         postReopsitory.save(post);
     }
 
-    private boolean didPostGoalFail(final Post post, final PostScores postScores) {
+    protected boolean didPostGoalFail(final Post post, final PostScores postScores) {
         final boolean failToReachRequiredScore = postScores.getScore() < post.getMinScoreRequired();
         final boolean enoughTotalVotes = (postScores.getTotalVotes() >= post.getMinTotalVotes()) && (post.getMinTotalVotes() > 0);
         final boolean keepBecauseOfComments = (postScores.getNoOfComments() > 0) && post.isKeepIfHasComments();
         return (failToReachRequiredScore && !(keepBecauseOfComments || enoughTotalVotes));
     }
 
-    private String getFailReason(final Post post, final PostScores postScores) {
-        String result = "Failed because " + String.format(SCORE_TEMPLATE, postScores.getScore(), "<", post.getMinScoreRequired());
+    protected String getFailReason(final Post post, final PostScores postScores) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Failed because ");
+        builder.append(String.format(SCORE_TEMPLATE, postScores.getScore(), "<", post.getMinScoreRequired()));
         if (post.getMinTotalVotes() > 0) {
-            result += " and " + String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), "<", post.getMinTotalVotes());
+            builder.append(" and ");
+            builder.append(String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), "<", post.getMinTotalVotes()));
         }
         if (post.isKeepIfHasComments()) {
-            result += " and has no comments";
+            builder.append(" and has no comments");
         }
-        return result;
+        return builder.toString();
     }
 
-    private String getSuccessReason(final Post post, final PostScores postScores) {
+    protected String getSuccessReason(final Post post, final PostScores postScores) {
+        final StringBuilder builder = new StringBuilder();
         if (postScores.getScore() >= post.getMinScoreRequired()) {
-            return "Succeed because " + String.format(SCORE_TEMPLATE, postScores.getScore(), ">=", post.getMinScoreRequired());
+            builder.append("Succeed because ");
+            builder.append(String.format(SCORE_TEMPLATE, postScores.getScore(), ">=", post.getMinScoreRequired()));
+            return builder.toString();
         }
         if ((post.getMinTotalVotes() > 0) && (postScores.getTotalVotes() >= post.getMinTotalVotes())) {
-            return "Succeed because " + String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), ">=", post.getMinTotalVotes());
+            builder.append("Succeed because ");
+            builder.append(String.format(TOTAL_VOTES_TEMPLATE, postScores.getTotalVotes(), ">=", post.getMinTotalVotes()));
+            return builder.toString();
         }
         return "Succeed because has comments";
     }
