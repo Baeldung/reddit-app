@@ -1,6 +1,7 @@
 package org.baeldung.web.controller.rest;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import org.baeldung.persistence.model.SubmissionResponse;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
 import org.baeldung.web.ScheduledPostDto;
+import org.baeldung.web.SubmissionResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.google.common.base.Joiner;
 
 @Controller
 @RequestMapping(value = "/api/scheduledPosts")
@@ -86,12 +86,23 @@ class ScheduledPostRestController {
         final List<SubmissionResponse> response = post.getSubmissionsResponse();
         if ((response != null) && (response.size() > 0)) {
             postDto.setStatus(response.get(response.size() - 1).toString().substring(0, 30));
-            postDto.setDetailedStatus(Joiner.on(" --- ").join(response));
+            final List<SubmissionResponseDto> responsedto = post.getSubmissionsResponse().stream().map(res -> generateResponseDto(res)).collect(Collectors.toList());
+            postDto.setDetailedStatus(responsedto);
         } else {
             postDto.setStatus("Not sent yet");
-            postDto.setDetailedStatus("Not sent yet");
+            postDto.setDetailedStatus(Collections.emptyList());
         }
         return postDto;
+    }
+
+    private SubmissionResponseDto generateResponseDto(final SubmissionResponse responseEntity) {
+        final SubmissionResponseDto dto = modelMapper.map(responseEntity, SubmissionResponseDto.class);
+        final String timezone = userService.getCurrentUser().getPreference().getTimezone();
+        dto.setLocalSubmissionDate(responseEntity.getSubmissionDate(), timezone);
+        if (responseEntity.getScoreCheckDate() != null) {
+            dto.setLocalScoreCheckDate(responseEntity.getScoreCheckDate(), timezone);
+        }
+        return dto;
     }
 
     private Post convertToEntity(final ScheduledPostDto postDto) throws ParseException {

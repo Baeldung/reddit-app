@@ -1,5 +1,7 @@
 package org.baeldung.persistence.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,10 @@ public class SubmissionResponse implements IEntity {
 
     private String content;
 
+    private Date submissionDate;
+
+    private Date scoreCheckDate;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
@@ -33,6 +39,7 @@ public class SubmissionResponse implements IEntity {
         super();
         this.attemptNumber = attemptNumber;
         this.content = content;
+        this.submissionDate = new Date();
         this.post = post;
     }
 
@@ -64,6 +71,22 @@ public class SubmissionResponse implements IEntity {
         this.content = content;
     }
 
+    public Date getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(final Date submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
+    public Date getScoreCheckDate() {
+        return scoreCheckDate;
+    }
+
+    public void setScoreCheckDate(final Date scoreCheckDate) {
+        this.scoreCheckDate = scoreCheckDate;
+    }
+
     public Post getPost() {
         return post;
     }
@@ -89,6 +112,8 @@ public class SubmissionResponse implements IEntity {
         result = (prime * result) + ((content == null) ? 0 : content.hashCode());
         result = (prime * result) + ((id == null) ? 0 : id.hashCode());
         result = (prime * result) + ((post == null) ? 0 : post.hashCode());
+        result = (prime * result) + ((scoreCheckDate == null) ? 0 : scoreCheckDate.hashCode());
+        result = (prime * result) + ((submissionDate == null) ? 0 : submissionDate.hashCode());
         return result;
     }
 
@@ -126,6 +151,20 @@ public class SubmissionResponse implements IEntity {
                 return false;
             }
         } else if (!post.equals(other.post)) {
+            return false;
+        }
+        if (scoreCheckDate == null) {
+            if (other.scoreCheckDate != null) {
+                return false;
+            }
+        } else if (!scoreCheckDate.equals(other.scoreCheckDate)) {
+            return false;
+        }
+        if (submissionDate == null) {
+            if (other.submissionDate != null) {
+                return false;
+            }
+        } else if (!submissionDate.equals(other.submissionDate)) {
             return false;
         }
         return true;

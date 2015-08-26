@@ -3,6 +3,7 @@ package org.baeldung.web;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class ScheduledPostDto {
@@ -34,7 +35,7 @@ public class ScheduledPostDto {
 
     private String status;
 
-    private String detailedStatus;
+    private List<SubmissionResponseDto> detailedStatus;
 
     public ScheduledPostDto() {
         super();
@@ -156,11 +157,11 @@ public class ScheduledPostDto {
         this.deleteAfterLastAttempt = deleteAfterLastAttempt;
     }
 
-    public String getDetailedStatus() {
+    public List<SubmissionResponseDto> getDetailedStatus() {
         return detailedStatus;
     }
 
-    public void setDetailedStatus(final String detailedStatus) {
+    public void setDetailedStatus(final List<SubmissionResponseDto> detailedStatus) {
         this.detailedStatus = detailedStatus;
     }
 

@@ -17,7 +17,7 @@
 
 <div class="container">
 <h1>My Scheduled Posts</h1>
-<table class="table table-bordered">
+<table id="myposts" class="table table-bordered">
 <thead>
 <tr>
 <th>Post title</th>
@@ -38,7 +38,7 @@
         <h4 class="modal-title">Detailed Status</h4>
       </div>
       <div class="modal-body">
-        
+        <table id="res" class="table table-bordered"></table>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -46,9 +46,21 @@
 </div>
 <script th:inline="javascript">
 /*<![CDATA[*/
-           
+      
+var loadedData = [];
+var detailedResTable = $('#res').DataTable( {
+    "searching":false,
+    "paging": false,
+    columns: [
+        { title: "Attempt Number", data: "attemptNumber" },
+        { title: "Detailed Status", data: "content" },
+        { title: "Attempt Submitted At", data: "localSubmissionDate" },
+        { title: "Attempt Score Checked At", data: "localScoreCheckDate" }
+    ]
+} );
+
 $(document).ready(function() {
-    $('table').dataTable( {
+    $('#myposts').dataTable( {
         "processing": true,
         "searching":false,
         "columnDefs": [
@@ -56,7 +68,8 @@ $(document).ready(function() {
                        { "name": "date",  "targets": 1 },
                        { "targets": 2, "data": "status","width":"20%","orderable": false,
                            "render": function ( data, type, full, meta ) {
-                               return data+' <a href="#" onclick="showDetailedStatus(\''+full.detailedStatus+'\' )">More Details</a>';
+                        	   console.log(meta);
+                               return data+' <a href="#" onclick="showDetailedStatus('+meta.row+')">More Details</a>';
                              }
                        },
                        { "name": "noOfAttempts",  "targets": 3},
@@ -81,6 +94,7 @@ $(document).ready(function() {
                 sortDir: data.order[0].dir,
                 sort: data.columns[data.order[0].column].name
             }, function(res,textStatus, request) {
+            	loadedData = res;
             	var pagingInfo = request.getResponseHeader('PAGING_INFO');
             	var total = pagingInfo.split(",")[0].split("=")[1];
                 callback({
@@ -109,8 +123,8 @@ function deletePost(id){
 	});
 }
 
-function showDetailedStatus(detailedStatus){
-	$(".modal-body").html(detailedStatus.replace(/---/g, '<br/>'));
+function showDetailedStatus(row){
+    detailedResTable.clear().rows.add(loadedData[row].detailedStatus).draw();
 	$('.modal').modal();
 }
 

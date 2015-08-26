@@ -172,7 +172,7 @@ public class PostRedditService implements IPostRedditService {
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                modifyLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
+                updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
                 postReopsitory.save(post);
             }
         }
@@ -184,13 +184,13 @@ public class PostRedditService implements IPostRedditService {
             final PostScores postScores = getPostScores(post);
             if (didPostGoalFail(post, postScores)) {
                 deletePost(post.getRedditID());
-                modifyLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores));
+                updateLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores));
                 post.setRedditID(null);
                 postReopsitory.save(post);
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                modifyLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
+                updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
                 postReopsitory.save(post);
             }
         }
@@ -209,7 +209,7 @@ public class PostRedditService implements IPostRedditService {
         post.setRedditID(null);
         post.setSubmissionDate(new Date(time));
         post.setSent(false);
-        modifyLastAttemptResponse(post, "Deleted from Reddit, to be resubmitted " + failReason);
+        updateLastAttemptResponse(post, "Deleted from Reddit, to be resubmitted " + failReason);
         postReopsitory.save(post);
     }
 
@@ -257,10 +257,11 @@ public class PostRedditService implements IPostRedditService {
         return fullResponse;
     }
 
-    private void modifyLastAttemptResponse(final Post post, final String response) {
+    private void updateLastAttemptResponse(final Post post, final String response) {
         final int attemptNo = post.getSubmissionsResponse().size();
         final SubmissionResponse oldResponse = submissionResponseReopsitory.findOneByPostAndAttemptNumber(post, attemptNo);
         oldResponse.setContent(response);
+        oldResponse.setScoreCheckDate(new Date());
         submissionResponseReopsitory.save(oldResponse);
     }
 }
