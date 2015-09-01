@@ -22,12 +22,12 @@ border-color: #ddd;
 <div th:include="header"/>
 
 <div class="container">
-<h1>Add new Site</h1>
+<h1>Add new RSS Feed</h1>
 <br/>
 <form th:action="@{/sites}" method="post" role="form" data-toggle="validator">
 <div class="row">
 <div class="form-group">
-    <label class="col-sm-3">Site Name</label>
+    <label class="col-sm-3">Name</label>
     <span class="col-sm-9"><input name="name" placeholder="name" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>
@@ -38,7 +38,7 @@ border-color: #ddd;
 <br/><br/>  
 
 <br/><br/>
-    <button type="submit" id="submitBut" class="btn btn-primary">Add Site</button>
+    <button type="submit" id="submitBut" class="btn btn-primary">Add RSS Feed</button>
 </div>
 </form>
 </div>

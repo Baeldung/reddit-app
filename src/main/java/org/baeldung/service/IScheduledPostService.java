@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.persistence.model.Post;
+import org.baeldung.persistence.model.User;
 import org.baeldung.web.PagingInfo;
 
 public interface IScheduledPostService {
@@ -18,4 +19,6 @@ public interface IScheduledPostService {
     List<Post> getPostsList(int page, int size, String sortDir, String sort);
 
     PagingInfo generatePagingInfo(int page, int size);
+
+    long countScheduledPostsByUser(User user);
 }

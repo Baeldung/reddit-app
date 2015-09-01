@@ -44,10 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			        .antMatchers("/adminHome","/users").hasAuthority("ADMIN_READ_PRIVILEGE")
 				.and()
 				.formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
-				.failureUrl("/?error=true").usernameParameter("username").passwordParameter("password")
+				.failureUrl("/?error").usernameParameter("username").passwordParameter("password")
 				.successHandler(successHandler)
 				.and()
-				.logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/");
+				.logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
+		                .and()
+		                .sessionManagement().invalidSessionUrl("/?invalidSession=true").sessionFixation().none();
 		// @formatter:on
     }
 }

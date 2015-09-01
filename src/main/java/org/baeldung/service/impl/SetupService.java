@@ -81,6 +81,7 @@ public class SetupService implements ISetupService {
                 persistedRoles.add(roleRepository.findByName(role.getName()));
             }
             user.setRoles(persistedRoles);
+            user.setEnabled(true);
             userRepository.save(user);
         }
     }

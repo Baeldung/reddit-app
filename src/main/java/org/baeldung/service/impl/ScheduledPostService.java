@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
+import org.baeldung.persistence.model.User;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
 import org.baeldung.web.PagingInfo;
@@ -89,6 +90,11 @@ public class ScheduledPostService implements IScheduledPostService {
     @Override
     public void deletePostById(final Long id) {
         postRepository.delete(id);
+    }
+
+    @Override
+    public long countScheduledPostsByUser(final User user) {
+        return postRepository.countByUser(user);
     }
 
     //

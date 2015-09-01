@@ -9,7 +9,11 @@ public class UserDto {
 
     private String username;
 
+    private boolean enabled;
+
     private Set<Role> roles;
+
+    private long scheduledPostsCount;
 
     //
 
@@ -39,6 +43,22 @@ public class UserDto {
 
     public void setRoles(final Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public long getScheduledPostsCount() {
+        return scheduledPostsCount;
+    }
+
+    public void setScheduledPostsCount(final long scheduledPostsCount) {
+        this.scheduledPostsCount = scheduledPostsCount;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
 
     //

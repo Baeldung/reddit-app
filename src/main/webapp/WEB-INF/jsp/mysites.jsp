@@ -9,15 +9,15 @@
 <div th:include="header"/>
 
 <div class="container">
-<h1>My Sites</h1>
+<h1>My RSS Feed</h1>
 <br/>
-<a th:href="@{/siteForm}" class="btn btn-primary">Add New Site</a>
+<a th:href="@{/siteForm}" class="btn btn-primary">Add New RSS Feed</a>
 <br/>
 <br/>
 <table class="table table-bordered">
 <thead>
 <tr>
-<th>Site Name</th>
+<th>Name</th>
 <th>Feed URL</th>
 <th>Actions</th>
 </tr>

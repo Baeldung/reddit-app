@@ -26,7 +26,7 @@ border-color: #ddd;
 <div th:include="header"/>
 
 <div class="container">
-<h1>Edit Default Preferences</h1>
+<h1>Profile Page</h1>
 <br/><br/>
 <form role="form" data-toggle="validator">
 <div class="row">
@@ -40,7 +40,12 @@ border-color: #ddd;
     </span>
 </div>
 
-<br/><br/>  
+<div class="col-sm-12"><a href="changePassword" class="btn btn-primary">Change Password</a></div>
+<br/><br/> 
+<hr/> 
+<br/><br/> 
+
+<h1>Edit Default Preferences</h1>
 <br/><br/> 
 <div class="form-group">
     <label class="col-sm-3">Timezone</label>

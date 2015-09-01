@@ -84,11 +84,17 @@ public class PostRedditService implements IPostRedditService {
     }
 
     @Override
-    public void deletePost(final String redditId) {
-        logger.info("Deleting post with id = {}", redditId);
+    public void deletePost(final Post post) {
+        logger.info("Deleting post with id = {}", post.getRedditID());
+
+        final User user = post.getUser();
+        final DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(user.getAccessToken());
+        token.setRefreshToken(new DefaultOAuth2RefreshToken((user.getRefreshToken())));
+        token.setExpiration(user.getTokenExpiration());
+        redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
 
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
-        param.add("id", "t3_" + redditId);
+        param.add("id", "t3_" + post.getRedditID());
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/del.json", param, JsonNode.class);
 
         logger.info("Deleting post response = {}", node.toString());
@@ -167,7 +173,7 @@ public class PostRedditService implements IPostRedditService {
             logger.info("Checking and Resubmitting post = {}", post.toString());
             final PostScores postScores = getPostScores(post);
             if (didPostGoalFail(post, postScores)) {
-                deletePost(post.getRedditID());
+                deletePost(post);
                 resetPost(post, getFailReason(post, postScores));
             } else {
                 post.setNoOfAttempts(0);
@@ -183,7 +189,7 @@ public class PostRedditService implements IPostRedditService {
             logger.info("Checking and deleting post = {}", post.toString());
             final PostScores postScores = getPostScores(post);
             if (didPostGoalFail(post, postScores)) {
-                deletePost(post.getRedditID());
+                deletePost(post);
                 updateLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores));
                 post.setRedditID(null);
                 postReopsitory.save(post);

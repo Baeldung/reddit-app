@@ -64,6 +64,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/scheduledPosts");
         registry.addViewController("/mysites");
         registry.addViewController("/users");
+        registry.addViewController("/changePassword");
+        registry.addViewController("/forgetPassword");
+        registry.addViewController("/updatePassword");
     }
 
     @Override

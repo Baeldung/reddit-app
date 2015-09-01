@@ -3,6 +3,11 @@
 
 <title>Schedule to Reddit</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -16,6 +21,7 @@
 <thead>
 <tr>
 <th>Username</th>
+<th>Scheduled Posts Count</th>
 <th>Roles</th>
 <th>Actions</th>
 </tr>
@@ -41,21 +47,52 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
 /*<![CDATA[*/
            
 $(function(){
-	var userRoles="";
-	$.get("admin/users", function(data){
-        $.each(data, function( index, user ) {
-        	userRoles = extractRolesName(user.roles);
-            $('.table').append('<tr><td>'+user.username+'</td><td>'+userRoles+
-              '</td><td><a href="#" class="btn btn-warning" onclick="showEditModal('+user.id+',\''+userRoles+'\')">Modify User Roles</a> </td></tr>');
-        });
-    });
+    $('table').dataTable( {
+        "processing": true,
+        "searching":false,
+        "columnDefs": [
+                       { "name": "username",   "targets": 0},
+                       { "name": "scheduledPostsCount",   "targets": 1,"orderable": false},
+                       { "targets": 2, "data": "roles","width":"20%","orderable": false,
+                           "render": function ( data, type, full, meta ) {
+                               return extractRolesName(data);
+                             }
+                       },
+                       { "targets": 3, "data": "id",
+                            "render": function ( data, type, full, meta ) {
+                                return '<a href="#" class="btn btn-warning" onclick="showEditModal('+data+',\''+extractRolesName(full.roles)+'\')">Modify User Roles</a>'
+                                +' <a href="#" class="btn btn-default" onclick="setEnabled('+full.id+','+!full.enabled+')">'
+                                +((full.enabled)?'Disable':'Enable')+'</a>';
+                              }}
+                     ],
+                     "columns": [
+                                 { "data": "username" },
+                                 { "data": "scheduledPostsCount" }
+                             ],
+        "serverSide": true,
+        "ajax": function(data, callback, settings) {
+            $.get('admin/users', {
+                size: data.length,
+                page: (data.start/data.length),
+                sortDir: data.order[0].dir,
+                sort: data.columns[data.order[0].column].name
+            }, function(res,textStatus, request) {
+                loadedData = res;
+                var pagingInfo = request.getResponseHeader('PAGING_INFO');
+                var total = pagingInfo.split(",")[0].split("=")[1];
+                callback({
+                    recordsTotal: total,
+                    recordsFiltered: total,
+                    data: res
+                });
+            });
+        }
+    } );
 });
 
 function extractRolesName(roles){
@@ -92,7 +129,21 @@ function modifyUserRoles(){
     }
     
     $.ajax({
-        url: "user/"+$("#userId").val()+"?roleIds="+roles.join(","),
+        url: "user/"+$("#userId").val()+"/role?roleIds="+roles.join(","),
+        type: 'PUT',
+        contentType:'application/json'
+            
+    }).done(function() {
+        window.location.href="users";
+    })
+    .fail(function(error) {
+        alert(error.responseText);
+    }); 
+}
+
+function setEnabled(userId, isEnabled){
+    $.ajax({
+        url: "user/"+userId+"?enabled="+isEnabled,
         type: 'PUT',
         contentType:'application/json'
             

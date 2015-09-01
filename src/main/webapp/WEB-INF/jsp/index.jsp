@@ -26,6 +26,9 @@
 <div class="alert alert-danger" th:if="${param.containsKey('error')}">
 Invalid username or password
 </div>
+<div class="alert alert-warning" th:if="${param.containsKey('invalidSession')}">
+Session timeout
+</div>
 <form method="post" action="j_spring_security_check" class="form-horizontal col-sm-6">
   <div class="form-group">
     <label for="username" class="control-label col-sm-3">Username</label>
@@ -35,7 +38,8 @@ Invalid username or password
     <label for="password" class="control-label col-sm-3">Password</label>
    <div class="col-sm-9"> <input type="password" class="form-control" id="password" name="password" placeholder="Password"/></div>
   </div>  
-  <button type="submit" class="btn btn-default pull-right">Login</button>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="forgetPassword">Forget Password?</a><button type="submit" class="btn btn-default pull-right">Login</button>
   <br/><br/>
   <br/><br/>
     <a href="signup" class="btn btn-primary pull-right">Sign up</a>
