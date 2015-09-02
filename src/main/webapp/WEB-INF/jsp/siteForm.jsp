@@ -2,6 +2,8 @@
 <head>
 
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -61,7 +63,7 @@ function addSite(){
 	        window.location.href="mysites";
 	    },
 	    error: function(error) {
-	        alert(error.responseText);
+	    	showAlertMessage(error.responseText);
 	    }   
 	 }); 
 }

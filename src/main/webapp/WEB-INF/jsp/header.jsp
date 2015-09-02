@@ -22,6 +22,13 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+<div id="errorAlert" class="alert alert-danger" style="display:none;margin:10px;">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">x</span>
+</button>
+<span id="alertContent"></span>
+</div>
+
 <div id="loading-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;background-color:rgba(230,230,230,0.5);display:none;z-index:2000;">
 <div id="loading-image" style="position:absolute;left:45%;top:45%;">
 <img th:src="@{/resources/spin.gif}"/>
@@ -30,9 +37,15 @@
 <script>
 $(document).ajaxStart(function() {
     $("#loading-layer").show();
+    $("#errorAlert").hide();
 });
 $(document).ajaxComplete(function() {
 	$("#loading-layer").hide();
 });
+
+function showAlertMessage(msg){
+	$("#alertContent").html(msg);
+	$("#errorAlert").show();
+}
 </script>
 </div>

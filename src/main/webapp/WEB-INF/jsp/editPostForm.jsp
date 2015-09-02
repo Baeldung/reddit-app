@@ -2,6 +2,8 @@
 <head>
 
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/datetime-picker.css}" />
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
@@ -194,7 +196,7 @@ function editPost(){
     	window.location.href="../scheduledPosts";
     })
     .fail(function(error) {
-    	alert(error.responseText);
+    	showAlertMessage(error.responseText);
     }); 
 }
 /*]]>*/  

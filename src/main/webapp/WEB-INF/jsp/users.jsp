@@ -2,6 +2,8 @@
 <head>
 
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
@@ -124,7 +126,7 @@ function modifyUserRoles(){
     	roles.push($(this).val());
     }); 
     if(roles.length == 0){
-    	alert("Error, at least select one role");
+    	showAlertMessage("Error, at least select one role");
     	return;
     }
     
@@ -137,7 +139,7 @@ function modifyUserRoles(){
         window.location.href="users";
     })
     .fail(function(error) {
-        alert(error.responseText);
+    	showAlertMessage(error.responseText);
     }); 
 }
 
@@ -151,7 +153,7 @@ function setEnabled(userId, isEnabled){
         window.location.href="users";
     })
     .fail(function(error) {
-        alert(error.responseText);
+    	showAlertMessage(error.responseText);
     }); 
 }
 

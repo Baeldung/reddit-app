@@ -3,6 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -35,6 +37,15 @@ border-color: #ddd;
     
   </div><!-- /.container-fluid -->
 </nav>
+
+
+<div id="errorAlert" class="alert alert-danger" style="display:none;margin:10px;">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">x</span>
+</button>
+<span id="alertContent"></span>
+</div>
+
 <div class="container">
 <h1>Sign up</h1>
 
@@ -86,8 +97,13 @@ function register(){
 		window.location.href= "./";
 	}).fail(function(error){
         console.log(error);
-        alert("Error: "+ error.responseText);
+        showAlertMessage("Error: "+ error.responseText);
     }); 
+}
+
+function showAlertMessage(msg){
+    $("#alertContent").html(msg);
+    $("#errorAlert").show();
 }
 </script>
 </div>		

@@ -2,6 +2,8 @@
 <head>
 
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/datetime-picker.css}"/>
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
@@ -79,7 +81,13 @@ border-color: #ddd;
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
-            $('*[name=date]').appendDtpicker({"inline": true});
+        	var currentDate = new Date();
+        	var currentMinutes = currentDate.getMinutes();
+        	var diff = (currentMinutes<30)?(30-currentMinutes):(60-currentMinutes);
+        	var newDate = new Date(currentDate.getTime() + diff*60000);
+            $('*[name=date]').appendDtpicker({"inline": true, "onInit": function(handler){
+                handler.setDate(newDate);
+            }});
             $('*[name=date]').handleDtpicker('hide');
         });
         var toggle = "show";
@@ -185,7 +193,7 @@ border-color: #ddd;
 	      });
 	 }).fail(function(error){
 		 console.log(error);
-		 alert(error.responseText);
+		 showAlertMessage(error.responseText);
 	 });
   }
   
@@ -261,7 +269,7 @@ function schedulePost(){
         window.location.href="scheduledPosts";
     },
     error: function(error) {
-        alert(error.responseText);
+    	showAlertMessage(error.responseText);
     }   
 }); 
 }

@@ -2,6 +2,8 @@
 <head>
 
 <title>Schedule to Reddit</title>
+<link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -164,7 +166,7 @@ function submitPost(){
             
     }).done(function(data) {
     	if(data.length < 2){
-            alert(data[0]);
+    		showAlertMessage(data[0]);
         }
         else{
             window.location.href="submissionResponse?msg="+data[0]+"&url="+data[1];
@@ -172,7 +174,7 @@ function submitPost(){
     })
     .fail(function(error) {
     	console.log(error);
-        alert(error.responseText);
+    	showAlertMessage(error.responseText);
     }); 
 }
 /*]]>*/  
