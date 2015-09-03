@@ -24,6 +24,9 @@
 <h1>Schedule to Reddit</h1>
 
 <br/><br/>
+<div class="alert alert-info" th:if="${param.containsKey('msg')}" th:text="${param.msg[0]}">
+
+</div>
 <div class="alert alert-danger" th:if="${param.containsKey('error')}">
 Invalid username or password
 </div>

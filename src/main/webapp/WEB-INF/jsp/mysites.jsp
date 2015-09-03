@@ -11,7 +11,7 @@
 <div th:include="header"/>
 
 <div class="container">
-<h1>My RSS Feed</h1>
+<h1>My RSS Feeds</h1>
 <br/>
 <a th:href="@{/siteForm}" class="btn btn-primary">Add New RSS Feed</a>
 <br/>

@@ -18,7 +18,7 @@ public class UserMvcController {
     public String confirmRegistration(final Model model, @RequestParam("token") final String token) {
         final String result = userService.confirmRegistration(token);
         if (result == null) {
-            return "redirect:/?msg=registration confirmed successfully";
+            return "redirect:/?msg=Registration confirmed successfully";
         }
         model.addAttribute("msg", result);
         return "submissionResponse";

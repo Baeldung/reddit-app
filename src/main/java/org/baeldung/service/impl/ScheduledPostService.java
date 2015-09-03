@@ -97,6 +97,13 @@ public class ScheduledPostService implements IScheduledPostService {
         return postRepository.countByUser(user);
     }
 
+    public int countAvailablePostsToSchedule() {
+        final Date start = DateUtils.truncate(new Date(), Calendar.DATE);
+        final Date end = DateUtils.addDays(start, 1);
+        final long count = postRepository.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
+        return (int) (LIMIT_SCHEDULED_POSTS_PER_DAY - count);
+    }
+
     //
 
     private boolean checkIfValidResubmitOptions(final Post post) {

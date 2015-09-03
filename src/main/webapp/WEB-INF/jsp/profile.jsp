@@ -30,6 +30,8 @@ border-color: #ddd;
 <div class="container">
 <h1>Profile Page</h1>
 <br/><br/>
+<div id="available" class="alert alert-info"></div>
+<br/><br/>
 <form role="form" data-toggle="validator">
 <div class="row">
 <input type="hidden" name="id"/>
@@ -93,6 +95,8 @@ border-color: #ddd;
     
     loadPref();
     
+    loadAvailable();
+    
     $('#timezone').timezones();
 
   });
@@ -107,6 +111,12 @@ border-color: #ddd;
 		          $('*[name="'+key+'"]').val(value);
 			  }
 		  });
+	  });
+  }
+  
+  function loadAvailable(){
+	  $.get("api/scheduledPosts/available", function(data){
+		  $("#available").html(data);
 	  });
   }
   /*]]>*/  

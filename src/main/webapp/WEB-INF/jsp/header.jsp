@@ -12,7 +12,7 @@
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a th:href="@{/mysites}">My RSS Feed</a></li>
+        <li><a th:href="@{/mysites}">My RSS Feeds</a></li>
         <li><a th:href="@{/scheduledPosts}">My Scheduled Posts</a></li>
         <li><a th:href="@{/post}">Post to Reddit</a></li>
         <li><a th:href="@{/postSchedule}">Schedule Post to Reddit</a></li>
@@ -38,9 +38,11 @@
 $(document).ajaxStart(function() {
     $("#loading-layer").show();
     $("#errorAlert").hide();
+    $(".btn").attr("disabled", true);
 });
 $(document).ajaxComplete(function() {
 	$("#loading-layer").hide();
+    $(".btn").removeAttr("disabled");
 });
 
 function showAlertMessage(msg){

@@ -21,4 +21,6 @@ public interface IScheduledPostService {
     PagingInfo generatePagingInfo(int page, int size);
 
     long countScheduledPostsByUser(User user);
+
+    int countAvailablePostsToSchedule();
 }

@@ -70,7 +70,7 @@ class UserRestController {
 
     // === Admin
 
-    @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
+    @PreAuthorize("hasRole('USER_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     @ResponseBody
     public List<UserDto> getUsersList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
@@ -80,21 +80,21 @@ class UserRestController {
         return users.stream().map(user -> convertUserEntityToDto(user)).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN_READ_PRIVILEGE')")
+    @PreAuthorize("hasRole('USER_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/roles", method = RequestMethod.GET)
     @ResponseBody
     public List<Role> getRolesList() {
         return userService.getRolesList();
     }
 
-    @PreAuthorize("hasRole('ADMIN_WRITE_PRIVILEGE')")
+    @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
     @RequestMapping(value = "/user/{id}/role", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void modifyUserRoles(@PathVariable("id") final Long id, @RequestParam(value = "roleIds") final String roleIds) {
         userService.modifyUserRoles(id, roleIds);
     }
 
-    @PreAuthorize("hasRole('ADMIN_WRITE_PRIVILEGE')")
+    @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void setUserEnabled(@PathVariable("id") final Long id, @RequestParam(value = "enabled") final boolean enabled) {

@@ -1,7 +1,6 @@
 package org.baeldung.security;
 
 import java.io.IOException;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +10,6 @@ import org.baeldung.persistence.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
@@ -35,8 +33,8 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
             redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
         }
 
-        final Set<String> privieleges = AuthorityUtils.authorityListToSet(auth.getAuthorities());
-        if (privieleges.contains("ADMIN_READ_PRIVILEGE")) {
+        final boolean isAdmin = user.getRoles().stream().filter(role -> role.getName().contains("ADMIN")).count() != 0;
+        if (isAdmin) {
             response.sendRedirect("adminHome");
         } else {
             response.sendRedirect("home");

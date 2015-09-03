@@ -46,6 +46,12 @@ border-color: #ddd;
 <span id="alertContent"></span>
 </div>
 
+<div id="loading-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;background-color:rgba(230,230,230,0.5);display:none;z-index:2000;">
+<div id="loading-image" style="position:absolute;left:45%;top:45%;">
+<img th:src="@{/resources/spin.gif}"/>
+</div>
+</div>
+
 <div class="container">
 <h1>Forget password</h1>
 
@@ -76,10 +82,10 @@ $("#submitBut").click(function(event) {
 
 function forgetPassword(){
 	$.post("user/forgetPassword", {email: $("#email").val()}, function (data){
-		window.location.href= "./";
+		window.location.href= "./?msg=You should receive password reset email shortly";
 	}).fail(function(error){
         console.log(error);
-        showAlertMessage("Error: "+ error.responseText);
+        showAlertMessage(error.responseText);
     }); 
 }
 
@@ -87,6 +93,16 @@ function showAlertMessage(msg){
     $("#alertContent").html(msg);
     $("#errorAlert").show();
 }
+
+$(document).ajaxStart(function() {
+    $("#loading-layer").show();
+    $("#errorAlert").hide();
+    $(".btn").attr("disabled", true);
+});
+$(document).ajaxComplete(function() {
+    $("#loading-layer").hide();
+    $(".btn").removeAttr("disabled");
+});
 </script>
 </div>		
 </body>

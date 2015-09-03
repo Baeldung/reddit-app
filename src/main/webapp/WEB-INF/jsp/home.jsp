@@ -11,13 +11,16 @@
 <div th:include="header"/>
 
 <div class="container">
+<div class="alert alert-info" th:if="${param.containsKey('msg')}" th:text="${param.msg[0]}">
+
+</div>
         <h1>Welcome, <small><a href="profile" sec:authentication="principal.username">Bob</a></small></h1>
         <br/>
         <div th:if="${#authentication.principal.user.accessToken == null}">
         <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>
         <br/> <br/>
         </div>
-        <a href="mysites" class="btn btn-primary">My RSS Feed</a>
+        <a href="mysites" class="btn btn-primary">My RSS Feeds</a>
         <a href="scheduledPosts" class="btn btn-primary">My Scheduled Posts</a>
         <a href="post" class="btn btn-primary">Post to Reddit</a>
         <a href="postSchedule" class="btn btn-primary">Schedule Post to Reddit</a>

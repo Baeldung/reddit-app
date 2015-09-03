@@ -78,6 +78,15 @@ class ScheduledPostRestController {
         scheduledPostService.deletePostById(id);
     }
 
+    @RequestMapping(value = "/available")
+    @ResponseBody
+    public String countAvailablePostsToSchedule(final HttpServletRequest request) {
+        if (request.isUserInRole("POST_UNLIMITED_PRIVILEGE")) {
+            return "You can schedule as many posts as you want";
+        }
+        return "You can schedule maximium " + scheduledPostService.countAvailablePostsToSchedule() + " posts to be submitted today";
+    }
+
     //
 
     private ScheduledPostDto convertToDto(final Post post) {

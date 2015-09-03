@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public final class SetupData {
 
-    public final static String USERS_FILE = "users.csv";
-    public final static String ROLES_FILE = "roles.csv";
-    public final static String PRIVILEGES_FILE = "privileges.csv";
-    public final static String ROLES_PRIVILEGES_FILE = "roles_privileges.csv";
-    public final static String USERS_ROLES_FILE = "users_roles.csv";
+    public final static String USERS_FILE = "setupData/users.csv";
+    public final static String ROLES_FILE = "setupData/roles.csv";
+    public final static String PRIVILEGES_FILE = "setupData/privileges.csv";
+    public final static String ROLES_PRIVILEGES_FILE = "setupData/roles_privileges.csv";
+    public final static String USERS_ROLES_FILE = "setupData/users_roles.csv";
 
     @Autowired
     private CsvDataLoader csvDataLoader;

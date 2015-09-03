@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
 		http.anonymous().disable().csrf().disable().authorizeRequests()
 				.antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
-			        .antMatchers("/adminHome","/users").hasAuthority("ADMIN_READ_PRIVILEGE")
+			        .antMatchers("/adminHome","/users").hasAuthority("USER_READ_PRIVILEGE")
 				.and()
 				.formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
 				.failureUrl("/?error").usernameParameter("username").passwordParameter("password")
