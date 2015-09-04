@@ -11,14 +11,14 @@ public class SessionListener implements HttpSessionListener {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void sessionCreated(HttpSessionEvent event) {
+    public void sessionCreated(final HttpSessionEvent event) {
         logger.info("==== Session is created ====");
         event.getSession().setMaxInactiveInterval(60 * 60);
         event.getSession().setAttribute("PREDICTION_FEATURE", MyFeatures.PREDICTION_FEATURE);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent event) {
+    public void sessionDestroyed(final HttpSessionEvent event) {
         logger.info("==== Session is destroyed ====");
     }
 }

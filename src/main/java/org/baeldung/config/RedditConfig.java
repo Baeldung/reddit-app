@@ -8,7 +8,7 @@ import java.util.List;
 import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.UserAgentInterceptor;
 import org.baeldung.security.MyAuthorizationCodeAccessTokenProvider;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -66,33 +66,21 @@ public class RedditConfig {
     @PropertySource("classpath:reddit-${envTarget:test}.properties")
     protected static class ResourceConfiguration {
 
-        @Value("${reddit.accessTokenUri}")
-        private String accessTokenUri;
-
-        @Value("${reddit.userAuthorizationUri}")
-        private String userAuthorizationUri;
-
-        @Value("${reddit.clientID}")
-        private String clientID;
-
-        @Value("${reddit.clientSecret}")
-        private String clientSecret;
-
-        @Value("${reddit.redirectUri}")
-        private String redirectUri;
+        @Autowired
+        private RedditProperties redditProperties;
 
         @Bean
         public OAuth2ProtectedResourceDetails reddit() {
             final AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
             details.setId("reddit");
-            details.setClientId(clientID);
-            details.setClientSecret(clientSecret);
-            details.setAccessTokenUri(accessTokenUri);
-            details.setUserAuthorizationUri(userAuthorizationUri);
+            details.setClientId(redditProperties.getClientID());
+            details.setClientSecret(redditProperties.getClientSecret());
+            details.setAccessTokenUri(redditProperties.getAccessTokenUri());
+            details.setUserAuthorizationUri(redditProperties.getUserAuthorizationUri());
             details.setTokenName("oauth_token");
             details.setScope(Arrays.asList("identity", "read", "submit", "edit"));
             details.setGrantType("authorization_code");
-            details.setPreEstablishedRedirectUri(redirectUri);
+            details.setPreEstablishedRedirectUri(redditProperties.getRedirectUri());
             details.setUseCurrentUri(false);
             return details;
         }
