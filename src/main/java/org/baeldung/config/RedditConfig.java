@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.baeldung.reddit.classifier.RedditClassifier;
-import org.baeldung.reddit.util.MyFeatures;
 import org.baeldung.reddit.util.UserAgentInterceptor;
 import org.baeldung.security.MyAuthorizationCodeAccessTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -39,8 +36,8 @@ public class RedditConfig {
         list.add(new UserAgentInterceptor());
         final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(reddit);
         restTemplate.setInterceptors(list);
-        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                new ClientCredentialsAccessTokenProvider()));
         restTemplate.setAccessTokenProvider(accessTokenProvider);
         return restTemplate;
     }
@@ -57,10 +54,10 @@ public class RedditConfig {
     @Bean
     public RedditClassifier redditClassifier() throws IOException {
         final RedditClassifier redditClassifier = new RedditClassifier();
-        if (MyFeatures.PREDICTION_FEATURE.isActive()) {
-            final Resource file = new ClassPathResource("data.csv");
-            redditClassifier.trainClassifier(file.getFile().getAbsolutePath());
-        }
+        // if (MyFeatures.PREDICTION_FEATURE.isActive()) {
+        // final Resource file = new ClassPathResource("data.csv");
+        // redditClassifier.trainClassifier(file.getFile().getAbsolutePath());
+        // }
         return redditClassifier;
     }
 
@@ -106,8 +103,8 @@ public class RedditConfig {
             final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
             list.add(new UserAgentInterceptor());
             template.setInterceptors(list);
-            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                    Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                    new ClientCredentialsAccessTokenProvider()));
             template.setAccessTokenProvider(accessTokenProvider);
             return template;
         }
