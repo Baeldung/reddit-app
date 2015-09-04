@@ -61,6 +61,11 @@ public class RedditConfig {
         return redditClassifier;
     }
 
+    @Bean
+    public RedditProperties redditProperties() {
+        return new RedditProperties();
+    }
+
     @Configuration
     @EnableOAuth2Client
     @PropertySource("classpath:reddit-${envTarget:test}.properties")
