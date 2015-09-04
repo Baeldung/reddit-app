@@ -42,7 +42,7 @@ function savePass(){
       $("#error").show();
       return;
     }
-    $.post("../user/updatePassword",{password: pass} ,function(data){
+    $.post("../users/updatePassword",{password: pass} ,function(data){
             window.location.href = "../?msg=Password updated successfully";
     })
     .fail(function(data) {

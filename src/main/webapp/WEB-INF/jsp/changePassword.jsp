@@ -47,7 +47,7 @@ function savePass(){
       $("#error").show();
       return;
     }
-    $.post("./user/changePassword",{password: pass, oldpassword: oldPass} ,function(data){
+    $.post("./users/changePassword",{password: pass, oldpassword: oldPass} ,function(data){
             window.location.href = "./?msg=Password changed succesfully";
     })
     .fail(function(data) {

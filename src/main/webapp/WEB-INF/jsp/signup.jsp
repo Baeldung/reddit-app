@@ -99,7 +99,7 @@ $("#submitBut").click(function(event) {
 
 function register(){
 	console.log("here");
-	$.post("user/register", {username: $("#username").val(), email: $("#email").val(), password: $("#password").val()}, function (data){
+	$.post("users/register", {username: $("#username").val(), email: $("#email").val(), password: $("#password").val()}, function (data){
 		window.location.href= "./?msg=You registered successfully. We will send you a confirmation message to your email account";
 	}).fail(function(error){
         console.log(error);

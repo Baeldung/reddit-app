@@ -38,14 +38,14 @@ class UserRestController {
 
     // === API Methods
 
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void register(final HttpServletRequest request, @RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
         final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         userService.registerNewUser(username, email, password, appUrl);
     }
 
-    @RequestMapping(value = "/user/changePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/changePassword", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void changeUserPassword(@RequestParam("password") final String password, @RequestParam("oldpassword") final String oldPassword) {
         final User user = userService.getCurrentUser();
@@ -55,14 +55,14 @@ class UserRestController {
         userService.changeUserPassword(user, password);
     }
 
-    @RequestMapping(value = "/user/forgetPassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/forgetPassword", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void forgetPassword(final HttpServletRequest request, @RequestParam("email") final String email) {
         final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         userService.resetPassword(email, appUrl);
     }
 
-    @RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/updatePassword", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void changeUserPassword(@RequestParam("password") final String password) {
         userService.changeUserPassword(userService.getCurrentUser(), password);
@@ -88,14 +88,14 @@ class UserRestController {
     }
 
     @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
-    @RequestMapping(value = "/user/{id}/role", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/{id}/role", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void modifyUserRoles(@PathVariable("id") final Long id, @RequestParam(value = "roleIds") final String roleIds) {
         userService.modifyUserRoles(id, roleIds);
     }
 
     @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void setUserEnabled(@PathVariable("id") final Long id, @RequestParam(value = "enabled") final boolean enabled) {
         userService.setUserEnabled(id, enabled);

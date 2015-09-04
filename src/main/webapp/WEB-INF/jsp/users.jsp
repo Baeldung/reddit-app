@@ -131,7 +131,7 @@ function modifyUserRoles(){
     }
     
     $.ajax({
-        url: "user/"+$("#userId").val()+"/role?roleIds="+roles.join(","),
+        url: "users/"+$("#userId").val()+"/role?roleIds="+roles.join(","),
         type: 'PUT',
         contentType:'application/json'
             
@@ -145,7 +145,7 @@ function modifyUserRoles(){
 
 function setEnabled(userId, isEnabled){
     $.ajax({
-        url: "user/"+userId+"?enabled="+isEnabled,
+        url: "users/"+userId+"?enabled="+isEnabled,
         type: 'PUT',
         contentType:'application/json'
             
