@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ // @formatter:off
     FallbackLiveTest.class,
-    MySitesLiveTest.class,
+    MyFeedLiveTest.class,
     ResubmitOptionsLiveTest.class,
     ScheduledPostLiveTest.class,
     UserPreferenceLiveTest.class

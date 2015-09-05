@@ -2,15 +2,15 @@ package org.baeldung.persistence;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
-import org.baeldung.persistence.model.Site;
+import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
 
 public class EntityFixtureFactory {
 
     // API
 
-    public static final Site newSite(final User user) {
-        final Site site = new Site();
+    public static final MyFeed newSite(final User user) {
+        final MyFeed site = new MyFeed();
         site.setUrl(randomAlphabetic(6));
         site.setName(randomAlphabetic(6));
         site.setUser(user);

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Site implements IEntity {
+public class MyFeed implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,11 +28,11 @@ public class Site implements IEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Site() {
+    public MyFeed() {
         super();
     }
 
-    public Site(final String url) {
+    public MyFeed(final String url) {
         super();
         this.url = url;
     }
@@ -101,7 +101,7 @@ public class Site implements IEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Site other = (Site) obj;
+        final MyFeed other = (MyFeed) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

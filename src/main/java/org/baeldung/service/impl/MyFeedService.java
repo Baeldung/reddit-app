@@ -5,11 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.baeldung.persistence.dao.SiteRepository;
-import org.baeldung.persistence.model.Site;
+import org.baeldung.persistence.dao.MyFeedRepository;
+import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.SiteArticle;
-import org.baeldung.service.ISiteService;
+import org.baeldung.service.IMyFeedService;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,43 +23,43 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 @Service
-class SiteService implements ISiteService {
+class MyFeedService implements IMyFeedService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SiteRepository siteRepository;
+    private MyFeedRepository myFeedRepository;
 
     // API
 
     @Override
-    public List<Site> getSitesByUser(final User user) {
-        return siteRepository.findByUser(user);
+    public List<MyFeed> getSitesByUser(final User user) {
+        return myFeedRepository.findByUser(user);
     }
 
     @Override
-    public Site saveSite(final Site site) {
-        logger.info("New site {} added", site.toString());
-        return siteRepository.save(site);
+    public MyFeed saveSite(final MyFeed site) {
+        logger.info("New feed {} added", site.toString());
+        return myFeedRepository.save(site);
     }
 
     @Override
-    public Site findSiteById(final Long siteId) {
-        return siteRepository.findOne(siteId);
+    public MyFeed findSiteById(final Long siteId) {
+        return myFeedRepository.findOne(siteId);
     }
 
     @Override
     public void deleteSiteById(final Long siteId) {
-        siteRepository.delete(siteId);
+        myFeedRepository.delete(siteId);
     }
 
     @Override
     public List<SiteArticle> getArticlesFromSite(final Long siteId) {
-        final Site site = siteRepository.findOne(siteId);
+        final MyFeed site = myFeedRepository.findOne(siteId);
         return getArticlesFromSite(site);
     }
 
     @Override
-    public List<SiteArticle> getArticlesFromSite(final Site site) {
+    public List<SiteArticle> getArticlesFromSite(final MyFeed site) {
         List<SyndEntry> entries;
         try {
             entries = getFeedEntries(site.getUrl());
