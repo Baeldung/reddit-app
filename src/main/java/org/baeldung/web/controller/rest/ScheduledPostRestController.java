@@ -39,7 +39,11 @@ class ScheduledPostRestController {
     @Autowired
     private ModelMapper modelMapper;
 
-    // === API Methods
+    public ScheduledPostRestController() {
+        super();
+    }
+
+    // API - read
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -50,41 +54,43 @@ class ScheduledPostRestController {
         return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public final ScheduledPostDto getPost(@PathVariable("id") final Long id) {
+        return convertToDto(scheduledPostService.getPostById(id));
+    }
+
+    @RequestMapping(value = "/available")
+    @ResponseBody
+    public final String countAvailablePostsToSchedule(final HttpServletRequest request) {
+        if (request.isUserInRole("POST_UNLIMITED_PRIVILEGE")) {
+            return "You can schedule as many posts as you want";
+        }
+        return "You can schedule maximium " + scheduledPostService.countAvailablePostsToSchedule() + " posts to be submitted today";
+    }
+
+    // API - write
+
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ScheduledPostDto schedule(final HttpServletRequest request, @RequestBody final ScheduledPostDto postDto, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
+    public final ScheduledPostDto schedule(final HttpServletRequest request, @RequestBody final ScheduledPostDto postDto, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
         final Post post = convertToEntity(postDto);
         final Post postCreated = scheduledPostService.schedulePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, resubmitOptionsActivated);
         return convertToDto(postCreated);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public ScheduledPostDto getPost(@PathVariable("id") final Long id) {
-        return convertToDto(scheduledPostService.getPostById(id));
-    }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(final HttpServletRequest request, @RequestBody final ScheduledPostDto postDto, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
+    public final void updatePost(final HttpServletRequest request, @RequestBody final ScheduledPostDto postDto, @RequestParam(value = "resubmitOptionsActivated") final boolean resubmitOptionsActivated) throws ParseException {
         final Post post = convertToEntity(postDto);
         scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, resubmitOptionsActivated);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable("id") final Long id) {
+    public final void deletePost(@PathVariable("id") final Long id) {
         scheduledPostService.deletePostById(id);
-    }
-
-    @RequestMapping(value = "/available")
-    @ResponseBody
-    public String countAvailablePostsToSchedule(final HttpServletRequest request) {
-        if (request.isUserInRole("POST_UNLIMITED_PRIVILEGE")) {
-            return "You can schedule as many posts as you want";
-        }
-        return "You can schedule maximium " + scheduledPostService.countAvailablePostsToSchedule() + " posts to be submitted today";
     }
 
     //
@@ -125,4 +131,5 @@ class ScheduledPostRestController {
         }
         return post;
     }
+
 }

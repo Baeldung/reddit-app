@@ -16,8 +16,6 @@ public class StartupTestLoggingComponent implements InitializingBean {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String ENV_KEY = "envTarget";
-    private static final String ACTIVE_SPRING_PROFILE = "spring.profiles.active";
-    private static final String PERSISTENCE_HOST = "jdbc.url";
 
     @Autowired
     private Environment env;
@@ -36,7 +34,6 @@ public class StartupTestLoggingComponent implements InitializingBean {
         logger.info("============================================================================");
         try {
             logEnvTarget(env);
-            logActiveSpringProfile(env);
             logLiveTestData(env);
         } catch (final Exception ex) {
             logger.warn("There was a problem logging data on startup", ex);
@@ -50,11 +47,6 @@ public class StartupTestLoggingComponent implements InitializingBean {
     private void logEnvTarget(final Environment environment) {
         final String envTarget = getValueOfProperty(environment, ENV_KEY, Env.LOCAL.getName(), Env.envs());
         logger.info("{} = {}", ENV_KEY, envTarget);
-    }
-
-    private void logActiveSpringProfile(final Environment environment) {
-        final String activeSpringProfile = getValueOfProperty(environment, ACTIVE_SPRING_PROFILE, "none", null);
-        logger.info("{} = {}", ACTIVE_SPRING_PROFILE, activeSpringProfile);
     }
 
     private void logLiveTestData(final Environment environment) {

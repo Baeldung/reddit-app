@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class SubmissionResponseDto {
+import org.baeldung.reddit.util.Dto;
+
+public class SubmissionResponseDto implements Dto {
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 

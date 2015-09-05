@@ -12,6 +12,7 @@ import org.baeldung.web.ScheduledPostDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.RequestSpecification;
 
 public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
     private static final String DATE = "2016-01-01 00:00";
@@ -26,7 +27,8 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
         post.setSubreddit(randomAlphabetic(6));
         post.setDate(DATE);
 
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
+        final RequestSpecification givenAuth = givenAuth();
+        final Response response = withRequestBody(givenAuth, post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
         final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
