@@ -81,7 +81,7 @@ $("#submitBut").click(function(event) {
 });
 
 function forgetPassword(){
-	$.post("users/forgetPassword", {email: $("#email").val()}, function (data){
+	$.post("users/passwordReset", {email: $("#email").val()}, function (data){
 		window.location.href= "./?msg=You should receive password reset email shortly";
 	}).fail(function(error){
         console.log(error);
