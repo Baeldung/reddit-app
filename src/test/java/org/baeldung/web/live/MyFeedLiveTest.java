@@ -12,13 +12,14 @@ import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
+// TODO: to inherit AbstractLiveTest after we have MySiteDto
 public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     // test
 
     @Test
     public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {
-        createSite();
+        newDto();
         final Response response = givenAuth().get(urlPrefix + "/sites");
 
         assertEquals(200, response.statusCode());
@@ -27,7 +28,7 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
-        final MyFeed site = createSite();
+        final MyFeed site = newDto();
         final Response response = givenAuth().get(urlPrefix + "/sites/articles?id=" + site.getId());
 
         assertEquals(200, response.statusCode());
@@ -36,7 +37,7 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
-        final MyFeed site = createSite();
+        final MyFeed site = newDto();
 
         final Response response = givenAuth().get(urlPrefix + "/sites");
         assertTrue(response.asString().contains(site.getUrl()));
@@ -44,7 +45,7 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
-        final MyFeed site = createSite();
+        final MyFeed site = newDto();
         final Response response = givenAuth().delete(urlPrefix + "/sites/" + site.getId());
 
         assertEquals(204, response.statusCode());
@@ -52,11 +53,12 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     //
 
-    private MyFeed createSite() throws ParseException, IOException {
+    private MyFeed newDto() throws ParseException, IOException {
         final MyFeed site = new MyFeed("http://www.baeldung.com/feed/");
         site.setName("baeldung");
 
         final Response response = withRequestBody(givenAuth(), site).post(urlPrefix + "/sites");
         return objectMapper.reader().forType(MyFeed.class).readValue(response.asString());
     }
+
 }

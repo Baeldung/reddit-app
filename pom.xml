@@ -482,6 +482,9 @@
                                 <exclude>**/*UnitTest.java</exclude>
                                 <exclude>**/*LiveTest.java</exclude>
                             </excludes>
+                            <systemPropertyVariables>
+                                <envTarget>test</envTarget>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>
