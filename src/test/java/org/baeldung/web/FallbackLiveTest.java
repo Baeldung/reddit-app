@@ -2,12 +2,12 @@ package org.baeldung.web;
 
 import static org.junit.Assert.assertEquals;
 
-import org.baeldung.web.live.AbstractLiveTest;
+import org.baeldung.web.live.AbstractBaseLiveTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
-public class FallbackLiveTest extends AbstractLiveTest {
+public class FallbackLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void givenDummyUrl_whenRequestingUsingGet_thenCorrect() {

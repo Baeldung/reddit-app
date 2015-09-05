@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ScheduledPostDto {
+import org.baeldung.reddit.util.Dto;
+
+public class ScheduledPostDto implements Dto {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private Long id;

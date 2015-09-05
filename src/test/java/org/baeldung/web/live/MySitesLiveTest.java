@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
-public class MySitesLiveTest extends AbstractLiveTest {
+public class MySitesLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {

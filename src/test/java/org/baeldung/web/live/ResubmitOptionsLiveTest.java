@@ -12,8 +12,10 @@ import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
-public class ResubmitOptionsLiveTest extends AbstractLiveTest {
-    private static final String date = "2016-01-01 00:00";
+public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
+    private static final String DATE = "2016-01-01 00:00";
+
+    // tests
 
     @Test
     public void givenResubmitOptionsDeactivated_whenScheduleANewPost_thenCreated() throws ParseException, IOException {
@@ -86,7 +88,7 @@ public class ResubmitOptionsLiveTest extends AbstractLiveTest {
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
-        post.setDate(date);
+        post.setDate(DATE);
         return post;
     }
 }

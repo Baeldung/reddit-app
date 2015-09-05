@@ -2,7 +2,8 @@ package org.baeldung.reddit.util;
 
 import javax.validation.constraints.NotNull;
 
-public class PostDto {
+public class PostDto implements Dto {
+
     @NotNull
     private String title;
 
@@ -21,7 +22,7 @@ public class PostDto {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -29,7 +30,7 @@ public class PostDto {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -37,7 +38,7 @@ public class PostDto {
         return subreddit;
     }
 
-    public void setSubreddit(String sr) {
+    public void setSubreddit(final String sr) {
         this.subreddit = sr;
     }
 
@@ -45,7 +46,7 @@ public class PostDto {
         return sendreplies;
     }
 
-    public void setSendreplies(boolean sendreplies) {
+    public void setSendreplies(final boolean sendreplies) {
         this.sendreplies = sendreplies;
     }
 
@@ -53,7 +54,7 @@ public class PostDto {
         return iden;
     }
 
-    public void setIden(String iden) {
+    public void setIden(final String iden) {
         this.iden = iden;
     }
 
@@ -61,7 +62,7 @@ public class PostDto {
         return captcha;
     }
 
-    public void setCaptcha(String captcha) {
+    public void setCaptcha(final String captcha) {
         this.captcha = captcha;
     }
 

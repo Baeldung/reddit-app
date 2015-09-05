@@ -186,7 +186,7 @@
         </dependency>
 
         <!-- persistence - liquibase -->
-        
+
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -199,7 +199,7 @@
         </dependency>
 
         <!-- model mapper -->
-        
+
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
@@ -558,7 +558,7 @@
                                         <include>**/*LiveTest.java</include>
                                     </includes>
                                     <systemPropertyVariables>
-                                        <!-- <secWebTarget>cargo</secWebTarget> -->
+                                        <envTarget>test</envTarget>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>

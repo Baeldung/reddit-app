@@ -9,7 +9,9 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.restassured.response.Response;
 
-public class UserPreferenceLiveTest extends AbstractLiveTest {
+public class UserPreferenceLiveTest extends AbstractBaseLiveTest {
+
+    // tests
 
     @Test
     public void whenGettingPrefernce_thenCorrect() {

@@ -1,7 +1,9 @@
-package org.baeldung.common;
+package org.baeldung.test;
 
 import java.util.List;
 
+import org.baeldung.common.Env;
+import org.baeldung.web.live.config.CommonPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -10,7 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StartupLoggingComponent implements InitializingBean {
+public class StartupTestLoggingComponent implements InitializingBean {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String ENV_KEY = "envTarget";
@@ -20,7 +22,10 @@ public class StartupLoggingComponent implements InitializingBean {
     @Autowired
     private Environment env;
 
-    public StartupLoggingComponent() {
+    @Autowired
+    private CommonPaths paths;
+
+    public StartupTestLoggingComponent() {
         super();
     }
 
@@ -32,7 +37,7 @@ public class StartupLoggingComponent implements InitializingBean {
         try {
             logEnvTarget(env);
             logActiveSpringProfile(env);
-            logPersistenceData(env);
+            logLiveTestData(env);
         } catch (final Exception ex) {
             logger.warn("There was a problem logging data on startup", ex);
         }
@@ -52,9 +57,9 @@ public class StartupLoggingComponent implements InitializingBean {
         logger.info("{} = {}", ACTIVE_SPRING_PROFILE, activeSpringProfile);
     }
 
-    private void logPersistenceData(final Environment environment) {
-        final String persistenceHost = getValueOfProperty(environment, PERSISTENCE_HOST, "not-found", null);
-        logger.info("{} = {}", PERSISTENCE_HOST, persistenceHost);
+    private void logLiveTestData(final Environment environment) {
+        final String serverRoot = paths.getServerRoot();
+        logger.info("Base live test URL = {}", serverRoot);
     }
 
     //

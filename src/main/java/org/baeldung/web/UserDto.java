@@ -3,8 +3,9 @@ package org.baeldung.web;
 import java.util.Set;
 
 import org.baeldung.persistence.model.Role;
+import org.baeldung.reddit.util.Dto;
 
-public class UserDto {
+public class UserDto implements Dto {
     private Long id;
 
     private String username;
