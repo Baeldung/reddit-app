@@ -55,7 +55,7 @@ class UserRestController {
         userService.changeUserPassword(user, password);
     }
 
-    @RequestMapping(value = "/users/forgetPassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/passwordReset", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void forgetPassword(final HttpServletRequest request, @RequestParam("email") final String email) {
         final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
