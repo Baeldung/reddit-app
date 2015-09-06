@@ -8,7 +8,7 @@ import java.util.List;
 import org.baeldung.persistence.dao.MyFeedRepository;
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
-import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.reddit.util.FeedArticle;
 import org.baeldung.service.IMyFeedService;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
@@ -32,37 +32,37 @@ class MyFeedService implements IMyFeedService {
     // API
 
     @Override
-    public List<MyFeed> getSitesByUser(final User user) {
+    public List<MyFeed> getFeedsByUser(final User user) {
         return myFeedRepository.findByUser(user);
     }
 
     @Override
-    public MyFeed saveSite(final MyFeed site) {
-        logger.info("New feed {} added", site.toString());
-        return myFeedRepository.save(site);
+    public MyFeed saveFeed(final MyFeed feed) {
+        logger.info("New feed {} added", feed.toString());
+        return myFeedRepository.save(feed);
     }
 
     @Override
-    public MyFeed findSiteById(final Long siteId) {
-        return myFeedRepository.findOne(siteId);
+    public MyFeed findFeedById(final Long feedId) {
+        return myFeedRepository.findOne(feedId);
     }
 
     @Override
-    public void deleteSiteById(final Long siteId) {
-        myFeedRepository.delete(siteId);
+    public void deleteFeedById(final Long feedId) {
+        myFeedRepository.delete(feedId);
     }
 
     @Override
-    public List<SiteArticle> getArticlesFromSite(final Long siteId) {
-        final MyFeed site = myFeedRepository.findOne(siteId);
-        return getArticlesFromSite(site);
+    public List<FeedArticle> getArticlesFromFeed(final Long feedId) {
+        final MyFeed feed = myFeedRepository.findOne(feedId);
+        return getArticlesFromSite(feed);
     }
 
     @Override
-    public List<SiteArticle> getArticlesFromSite(final MyFeed site) {
+    public List<FeedArticle> getArticlesFromSite(final MyFeed feed) {
         List<SyndEntry> entries;
         try {
-            entries = getFeedEntries(site.getUrl());
+            entries = getFeedEntries(feed.getUrl());
         } catch (final Exception e) {
             throw new FeedServerException("Error Occurred while parsing feed", e);
         }
@@ -90,10 +90,10 @@ class MyFeedService implements IMyFeedService {
         return entries;
     }
 
-    private List<SiteArticle> parseFeed(final List<SyndEntry> entries) {
-        final List<SiteArticle> articles = new ArrayList<SiteArticle>();
+    private List<FeedArticle> parseFeed(final List<SyndEntry> entries) {
+        final List<FeedArticle> articles = new ArrayList<FeedArticle>();
         for (final SyndEntry entry : entries) {
-            articles.add(new SiteArticle(entry.getTitle(), entry.getLink(), entry.getPublishedDate()));
+            articles.add(new FeedArticle(entry.getTitle(), entry.getLink(), entry.getPublishedDate()));
         }
         return articles;
     }

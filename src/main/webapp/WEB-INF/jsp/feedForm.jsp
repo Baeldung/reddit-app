@@ -55,12 +55,12 @@ function addSite(){
 	    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
 	    console.log(JSON.stringify(data));
 	 $.ajax({
-	    url: 'sites',
+	    url: 'myFeeds',
 	    data: JSON.stringify(data),
 	    type: 'POST',
 	    contentType:'application/json',
 	    success: function(result) {
-	        window.location.href="mysites";
+	        window.location.href="feeds";
 	    },
 	    error: function(error) {
 	    	showAlertMessage(error.responseText);

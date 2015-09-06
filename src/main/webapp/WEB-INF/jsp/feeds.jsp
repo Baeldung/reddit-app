@@ -13,7 +13,7 @@
 <div class="container">
 <h1>My RSS Feeds</h1>
 <br/>
-<a th:href="@{/siteForm}" class="btn btn-primary">Add New RSS Feed</a>
+<a th:href="@{/feedForm}" class="btn btn-primary">Add New RSS Feed</a>
 <br/>
 <br/>
 <table class="table table-bordered">
@@ -32,7 +32,7 @@
 /*<![CDATA[*/
            
 $(function(){
-	$.get("sites", function(data){
+	$.get("myFeeds", function(data){
         $.each(data, function( index, site ) {
             $('.table').append('<tr><td>'+site.name+'</td><td>'+site.url+
               '</td><td><a href="#" class="btn btn-danger" onclick="confirmDelete('+site.id+
@@ -49,10 +49,10 @@ function confirmDelete(id) {
 
 function deleteSite(id){
     $.ajax({
-        url: 'sites/'+id,
+        url: 'myFeeds/'+id,
         type: 'DELETE',
         success: function(result) {
-            window.location.href="mysites"
+            window.location.href="feeds"
         }
     });
 }

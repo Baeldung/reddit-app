@@ -8,19 +8,19 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.persistence.model.MyFeed;
+import org.baeldung.web.FeedDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 
-// TODO: to inherit AbstractLiveTest after we have MySiteDto
-public class MyFeedLiveTest extends AbstractBaseLiveTest {
+public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
 
     // test
 
     @Test
     public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {
         newDto();
-        final Response response = givenAuth().get(urlPrefix + "/sites");
+        final Response response = givenAuth().get(urlPrefix + "/myFeeds");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -28,8 +28,8 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
-        final MyFeed site = newDto();
-        final Response response = givenAuth().get(urlPrefix + "/sites/articles?id=" + site.getId());
+        final FeedDto feed = newDto();
+        final Response response = givenAuth().get(urlPrefix + "/myFeeds/articles?id=" + feed.getId());
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -37,27 +37,32 @@ public class MyFeedLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
-        final MyFeed site = newDto();
+        final FeedDto feed = newDto();
 
-        final Response response = givenAuth().get(urlPrefix + "/sites");
-        assertTrue(response.asString().contains(site.getUrl()));
+        final Response response = givenAuth().get(urlPrefix + "/myFeeds");
+
+        assertTrue(response.asString().contains(feed.getUrl()));
     }
 
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
-        final MyFeed site = newDto();
-        final Response response = givenAuth().delete(urlPrefix + "/sites/" + site.getId());
+        final FeedDto feed = newDto();
+        final Response response = givenAuth().delete(urlPrefix + "/myFeeds/" + feed.getId());
 
         assertEquals(204, response.statusCode());
     }
 
     //
 
-    private MyFeed newDto() throws ParseException, IOException {
-        final MyFeed site = new MyFeed("http://www.baeldung.com/feed/");
-        site.setName("baeldung");
+    @Override
+    protected FeedDto newDto() throws ParseException, IOException {
+        final FeedDto feed = new FeedDto();
+        feed.setUrl("http://www.baeldung.com/feed/");
+        feed.setName("baeldung");
 
-        final Response response = withRequestBody(givenAuth(), site).post(urlPrefix + "/sites");
+        final Response response = withRequestBody(givenAuth(), feed).post(urlPrefix + "/myFeeds");
+        System.out.println(urlPrefix);
+        System.out.println(response.asString());
         return objectMapper.reader().forType(MyFeed.class).readValue(response.asString());
     }
 

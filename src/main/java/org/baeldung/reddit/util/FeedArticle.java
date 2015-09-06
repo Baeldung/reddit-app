@@ -2,16 +2,16 @@ package org.baeldung.reddit.util;
 
 import java.util.Date;
 
-public class SiteArticle {
+public class FeedArticle {
     private String title;
     private String link;
     private Date publishDate;
 
-    public SiteArticle() {
+    public FeedArticle() {
         super();
     }
 
-    public SiteArticle(String title, String link, Date publishDate) {
+    public FeedArticle(String title, String link, Date publishDate) {
         super();
         this.title = title;
         this.link = link;

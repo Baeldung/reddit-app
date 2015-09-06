@@ -53,11 +53,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/home");
         registry.addViewController("/adminHome");
         registry.addViewController("/signup");
-        registry.addViewController("/siteForm");
+        registry.addViewController("/feedForm");
         registry.addViewController("/submissionResponse");
         registry.addViewController("/profile");
         registry.addViewController("/scheduledPosts");
-        registry.addViewController("/mysites");
+        registry.addViewController("/feeds");
         registry.addViewController("/users");
         registry.addViewController("/changePassword");
         registry.addViewController("/forgetPassword");

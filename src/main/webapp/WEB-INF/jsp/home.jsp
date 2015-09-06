@@ -20,7 +20,7 @@
         <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>
         <br/> <br/>
         </div>
-        <a href="mysites" class="btn btn-primary">My RSS Feeds</a>
+        <a href="feeds" class="btn btn-primary">My RSS Feeds</a>
         <a href="scheduledPosts" class="btn btn-primary">My Scheduled Posts</a>
         <a href="post" class="btn btn-primary">Post to Reddit</a>
         <a href="postSchedule" class="btn btn-primary">Schedule Post to Reddit</a>

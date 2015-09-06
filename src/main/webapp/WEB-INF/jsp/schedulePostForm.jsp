@@ -32,7 +32,7 @@ border-color: #ddd;
 <div class="container">
 <h1>Schedule Post to Reddit 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  Load from My Sites
+  Load from My Feeds
 </button>
 </h1>
 <form action="#" method="post" role="form" data-toggle="validator">
@@ -110,12 +110,12 @@ border-color: #ddd;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Load from My Sites</h4>
+        <h4 class="modal-title" id="myModalLabel">Load from My Feeds</h4>
       </div>
       <div class="modal-body">
         <div class="dropdown col-sm-6">
 		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    Choose Site <span class="caret"></span>
+		    Choose Feed <span class="caret"></span>
 		  </button>
 		  <ul id="siteList" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 		  </ul>
@@ -175,7 +175,7 @@ border-color: #ddd;
   $('#myModal').on('shown.bs.modal', function () {
 	  if($("#siteList").children().length > 0)
 		  return;
-	  $.get("sites", function(data){
+	  $.get("myFeeds", function(data){
 		 $.each(data, function( index, site ) {
 			  $("#siteList").append('<li><a href="#" onclick="loadArticles('+site.id+',\''+site.name+'\')">'+site.name+'</a></li>')
 		 });
@@ -185,7 +185,7 @@ border-color: #ddd;
   
   function loadArticles(siteID,siteName){
 	  $("#dropdownMenu1").html(siteName);
-	  $.get("sites/articles?id="+siteID, function(data){
+	  $.get("myFeeds/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
 		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
 	      $.each(data, function( index, article ) {

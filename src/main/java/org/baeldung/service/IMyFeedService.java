@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
-import org.baeldung.reddit.util.SiteArticle;
+import org.baeldung.reddit.util.FeedArticle;
 
 public interface IMyFeedService {
 
-    List<MyFeed> getSitesByUser(final User user);
+    List<MyFeed> getFeedsByUser(final User user);
 
-    MyFeed saveSite(final MyFeed site);
+    MyFeed saveFeed(final MyFeed feed);
 
-    MyFeed findSiteById(final Long siteId);
+    MyFeed findFeedById(final Long feedId);
 
-    void deleteSiteById(final Long siteId);
+    void deleteFeedById(final Long feedId);
 
-    List<SiteArticle> getArticlesFromSite(final Long siteId);
+    List<FeedArticle> getArticlesFromFeed(final Long feedId);
 
-    List<SiteArticle> getArticlesFromSite(final MyFeed site);
+    List<FeedArticle> getArticlesFromSite(final MyFeed feed);
 
     boolean isValidFeedUrl(final String feedUrl);
 

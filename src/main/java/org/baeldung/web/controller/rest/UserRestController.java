@@ -41,7 +41,7 @@ class UserRestController {
     @RequestMapping(value = "/users/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void register(final HttpServletRequest request, @RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
-        final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         userService.registerNewUser(username, email, password, appUrl);
     }
 
@@ -58,7 +58,7 @@ class UserRestController {
     @RequestMapping(value = "/users/passwordReset", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void forgetPassword(final HttpServletRequest request, @RequestParam("email") final String email) {
-        final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
         userService.resetPassword(email, appUrl);
     }
 
