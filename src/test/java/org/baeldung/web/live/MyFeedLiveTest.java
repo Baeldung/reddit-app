@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
-import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.web.FeedDto;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.jayway.restassured.response.Response;
 
 public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
@@ -61,9 +61,8 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
         feed.setName("baeldung");
 
         final Response response = withRequestBody(givenAuth(), feed).post(urlPrefix + "/myFeeds");
-        System.out.println(urlPrefix);
-        System.out.println(response.asString());
-        return objectMapper.reader().forType(MyFeed.class).readValue(response.asString());
+
+        return objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).reader().forType(FeedDto.class).readValue(response.asString());
     }
 
 }

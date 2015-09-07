@@ -23,10 +23,15 @@ public class CommonPaths {
     // API
 
     public String getServerRoot() {
-        if (port.equals("80")) {
-            return protocol + "://" + host + "/" + address;
+        final StringBuilder builder = new StringBuilder();
+        builder.append(protocol).append("://").append(host);
+        if (!port.equals("80")) {
+            builder.append(':').append(port);
         }
-        return protocol + "://" + host + ":" + port + "/" + address;
+        if ((address != null) && (address.length() > 0)) {
+            builder.append('/').append(address);
+        }
+        return builder.toString();
     }
 
 }
