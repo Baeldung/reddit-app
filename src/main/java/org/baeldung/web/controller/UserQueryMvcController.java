@@ -1,6 +1,6 @@
 package org.baeldung.web.controller;
 
-import org.baeldung.service.IUserService;
+import org.baeldung.service.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class UserMvcController {
+@RequestMapping(value = "/users")
+public class UserQueryMvcController {
 
     @Autowired
-    private IUserService userService;
+    private IUserQueryService userService;
 
-    @RequestMapping(value = "/user/regitrationConfirm", method = RequestMethod.GET)
+    @RequestMapping(value = "/regitrationConfirmation", method = RequestMethod.GET)
     public String confirmRegistration(final Model model, @RequestParam("token") final String token) {
-        final String result = userService.confirmRegistration(token);
+        final String result = userService.checkConfirmRegistrationToken(token);
         if (result == null) {
             return "redirect:/?msg=Registration confirmed successfully";
         }
@@ -24,7 +25,7 @@ public class UserMvcController {
         return "submissionResponse";
     }
 
-    @RequestMapping(value = "/user/resetPassword", method = RequestMethod.GET)
+    @RequestMapping(value = "/passwordReset", method = RequestMethod.GET)
     public String resetPassword(final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
         final String result = userService.checkPasswordResetToken(id, token);
         if (result == null) {

@@ -3,7 +3,7 @@ package org.baeldung.web;
 import java.util.UUID;
 
 import org.baeldung.persistence.model.User;
-import org.baeldung.service.IUserService;
+import org.baeldung.service.IUserCommandService;
 import org.baeldung.service.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegistrationListener implements ApplicationListener<org.baeldung.service.OnRegistrationCompleteEvent> {
     @Autowired
-    private IUserService userService;
+    private IUserCommandService userService;
 
     @Autowired
     private MessageSource messages;
@@ -48,7 +48,7 @@ public class RegistrationListener implements ApplicationListener<org.baeldung.se
     private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
         final String recipientAddress = user.getPreference().getEmail();
         final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/user/regitrationConfirm?token=" + token;
+        final String confirmationUrl = event.getAppUrl() + "/users/regitrationConfirmation?token=" + token;
         final String message = "Confirm registration";
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);

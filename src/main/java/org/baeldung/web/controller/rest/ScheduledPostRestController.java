@@ -10,13 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.SubmissionResponse;
+import org.baeldung.persistence.model.User;
+import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.IScheduledPostService;
-import org.baeldung.service.IUserService;
 import org.baeldung.web.ScheduledPostDto;
 import org.baeldung.web.SubmissionResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,9 +34,6 @@ class ScheduledPostRestController {
 
     @Autowired
     private IScheduledPostService scheduledPostService;
-
-    @Autowired
-    private IUserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -97,7 +96,7 @@ class ScheduledPostRestController {
 
     private ScheduledPostDto convertToDto(final Post post) {
         final ScheduledPostDto postDto = modelMapper.map(post, ScheduledPostDto.class);
-        postDto.setSubmissionDate(post.getSubmissionDate(), userService.getCurrentUser().getPreference().getTimezone());
+        postDto.setSubmissionDate(post.getSubmissionDate(), getCurrentUser().getPreference().getTimezone());
         final List<SubmissionResponse> response = post.getSubmissionsResponse();
         if ((response != null) && (response.size() > 0)) {
             postDto.setStatus(response.get(response.size() - 1).toString().substring(0, 30));
@@ -112,7 +111,7 @@ class ScheduledPostRestController {
 
     private SubmissionResponseDto generateResponseDto(final SubmissionResponse responseEntity) {
         final SubmissionResponseDto dto = modelMapper.map(responseEntity, SubmissionResponseDto.class);
-        final String timezone = userService.getCurrentUser().getPreference().getTimezone();
+        final String timezone = getCurrentUser().getPreference().getTimezone();
         dto.setLocalSubmissionDate(responseEntity.getSubmissionDate(), timezone);
         if (responseEntity.getScoreCheckDate() != null) {
             dto.setLocalScoreCheckDate(responseEntity.getScoreCheckDate(), timezone);
@@ -122,7 +121,7 @@ class ScheduledPostRestController {
 
     private Post convertToEntity(final ScheduledPostDto postDto) throws ParseException {
         final Post post = modelMapper.map(postDto, Post.class);
-        post.setSubmissionDate(postDto.getSubmissionDateConverted(userService.getCurrentUser().getPreference().getTimezone()));
+        post.setSubmissionDate(postDto.getSubmissionDateConverted(getCurrentUser().getPreference().getTimezone()));
         if (postDto.getId() != null) {
             final Post oldPost = scheduledPostService.getPostById(postDto.getId());
             post.setRedditID(oldPost.getRedditID());
@@ -130,6 +129,12 @@ class ScheduledPostRestController {
             post.setSubmissionsResponse(post.getSubmissionsResponse());
         }
         return post;
+    }
+
+    //
+    private User getCurrentUser() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userPrincipal.getUser();
     }
 
 }

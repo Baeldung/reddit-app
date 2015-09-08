@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.baeldung.persistence.model.MyFeed;
+import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.FeedArticle;
+import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.IMyFeedService;
-import org.baeldung.service.IUserService;
 import org.baeldung.web.FeedDto;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,9 +31,6 @@ class MyFeedRestController {
     private IMyFeedService myFeedService;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     // === API Methods
@@ -39,7 +38,7 @@ class MyFeedRestController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<FeedDto> getFeedsList() {
-        final List<MyFeed> feeds = myFeedService.getFeedsByUser(userService.getCurrentUser());
+        final List<MyFeed> feeds = myFeedService.getFeedsByUser(getCurrentUser());
         return feeds.stream().map(feed -> convertToDto(feed)).collect(Collectors.toList());
     }
 
@@ -51,7 +50,7 @@ class MyFeedRestController {
         if (!myFeedService.isValidFeedUrl(feed.getUrl())) {
             throw new FeedServerException("Invalid Feed Url");
         }
-        feed.setUser(userService.getCurrentUser());
+        feed.setUser(getCurrentUser());
         feed = myFeedService.saveFeed(feed);
         return convertToDto(feed);
     }
@@ -76,6 +75,11 @@ class MyFeedRestController {
 
     private MyFeed convertToEntity(final FeedDto feed) {
         return modelMapper.map(feed, MyFeed.class);
+    }
+
+    private User getCurrentUser() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userPrincipal.getUser();
     }
 
 }

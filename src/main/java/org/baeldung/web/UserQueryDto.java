@@ -5,7 +5,7 @@ import java.util.Set;
 import org.baeldung.persistence.model.Role;
 import org.baeldung.reddit.util.Dto;
 
-public class UserDto implements Dto {
+public class UserQueryDto implements Dto {
     private Long id;
 
     private String username;
@@ -18,7 +18,7 @@ public class UserDto implements Dto {
 
     //
 
-    public UserDto() {
+    public UserQueryDto() {
         super();
     }
 

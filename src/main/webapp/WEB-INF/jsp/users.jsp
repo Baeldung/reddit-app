@@ -39,7 +39,7 @@
         <h4 class="modal-title">Modify User Roles</h4>
       </div>
       <div class="modal-body">
-        <input type="hidden" name="id" id="userId"/>
+        <input type="hidden" name="id" id="userIndex"/>
         <div id="allRoles"></div>
       </div>
       <div class="modal-footer">
@@ -53,6 +53,8 @@
 <script>
 /*<![CDATA[*/
            
+var loadedData = [];
+      
 $(function(){
     $('table').dataTable( {
         "processing": true,
@@ -67,8 +69,8 @@ $(function(){
                        },
                        { "targets": 3, "data": "id",
                             "render": function ( data, type, full, meta ) {
-                                return '<a href="#" class="btn btn-warning" onclick="showEditModal('+data+',\''+extractRolesName(full.roles)+'\')">Modify User Roles</a>'
-                                +' <a href="#" class="btn btn-default" onclick="setEnabled('+full.id+','+!full.enabled+')">'
+                                return '<a href="#" class="btn btn-warning" onclick="showEditModal('+meta.row+')">Modify User Roles</a>'
+                                +' <a href="#" class="btn btn-default" onclick="triggerEnabled('+meta.row+')">'
                                 +((full.enabled)?'Disable':'Enable')+'</a>';
                               }}
                      ],
@@ -78,7 +80,7 @@ $(function(){
                              ],
         "serverSide": true,
         "ajax": function(data, callback, settings) {
-            $.get('admin/users', {
+            $.get('api/users', {
                 size: data.length,
                 page: (data.start/data.length),
                 sortDir: data.order[0].dir,
@@ -105,10 +107,13 @@ function extractRolesName(roles){
 	return result;
 }
 
-function showEditModal(userId, roleNames){
-	$("#userId").val(userId);
-	 $('#allRoles').html("");
-	$.get("admin/roles", function(data){
+var allRoles;
+function showEditModal(row){
+	$("#userIndex").val(row);
+	$('#allRoles').html("");
+	var roleNames = extractRolesName(loadedData[row].roles);
+	$.get("api/users/roles", function(data){
+		allRoles = data;
         $.each(data, function( index, role ) {
         	if(roleNames.indexOf(role.name) != -1){
                 $('#allRoles').append('<input type="checkbox" name="roleIds" value="'+role.id+'" checked/> '+role.name+'<br/>')
@@ -122,16 +127,21 @@ function showEditModal(userId, roleNames){
 
 function modifyUserRoles(){
 	var roles = [];
-    $.each($("input[name='roleIds']:checked"), function(){            
-    	roles.push($(this).val());
+    $.each($("input[name='roleIds']"), function(index,role){  
+    	if($(this).is(':checked')){
+    	    roles.push(allRoles[index]);
+    	}
     }); 
     if(roles.length == 0){
     	showAlertMessage("Error, at least select one role");
     	return;
     }
     
+    var user = loadedData[$("#userIndex").val()];
+    user.roles = roles;
     $.ajax({
-        url: "users/"+$("#userId").val()+"/role?roleIds="+roles.join(","),
+        url: "api/users/"+user.id,
+        data: JSON.stringify(user),
         type: 'PUT',
         contentType:'application/json'
             
@@ -143,9 +153,12 @@ function modifyUserRoles(){
     }); 
 }
 
-function setEnabled(userId, isEnabled){
+function triggerEnabled(row){
+	var user = loadedData[row];
+	user.enabled = !user.enabled;
     $.ajax({
-        url: "users/"+userId+"?enabled="+isEnabled,
+        url: "api/users/"+user.id,
+        data: JSON.stringify(user),
         type: 'PUT',
         contentType:'application/json'
             

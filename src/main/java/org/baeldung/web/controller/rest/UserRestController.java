@@ -10,13 +10,12 @@ import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.baeldung.service.IScheduledPostService;
 import org.baeldung.service.IUserService;
-import org.baeldung.web.UserDto;
+import org.baeldung.web.UserQueryDto;
 import org.baeldung.web.exceptions.InvalidOldPasswordException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Controller
+//@Controller
 class UserRestController {
 
     @Autowired
@@ -73,7 +72,7 @@ class UserRestController {
     @PreAuthorize("hasRole('USER_READ_PRIVILEGE')")
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     @ResponseBody
-    public List<UserDto> getUsersList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
+    public List<UserQueryDto> getUsersList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "username") final String sort, final HttpServletResponse response) {
         response.addHeader("PAGING_INFO", userService.generatePagingInfo(page, size).toString());
         final List<User> users = userService.getUsersList(page, size, sortDir, sort);
@@ -103,8 +102,8 @@ class UserRestController {
 
     //
 
-    private UserDto convertUserEntityToDto(final User user) {
-        final UserDto dto = modelMapper.map(user, UserDto.class);
+    private UserQueryDto convertUserEntityToDto(final User user) {
+        final UserQueryDto dto = modelMapper.map(user, UserQueryDto.class);
         dto.setScheduledPostsCount(scheduledPostService.countScheduledPostsByUser(user));
         return dto;
     }

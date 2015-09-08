@@ -1,9 +1,11 @@
 package org.baeldung.reddit.web.controller;
 
+import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.persistence.beans.RedditTemplate;
 import org.baeldung.reddit.persistence.service.IRedditService;
-import org.baeldung.service.IUserService;
+import org.baeldung.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +20,6 @@ public class RedditMvcController {
     @Autowired
     private IRedditService redditService;
 
-    @Autowired
-    private IUserService userService;
-
     // === API Methods
 
     @RequestMapping("/redditLogin")
@@ -32,18 +31,25 @@ public class RedditMvcController {
 
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {
-        if (userService.getCurrentUser().getAccessToken() == null) {
+        if (getCurrentUser().getAccessToken() == null) {
             model.addAttribute("msg", "Sorry, You did not connect your account to Reddit yet");
             return "submissionResponse";
         }
 
-        final boolean isCaptchaNeeded = userService.getCurrentUser().isCaptchaNeeded();
+        final boolean isCaptchaNeeded = getCurrentUser().isCaptchaNeeded();
         if (isCaptchaNeeded) {
             final String iden = redditTemplate.getNewCaptcha();
             model.addAttribute("iden", iden);
         }
 
         return "submissionForm";
+    }
+
+    //
+
+    private User getCurrentUser() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userPrincipal.getUser();
     }
 
 }

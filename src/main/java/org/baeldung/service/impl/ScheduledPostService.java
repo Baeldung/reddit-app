@@ -9,8 +9,8 @@ import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
+import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.IScheduledPostService;
-import org.baeldung.service.IUserService;
 import org.baeldung.web.PagingInfo;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.baeldung.web.exceptions.InvalidResubmitOptionsException;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
@@ -29,21 +30,18 @@ public class ScheduledPostService implements IScheduledPostService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private IUserService userService;
-
     //
 
     @Override
     public List<Post> getPostsList(final int page, final int size, final String sortDir, final String sort) {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
-        final Page<Post> posts = postRepository.findByUser(userService.getCurrentUser(), pageReq);
+        final Page<Post> posts = postRepository.findByUser(getCurrentUser(), pageReq);
         return posts.getContent();
     }
 
     @Override
     public PagingInfo generatePagingInfo(final int page, final int size) {
-        final long total = postRepository.countByUser(userService.getCurrentUser());
+        final long total = postRepository.countByUser(getCurrentUser());
         return new PagingInfo(page, size, total);
     }
 
@@ -60,7 +58,7 @@ public class ScheduledPostService implements IScheduledPostService {
         if (!(isSuperUser || checkIfCanSchedule(post.getSubmissionDate()))) {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
-        post.setUser(userService.getCurrentUser());
+        post.setUser(getCurrentUser());
         return postRepository.save(post);
     }
 
@@ -78,7 +76,7 @@ public class ScheduledPostService implements IScheduledPostService {
         if (!(isSuperUser || checkIfCanSchedule(post.getSubmissionDate()))) {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
-        post.setUser(userService.getCurrentUser());
+        post.setUser(getCurrentUser());
         postRepository.save(post);
     }
 
@@ -97,10 +95,11 @@ public class ScheduledPostService implements IScheduledPostService {
         return postRepository.countByUser(user);
     }
 
+    @Override
     public int countAvailablePostsToSchedule() {
         final Date start = DateUtils.truncate(new Date(), Calendar.DATE);
         final Date end = DateUtils.addDays(start, 1);
-        final long count = postRepository.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
+        final long count = postRepository.countByUserAndSubmissionDateBetween(getCurrentUser(), start, end);
         return (int) (LIMIT_SCHEDULED_POSTS_PER_DAY - count);
     }
 
@@ -126,8 +125,12 @@ public class ScheduledPostService implements IScheduledPostService {
     private boolean checkIfCanSchedule(final Date date) {
         final Date start = DateUtils.truncate(date, Calendar.DATE);
         final Date end = DateUtils.addDays(start, 1);
-        final long count = postRepository.countByUserAndSubmissionDateBetween(userService.getCurrentUser(), start, end);
+        final long count = postRepository.countByUserAndSubmissionDateBetween(getCurrentUser(), start, end);
         return count < LIMIT_SCHEDULED_POSTS_PER_DAY;
     }
 
+    private User getCurrentUser() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userPrincipal.getUser();
+    }
 }
