@@ -1,11 +1,15 @@
-package org.baeldung.web.controller.rest;
+package org.baeldung.web.controller.rest.command;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
-import org.baeldung.service.IUserCommandService;
-import org.baeldung.web.UserCommandDto;
+import org.baeldung.service.command.IUserCommandService;
+import org.baeldung.web.dto.command.UserChangePasswordCommandDto;
+import org.baeldung.web.dto.command.UserRegisterCommandDto;
+import org.baeldung.web.dto.command.UserTriggerResetPasswordCommandDto;
+import org.baeldung.web.dto.command.UserUpdateCommandDto;
+import org.baeldung.web.dto.command.UserUpdatePasswordCommandDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
@@ -32,28 +35,38 @@ public class UserCommandRestController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void register(final HttpServletRequest request, @RequestParam("username") final String username, @RequestParam("email") final String email, @RequestParam("password") final String password) {
+    public void register(final HttpServletRequest request, @RequestBody final UserRegisterCommandDto userDto) {
         final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        userService.registerNewUser(username, email, password, appUrl);
+        userService.registerNewUser(userDto.getUsername(), userDto.getEmail(), userDto.getPassword(), appUrl);
     }
 
+    /**
+     * used to change current user password
+     */
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void changeUserPassword(@RequestParam("password") final String password, @RequestParam("oldpassword") final String oldPassword) {
-        userService.changeUserPassword(getCurrentUser(), password, oldPassword);
+    public void changeUserPassword(@RequestBody final UserChangePasswordCommandDto userDto) {
+        userService.changeUserPassword(getCurrentUser(), userDto.getPassword(), userDto.getOldPassword());
     }
 
+    /**
+     * used to trigger reset password by sending email with reset password token
+     */
     @RequestMapping(value = "/passwordReset", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void forgetPassword(final HttpServletRequest request, @RequestParam("email") final String email) {
+    public void triggerResetPassword(final HttpServletRequest request, @RequestBody final UserTriggerResetPasswordCommandDto userDto) {
         final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        userService.resetPassword(email, appUrl);
+        userService.resetPassword(userDto.getEmail(), appUrl);
     }
 
+    /**
+     * used to update user password – this command is called after user use password reset token.
+     */
     @RequestMapping(value = "/passwordUpdate", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void updateUserPassword(@RequestParam("password") final String password) {
-        userService.updateUserPassword(getCurrentUser(), password);
+    public void updateUserPassword(@RequestBody final UserUpdatePasswordCommandDto userDto) {
+        userService.updateUserPassword(getCurrentUser(), userDto.getPassword());
     }
 
     // admin
@@ -61,13 +74,13 @@ public class UserCommandRestController {
     @PreAuthorize("hasRole('USER_WRITE_PRIVILEGE')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@RequestBody final UserCommandDto userDto) {
+    public void updateUser(@RequestBody final UserUpdateCommandDto userDto) {
         userService.updateUser(convertToEntity(userDto));
     }
 
     //
 
-    private User convertToEntity(final UserCommandDto userDto) {
+    private User convertToEntity(final UserUpdateCommandDto userDto) {
         return modelMapper.map(userDto, User.class);
     }
 

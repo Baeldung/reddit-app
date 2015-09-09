@@ -1,4 +1,4 @@
-package org.baeldung.service;
+package org.baeldung.service.query;
 
 import java.util.List;
 

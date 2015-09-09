@@ -1,4 +1,4 @@
-package org.baeldung.web.controller.rest;
+package org.baeldung.reddit.web.controller;
 
 import java.util.List;
 

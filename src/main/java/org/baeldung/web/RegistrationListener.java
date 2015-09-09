@@ -3,8 +3,8 @@ package org.baeldung.web;
 import java.util.UUID;
 
 import org.baeldung.persistence.model.User;
-import org.baeldung.service.IUserCommandService;
 import org.baeldung.service.OnRegistrationCompleteEvent;
+import org.baeldung.service.command.IUserCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;

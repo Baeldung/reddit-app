@@ -1,11 +1,12 @@
-package org.baeldung.web;
+package org.baeldung.web.dto.command;
 
 import java.util.Set;
 
 import org.baeldung.persistence.model.Role;
 import org.baeldung.reddit.util.Dto;
+import org.baeldung.web.dto.command.ICommandDto;
 
-public class UserCommandDto implements Dto {
+public class UserUpdateCommandDto implements Dto, ICommandDto {
     private Long id;
 
     private boolean enabled;
@@ -14,7 +15,7 @@ public class UserCommandDto implements Dto {
 
     //
 
-    public UserCommandDto() {
+    public UserUpdateCommandDto() {
         super();
     }
 

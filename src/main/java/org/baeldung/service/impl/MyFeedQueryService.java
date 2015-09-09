@@ -9,7 +9,7 @@ import org.baeldung.persistence.dao.MyFeedRepository;
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.FeedArticle;
-import org.baeldung.service.IMyFeedService;
+import org.baeldung.service.query.IMyFeedQueryService;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 @Service
-class MyFeedService implements IMyFeedService {
+class MyFeedQueryService implements IMyFeedQueryService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -37,19 +37,8 @@ class MyFeedService implements IMyFeedService {
     }
 
     @Override
-    public MyFeed saveFeed(final MyFeed feed) {
-        logger.info("New feed {} added", feed.toString());
-        return myFeedRepository.save(feed);
-    }
-
-    @Override
     public MyFeed findFeedById(final Long feedId) {
         return myFeedRepository.findOne(feedId);
-    }
-
-    @Override
-    public void deleteFeedById(final Long feedId) {
-        myFeedRepository.delete(feedId);
     }
 
     @Override
@@ -67,16 +56,6 @@ class MyFeedService implements IMyFeedService {
             throw new FeedServerException("Error Occurred while parsing feed", e);
         }
         return parseFeed(entries);
-    }
-
-    @Override
-    public boolean isValidFeedUrl(final String feedUrl) {
-        try {
-            return getFeedEntries(feedUrl).size() > 0;
-        } catch (final Exception e) {
-            logger.error("Invalid feed url", e);
-            return false;
-        }
     }
 
     // Non API

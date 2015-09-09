@@ -1,6 +1,6 @@
 package org.baeldung.web.controller;
 
-import org.baeldung.service.IUserQueryService;
+import org.baeldung.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/users")
-public class UserQueryMvcController {
+public class UserMvcController {
 
     @Autowired
     private IUserQueryService userService;

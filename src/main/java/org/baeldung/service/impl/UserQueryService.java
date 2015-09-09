@@ -12,7 +12,7 @@ import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.model.VerificationToken;
 import org.baeldung.security.UserPrincipal;
-import org.baeldung.service.IUserQueryService;
+import org.baeldung.service.query.IUserQueryService;
 import org.baeldung.web.PagingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package org.baeldung.web.controller.rest;
+package org.baeldung.web.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-class MetricRestController {
+class MetricController {
 
     @Autowired
     private IMetricService metricService;

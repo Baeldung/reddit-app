@@ -1,4 +1,4 @@
-package org.baeldung.service;
+package org.baeldung.service.command;
 
 import org.baeldung.persistence.model.User;
 

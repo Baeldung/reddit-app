@@ -1,14 +1,14 @@
-package org.baeldung.web;
+package org.baeldung.web.dto.query;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import org.baeldung.reddit.util.Dto;
+import org.baeldung.web.SubmissionResponseDto;
 
-public class ScheduledPostDto implements Dto {
+public class ScheduledPostQueryDto implements Dto {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private Long id;
@@ -39,7 +39,7 @@ public class ScheduledPostDto implements Dto {
 
     private List<SubmissionResponseDto> detailedStatus;
 
-    public ScheduledPostDto() {
+    public ScheduledPostQueryDto() {
         super();
     }
 
@@ -87,11 +87,6 @@ public class ScheduledPostDto implements Dto {
 
     public String getDate() {
         return date;
-    }
-
-    public Date getSubmissionDateConverted(final String timezone) throws ParseException {
-        dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-        return dateFormat.parse(this.date);
     }
 
     public void setDate(final String date) {

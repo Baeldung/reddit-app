@@ -1,4 +1,4 @@
-package org.baeldung.web.controller.rest;
+package org.baeldung.web.controller.rest.query;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
-import org.baeldung.service.IScheduledPostService;
-import org.baeldung.service.IUserQueryService;
-import org.baeldung.web.UserQueryDto;
+import org.baeldung.service.query.IScheduledPostQueryService;
+import org.baeldung.service.query.IUserQueryService;
+import org.baeldung.web.dto.query.UserQueryDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ public class UserQueryRestController {
     private IUserQueryService userService;
 
     @Autowired
-    private IScheduledPostService scheduledPostService;
+    private IScheduledPostQueryService scheduledPostService;
 
     @Autowired
     private ModelMapper modelMapper;

@@ -4,6 +4,8 @@ import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
+import org.baeldung.web.PreferenceDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,23 +17,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/user/preference")
+@RequestMapping(value = "/api/user/preference")
 class UserPreferenceRestController {
 
     @Autowired
     private PreferenceRepository preferenceReopsitory;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     //
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Preference getCurrentUserPreference() {
-        return getCurrentUser().getPreference();
+    public PreferenceDto getCurrentUserPreference() {
+        final Preference pref = getCurrentUser().getPreference();
+        return modelMapper.map(pref, PreferenceDto.class);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@RequestBody final Preference pref) {
+    public void update(@RequestBody final PreferenceDto prefDto) {
+        final Preference pref = modelMapper.map(prefDto, Preference.class);
         preferenceReopsitory.save(pref);
         getCurrentUser().setPreference(pref);
     }
