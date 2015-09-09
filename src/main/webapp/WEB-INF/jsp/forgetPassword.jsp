@@ -81,12 +81,18 @@ $("#submitBut").click(function(event) {
 });
 
 function forgetPassword(){
-	$.post("api/users/passwordReset", {email: $("#email").val()}, function (data){
-		window.location.href= "./?msg=You should receive password reset email shortly";
-	}).fail(function(error){
-        console.log(error);
-        showAlertMessage(error.responseText);
-    }); 
+	$.ajax({
+	    url: 'api/users/passwordReset',
+	    data: JSON.stringify({email: $("#email").val()}),
+	    type: 'POST',
+	    contentType:'application/json',
+	    success: function(result) {
+	        window.location.href="./?msg=You should receive password reset email shortly";
+	    },
+	    error: function(error) {
+	        showAlertMessage(error.responseText);
+	    }   
+	});  
 }
 
 function showAlertMessage(msg){

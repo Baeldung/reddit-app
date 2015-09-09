@@ -72,32 +72,7 @@ border-color: #ddd;
    </div>
 </form>
 <div>
-<div th:if="${session.PREDICTION_FEATURE.isActive()}">
-<button id="checkbtn" class="btn btn-default disabled" onclick="predicateResponse()">Predicate Response</button>
-<span id="prediction"></span>
-<script type="text/javascript">
-/*<![CDATA[*/
-$("input").change(function() {
-    if($("#submitBut").hasClass("disabled")){
-    	if(! $("#checkbtn").hasClass("disabled")){
-    		$("#checkbtn").addClass("disabled");
-    	}
-    }else{
-    	$("#checkbtn").removeClass("disabled");
-    }
-});
-function predicateResponse(){
-	var title = $('input[name="title"]').val();
-	var domain = $('input[name="url"]').val();
-	domain =  $('<a>').prop('href', domain).prop('hostname');
-	console.log(domain);
-	$.post("api/predicatePostResponse",{title: title, domain: domain} ,function(data){
-        $("#prediction").addClass("alert alert-info").html(data.replace('{','').replace('}',''));
-    });
-}
-/*]]>*/
-</script>
-</div>
+
 </div>
 </div>
 <script>

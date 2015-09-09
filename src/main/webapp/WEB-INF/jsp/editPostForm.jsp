@@ -185,9 +185,9 @@ function editPost(){
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
-    var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
+
 	$.ajax({
-        url: "../api/scheduledPosts/"+id+"?resubmitOptionsActivated="+resubmitActivated,
+        url: "../api/scheduledPosts/"+id,
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'

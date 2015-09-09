@@ -156,7 +156,7 @@ border-color: #ddd;
   });
   
   function loadPref(){
-      $.get("user/preference", function (data){
+      $.get("api/user/preference", function (data){
           $.each(data, function(key, value) {
               if(value == true && key!= "id"){
                   $('*[name="'+key+'"]')[0].checked=true;
@@ -175,7 +175,7 @@ border-color: #ddd;
   $('#myModal').on('shown.bs.modal', function () {
 	  if($("#siteList").children().length > 0)
 		  return;
-	  $.get("myFeeds", function(data){
+	  $.get("api/myFeeds", function(data){
 		 $.each(data, function( index, site ) {
 			  $("#siteList").append('<li><a href="#" onclick="loadArticles('+site.id+',\''+site.name+'\')">'+site.name+'</a></li>')
 		 });
@@ -185,7 +185,7 @@ border-color: #ddd;
   
   function loadArticles(siteID,siteName){
 	  $("#dropdownMenu1").html(siteName);
-	  $.get("myFeeds/articles?id="+siteID, function(data){
+	  $.get("api/myFeeds/articles?id="+siteID, function(data){
 		  $("#articleList").html('');
 		  $("#dropdownMenu2").html('Choose Article <span class="caret"></span>');
 	      $.each(data, function( index, article ) {
@@ -258,10 +258,9 @@ function schedulePost(){
     var data = {};
     $('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
-    var resubmitActivated = $('input[name="resubmitOptionsActivated"]')[0].checked;
 
  $.ajax({
-    url: 'api/scheduledPosts?resubmitOptionsActivated='+resubmitActivated,
+    url: 'api/scheduledPosts',
     data: JSON.stringify(data),
     type: 'POST',
     contentType:'application/json',

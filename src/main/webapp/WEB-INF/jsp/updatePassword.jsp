@@ -42,12 +42,18 @@ function savePass(){
       $("#error").show();
       return;
     }
-    $.post("../api/users/passwordUpdate",{password: pass} ,function(data){
+    $.ajax({
+        url: '../api/users/passwordUpdate',
+        data: JSON.stringify({password: pass}),
+        type: 'POST',
+        contentType:'application/json',
+        success: function(result) {
             window.location.href = "../?msg=Password updated successfully";
-    })
-    .fail(function(data) {
-    	$("#errormsg").show().html(data.responseText);
-    });
+        },
+        error: function(data) {
+            $("#errormsg").show().html(data.responseText);
+        }   
+    }); 
 }
 </script>  
 </body>

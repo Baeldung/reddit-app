@@ -102,7 +102,7 @@ border-color: #ddd;
   });
   
   function loadPref(){
-	  $.get("user/preference", function (data){
+	  $.get("api/user/preference", function (data){
 		  $.each(data, function(key, value) {
 			  if(value == true){
 				  $('*[name="'+key+'"]')[0].checked=true;
@@ -134,7 +134,7 @@ function editPref(){
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
     console.log(JSON.stringify(data));
 	$.ajax({
-        url: "user/preference/"+$('input[name="id"]').val(),
+        url: "api/user/preference/"+$('input[name="id"]').val(),
         data: JSON.stringify(data),
         type: 'PUT',
         contentType:'application/json'

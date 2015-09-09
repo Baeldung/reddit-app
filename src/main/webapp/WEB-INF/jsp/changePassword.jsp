@@ -47,12 +47,19 @@ function savePass(){
       $("#error").show();
       return;
     }
-    $.post("./api/users/passwordChange",{password: pass, oldpassword: oldPass} ,function(data){
-            window.location.href = "./?msg=Password changed succesfully";
-    })
-    .fail(function(data) {
-    	$("#errormsg").show().html(data.responseText);
-    });
+
+    $.ajax({
+        url: './api/users/passwordChange',
+        data: JSON.stringify({password: pass, oldPassword: oldPass}),
+        type: 'POST',
+        contentType:'application/json',
+        success: function(result) {
+            window.location.href="./?msg=Password changed succesfully";
+        },
+        error: function(data) {
+        	$("#errormsg").show().html(data.responseText);
+        }   
+    }); 
 }
 </script>  
 </body>

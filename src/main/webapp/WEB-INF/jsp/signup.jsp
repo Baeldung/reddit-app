@@ -98,12 +98,17 @@ $("#submitBut").click(function(event) {
 });
 
 function register(){
-	console.log("here");
-	$.post("api/users/registration", {username: $("#username").val(), email: $("#email").val(), password: $("#password").val()}, function (data){
+	var params = {username: $("#username").val(), email: $("#email").val(), password: $("#password").val()};
+	$.ajax({
+	    url: 'api/users/registration',
+	    data: JSON.stringify(params),
+	    type: 'POST',
+	    contentType:'application/json',
+	    success: function(data) {
 		window.location.href= "./?msg=You registered successfully. We will send you a confirmation message to your email account";
-	}).fail(function(error){
+	},error: function(error){
         console.log(error);
-        showAlertMessage("Error: "+ error.responseText);
+        showAlertMessage("Error: "+ error.responseText);}
     }); 
 }
 

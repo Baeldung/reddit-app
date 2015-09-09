@@ -32,7 +32,7 @@
 /*<![CDATA[*/
            
 $(function(){
-	$.get("myFeeds", function(data){
+	$.get("api/myFeeds", function(data){
         $.each(data, function( index, site ) {
             $('.table').append('<tr><td>'+site.name+'</td><td>'+site.url+
               '</td><td><a href="#" class="btn btn-danger" onclick="confirmDelete('+site.id+
@@ -49,7 +49,7 @@ function confirmDelete(id) {
 
 function deleteSite(id){
     $.ajax({
-        url: 'myFeeds/'+id,
+        url: 'api/myFeeds/'+id,
         type: 'DELETE',
         success: function(result) {
             window.location.href="feeds"

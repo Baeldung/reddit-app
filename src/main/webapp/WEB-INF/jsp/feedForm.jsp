@@ -55,7 +55,7 @@ function addSite(){
 	    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
 	    console.log(JSON.stringify(data));
 	 $.ajax({
-	    url: 'myFeeds',
+	    url: 'api/myFeeds',
 	    data: JSON.stringify(data),
 	    type: 'POST',
 	    contentType:'application/json',
