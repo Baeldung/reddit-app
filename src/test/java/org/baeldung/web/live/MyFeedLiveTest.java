@@ -7,20 +7,21 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
-import org.baeldung.web.FeedDto;
+import org.baeldung.web.dto.command.FeedAddCommandDto;
+import org.baeldung.web.dto.query.FeedQueryDto;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.jayway.restassured.response.Response;
 
-public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
+public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
 
     // test
 
     @Test
     public void whenGettingUserSites_thenCorrect() throws ParseException, IOException {
         newDto();
-        final Response response = givenAuth().get(urlPrefix + "/myFeeds");
+        final Response response = givenAuth().get(urlPrefix + "/api/myFeeds");
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -28,8 +29,8 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
 
     @Test
     public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
-        final FeedDto feed = newDto();
-        final Response response = givenAuth().get(urlPrefix + "/myFeeds/articles?id=" + feed.getId());
+        final FeedQueryDto feed = newDto();
+        final Response response = givenAuth().get(urlPrefix + "/api/myFeeds/articles?id=" + feed.getId());
 
         assertEquals(200, response.statusCode());
         assertTrue(response.as(List.class).size() > 0);
@@ -37,17 +38,17 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
 
     @Test
     public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
-        final FeedDto feed = newDto();
+        final FeedQueryDto feed = newDto();
 
-        final Response response = givenAuth().get(urlPrefix + "/myFeeds");
+        final Response response = givenAuth().get(urlPrefix + "/api/myFeeds");
 
         assertTrue(response.asString().contains(feed.getUrl()));
     }
 
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
-        final FeedDto feed = newDto();
-        final Response response = givenAuth().delete(urlPrefix + "/myFeeds/" + feed.getId());
+        final FeedQueryDto feed = newDto();
+        final Response response = givenAuth().delete(urlPrefix + "/api/myFeeds/" + feed.getId());
 
         assertEquals(204, response.statusCode());
     }
@@ -55,14 +56,12 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
     //
 
     @Override
-    protected FeedDto newDto() throws ParseException, IOException {
-        final FeedDto feed = new FeedDto();
-        feed.setUrl("http://www.baeldung.com/feed/");
-        feed.setName("baeldung");
+    protected FeedQueryDto newDto() throws ParseException, IOException {
+        final FeedAddCommandDto feed = new FeedAddCommandDto("baeldung", "http://www.baeldung.com/feed/");
 
-        final Response response = withRequestBody(givenAuth(), feed).post(urlPrefix + "/myFeeds");
+        final Response response = withRequestBody(givenAuth(), feed).post(urlPrefix + "/api/myFeeds");
 
-        return objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).reader().forType(FeedDto.class).readValue(response.asString());
+        return objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).reader().forType(FeedQueryDto.class).readValue(response.asString());
     }
 
 }

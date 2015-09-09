@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.Assert.assertEquals;
 
 import org.baeldung.persistence.model.Post;
+import org.baeldung.web.dto.query.ScheduledPostQueryDto;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
 
@@ -19,7 +20,7 @@ public class ScheduledPostDtoUnitTest {
         post.setSubreddit(randomAlphabetic(5));
         post.setUrl("www.test.com");
 
-        final ScheduledPostDto postDto = modelMapper.map(post, ScheduledPostDto.class);
+        final ScheduledPostQueryDto postDto = modelMapper.map(post, ScheduledPostQueryDto.class);
         assertEquals(post.getId(), postDto.getId());
         assertEquals(post.getTitle(), postDto.getTitle());
         assertEquals(post.getSubreddit(), postDto.getSubreddit());
@@ -28,7 +29,7 @@ public class ScheduledPostDtoUnitTest {
 
     @Test
     public void whenConvertScheduledPostDtoToPostEntity_thenCorrect() {
-        final ScheduledPostDto postDto = new ScheduledPostDto();
+        final ScheduledPostQueryDto postDto = new ScheduledPostQueryDto();
         postDto.setId(Long.valueOf(1));
         postDto.setTitle(randomAlphabetic(6));
         postDto.setSubreddit(randomAlphabetic(5));

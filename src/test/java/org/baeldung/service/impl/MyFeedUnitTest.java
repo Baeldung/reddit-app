@@ -6,18 +6,17 @@ import java.util.List;
 
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.reddit.util.FeedArticle;
-import org.baeldung.service.IMyFeedService;
-import org.baeldung.service.impl.MyFeedService;
+import org.baeldung.service.query.IMyFeedQueryService;
 import org.junit.Before;
 import org.junit.Test;
 
 public class MyFeedUnitTest {
 
-    private IMyFeedService service;
+    private IMyFeedQueryService service;
 
     @Before
     public void init() {
-        service = new MyFeedService();
+        service = new MyFeedQueryService();
     }
 
     @Test

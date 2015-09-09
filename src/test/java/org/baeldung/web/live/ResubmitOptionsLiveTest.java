@@ -7,7 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.baeldung.web.ScheduledPostDto;
+import org.baeldung.web.dto.command.ScheduledPostAddCommandDto;
+import org.baeldung.web.dto.query.ScheduledPostQueryDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
@@ -19,23 +20,24 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void givenResubmitOptionsDeactivated_whenScheduleANewPost_thenCreated() throws ParseException, IOException {
-        final ScheduledPostDto post = createPost();
-
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
+        final ScheduledPostAddCommandDto post = createPost();
+        post.setResubmitOptionsActivated(false);
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
+        final ScheduledPostQueryDto result = objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroAttempts_thenInvalid() throws ParseException, IOException {
-        final ScheduledPostDto post = createPost();
+        final ScheduledPostAddCommandDto post = createPost();
         post.setNoOfAttempts(0);
         post.setMinScoreRequired(5);
         post.setTimeInterval(60);
+        post.setResubmitOptionsActivated(true);
 
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -43,12 +45,13 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroMinScore_thenInvalid() throws ParseException, IOException {
-        final ScheduledPostDto post = createPost();
+        final ScheduledPostAddCommandDto post = createPost();
         post.setMinScoreRequired(0);
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
+        post.setResubmitOptionsActivated(true);
 
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -56,12 +59,13 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroTimeInterval_thenInvalid() throws ParseException, IOException {
-        final ScheduledPostDto post = createPost();
+        final ScheduledPostAddCommandDto post = createPost();
         post.setTimeInterval(0);
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
+        post.setResubmitOptionsActivated(true);
 
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(400, response.statusCode());
         assertTrue(response.asString().contains("Invalid Resubmit Options"));
@@ -69,22 +73,23 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
 
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithValidResubmitOptions_thenCreated() throws ParseException, IOException {
-        final ScheduledPostDto post = createPost();
+        final ScheduledPostAddCommandDto post = createPost();
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
         post.setTimeInterval(60);
+        post.setResubmitOptionsActivated(true);
 
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", true).post(urlPrefix + "/api/scheduledPosts");
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
+        final ScheduledPostQueryDto result = objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
     //
 
-    private ScheduledPostDto createPost() throws ParseException {
-        final ScheduledPostDto post = new ScheduledPostDto();
+    private ScheduledPostAddCommandDto createPost() throws ParseException {
+        final ScheduledPostAddCommandDto post = new ScheduledPostAddCommandDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
