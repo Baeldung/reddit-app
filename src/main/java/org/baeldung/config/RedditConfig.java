@@ -1,11 +1,9 @@
 package org.baeldung.config;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.baeldung.reddit.classifier.RedditClassifier;
 import org.baeldung.reddit.util.UserAgentInterceptor;
 import org.baeldung.security.MyAuthorizationCodeAccessTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +47,6 @@ public class RedditConfig {
         list.add(new UserAgentInterceptor());
         restTemplate.setInterceptors(list);
         return restTemplate;
-    }
-
-    @Bean
-    public RedditClassifier redditClassifier() throws IOException {
-        final RedditClassifier redditClassifier = new RedditClassifier();
-        // if (MyFeatures.PREDICTION_FEATURE.isActive()) {
-        // final Resource file = new ClassPathResource("data.csv");
-        // redditClassifier.trainClassifier(file.getFile().getAbsolutePath());
-        // }
-        return redditClassifier;
     }
 
     @Bean
