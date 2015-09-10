@@ -10,6 +10,7 @@ import org.baeldung.persistence.model.PasswordResetToken;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.model.VerificationToken;
 import org.baeldung.security.UserPrincipal;
+import org.baeldung.service.TokenState;
 import org.baeldung.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -42,39 +43,39 @@ public class UserQueryService implements IUserQueryService {
     }
 
     @Override
-    public String checkPasswordResetToken(final long userId, final String token) {
+    public TokenState checkPasswordResetToken(final long userId, final String token) {
         final PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);
         if ((passToken == null) || (passToken.getUser().getId() != userId)) {
-            return "Invalid Token";
+            return TokenState.INVALID;
         }
 
         final Calendar cal = Calendar.getInstance();
         if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            return "Token Expired";
+            return TokenState.EXPIRED;
         }
 
         final UserPrincipal userPrincipal = new UserPrincipal(passToken.getUser());
         final Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
-        return null;
+        return TokenState.VALID;
     }
 
     @Override
-    public String checkConfirmRegistrationToken(final String token) {
+    public TokenState checkConfirmRegistrationToken(final String token) {
         final VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
-            return "Invalid Token";
+            return TokenState.INVALID;
         }
 
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            return "Token Expired";
+            return TokenState.EXPIRED;
         }
 
         final User user = verificationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
-        return null;
+        return TokenState.VALID;
     }
 
     @Override

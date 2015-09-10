@@ -1,5 +1,6 @@
 package org.baeldung.web.controller;
 
+import org.baeldung.service.TokenState;
 import org.baeldung.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,18 +18,18 @@ public class UserMvcController {
 
     @RequestMapping(value = "/regitrationConfirmation", method = RequestMethod.GET)
     public String confirmRegistration(final Model model, @RequestParam("token") final String token) {
-        final String result = userService.checkConfirmRegistrationToken(token);
-        if (result == null) {
+        final TokenState result = userService.checkConfirmRegistrationToken(token);
+        if (result == TokenState.VALID) {
             return "redirect:/?msg=Registration confirmed successfully";
         }
-        model.addAttribute("msg", result);
+        model.addAttribute("msg", result.toString());
         return "submissionResponse";
     }
 
     @RequestMapping(value = "/passwordReset", method = RequestMethod.GET)
     public String resetPassword(final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
-        final String result = userService.checkPasswordResetToken(id, token);
-        if (result == null) {
+        final TokenState result = userService.checkPasswordResetToken(id, token);
+        if (result == TokenState.VALID) {
             return "changePassword";
         }
         model.addAttribute("msg", result);
