@@ -5,11 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.command.IUserCommandService;
-import org.baeldung.web.dto.command.UserChangePasswordCommandDto;
 import org.baeldung.web.dto.command.UserRegisterCommandDto;
 import org.baeldung.web.dto.command.UserTriggerResetPasswordCommandDto;
 import org.baeldung.web.dto.command.UserUpdateCommandDto;
 import org.baeldung.web.dto.command.UserUpdatePasswordCommandDto;
+import org.baeldung.web.dto.command.UserchangePasswordCommandDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,13 +41,13 @@ public class UserCommandRestController {
     }
 
     /**
-     * used to change current user password
+     * used to update current user password
      */
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/passwordChange", method = RequestMethod.POST)
+    @RequestMapping(value = "/password", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void changeUserPassword(@RequestBody final UserChangePasswordCommandDto userDto) {
-        userService.changeUserPassword(getCurrentUser(), userDto.getPassword(), userDto.getOldPassword());
+    public void updateUserPassword(@RequestBody final UserUpdatePasswordCommandDto userDto) {
+        userService.updateUserPassword(getCurrentUser(), userDto.getPassword(), userDto.getOldPassword());
     }
 
     /**
@@ -61,12 +61,12 @@ public class UserCommandRestController {
     }
 
     /**
-     * used to update user password – this command is called after user use password reset token.
+     * used to change user password – this command is called after user use password reset token.
      */
-    @RequestMapping(value = "/passwordUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void updateUserPassword(@RequestBody final UserUpdatePasswordCommandDto userDto) {
-        userService.updateUserPassword(getCurrentUser(), userDto.getPassword());
+    public void changeUserPassword(@RequestBody final UserchangePasswordCommandDto userDto) {
+        userService.changeUserPassword(getCurrentUser(), userDto.getPassword());
     }
 
     // admin

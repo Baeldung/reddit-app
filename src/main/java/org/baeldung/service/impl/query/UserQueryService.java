@@ -1,26 +1,22 @@
-package org.baeldung.service.impl;
+package org.baeldung.service.impl.query;
 
 import java.util.Calendar;
 import java.util.List;
 
 import org.baeldung.persistence.dao.PasswordResetTokenRepository;
-import org.baeldung.persistence.dao.RoleRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.dao.VerificationTokenRepository;
 import org.baeldung.persistence.model.PasswordResetToken;
-import org.baeldung.persistence.model.Role;
 import org.baeldung.persistence.model.User;
 import org.baeldung.persistence.model.VerificationToken;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IUserQueryService;
-import org.baeldung.web.PagingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +25,6 @@ public class UserQueryService implements IUserQueryService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
@@ -49,17 +39,6 @@ public class UserQueryService implements IUserQueryService {
     public List<User> getUsersList(final int page, final int size, final String sortDir, final String sort) {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
         return userRepository.findAll(pageReq).getContent();
-    }
-
-    @Override
-    @Transactional
-    public List<Role> getRolesList() {
-        return roleRepository.findAll();
-    }
-
-    @Override
-    public PagingInfo generatePagingInfo(final int page, final int size) {
-        return new PagingInfo(page, size, userRepository.count());
     }
 
     @Override
@@ -96,6 +75,11 @@ public class UserQueryService implements IUserQueryService {
         user.setEnabled(true);
         userRepository.save(user);
         return null;
+    }
+
+    @Override
+    public long countAllUsers() {
+        return userRepository.count();
     }
 
 }

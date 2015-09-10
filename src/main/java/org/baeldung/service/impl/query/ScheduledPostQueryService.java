@@ -1,4 +1,4 @@
-package org.baeldung.service.impl;
+package org.baeldung.service.impl.query;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +9,6 @@ import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.User;
 import org.baeldung.service.query.IScheduledPostQueryService;
-import org.baeldung.web.PagingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,12 +29,6 @@ public class ScheduledPostQueryService implements IScheduledPostQueryService {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
         final Page<Post> posts = postRepository.findByUser(user, pageReq);
         return posts.getContent();
-    }
-
-    @Override
-    public PagingInfo generatePagingInfo(final User user, final int page, final int size) {
-        final long total = postRepository.countByUser(user);
-        return new PagingInfo(page, size, total);
     }
 
     @Override

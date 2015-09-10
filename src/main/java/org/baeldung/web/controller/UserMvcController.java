@@ -29,7 +29,7 @@ public class UserMvcController {
     public String resetPassword(final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
         final String result = userService.checkPasswordResetToken(id, token);
         if (result == null) {
-            return "updatePassword";
+            return "changePassword";
         }
         model.addAttribute("msg", result);
         return "submissionResponse";

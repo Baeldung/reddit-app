@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.reddit.util.FeedArticle;
+import org.baeldung.service.impl.query.MyFeedQueryService;
 import org.baeldung.service.query.IMyFeedQueryService;
 import org.junit.Before;
 import org.junit.Test;

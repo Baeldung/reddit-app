@@ -1,4 +1,4 @@
-package org.baeldung.service.impl;
+package org.baeldung.service.impl.command;
 
 import java.text.ParseException;
 import java.util.Calendar;

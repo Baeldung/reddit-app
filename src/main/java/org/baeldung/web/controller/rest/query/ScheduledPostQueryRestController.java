@@ -12,6 +12,7 @@ import org.baeldung.persistence.model.SubmissionResponse;
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IScheduledPostQueryService;
+import org.baeldung.web.PagingInfo;
 import org.baeldung.web.SubmissionResponseDto;
 import org.baeldung.web.dto.query.ScheduledPostQueryDto;
 import org.modelmapper.ModelMapper;
@@ -45,7 +46,8 @@ class ScheduledPostQueryRestController {
     public final List<ScheduledPostQueryDto> getScheduledPosts(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "title") final String sort, final HttpServletResponse response) {
         final User user = getCurrentUser();
-        response.addHeader("PAGING_INFO", scheduledPostService.generatePagingInfo(user, page, size).toString());
+        final PagingInfo pagingInfo = new PagingInfo(page, size, scheduledPostService.countScheduledPostsByUser(user));
+        response.addHeader("PAGING_INFO", pagingInfo.toString());
         final List<Post> posts = scheduledPostService.getPostsList(user, page, size, sortDir, sort);
         return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }

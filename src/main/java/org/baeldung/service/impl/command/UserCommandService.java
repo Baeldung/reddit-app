@@ -1,4 +1,4 @@
-package org.baeldung.service.impl;
+package org.baeldung.service.impl.command;
 
 import java.util.TimeZone;
 import java.util.UUID;
@@ -85,15 +85,15 @@ public class UserCommandService implements IUserCommandService {
     }
 
     @Override
-    public void changeUserPassword(final User user, final String password, final String oldPassword) {
+    public void updateUserPassword(final User user, final String password, final String oldPassword) {
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidOldPasswordException("Invalid old password");
         }
-        updateUserPassword(user, password);
+        changeUserPassword(user, password);
     }
 
     @Override
-    public void updateUserPassword(final User user, final String password) {
+    public void changeUserPassword(final User user, final String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }

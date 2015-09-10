@@ -14,7 +14,11 @@
     <div id="errormsg" class="alert alert-danger" style="display:none"></div>
             <div >
                 <br/>
-                     
+                
+                    <label class="col-sm-2">Old Password</label>
+                    <span class="col-sm-5"><input class="form-control" id="oldpass" name="oldpassword" type="password" value="" required="required"/></span>
+                    <span class="col-sm-5"></span>
+<br/><br/>         
                     <label class="col-sm-2">New Password</label>
                     <span class="col-sm-5"><input class="form-control" id="pass" name="password" type="password" value="" required="required"/></span>
                     <span class="col-sm-5"></span>
@@ -31,9 +35,10 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
 function savePass(){
+	var oldPass = $("#oldpass").val();
     var pass = $("#pass").val();
     var confirmPass = $("#passConfirm").val();
-    if(pass.length == 0 || confirmPass.length==0){
+    if(pass.length == 0 || confirmPass.length==0 || oldPass.length == 0){
     	$("#errormsg").show().html("Please fill all the fields required");
     	return;
     }
@@ -42,16 +47,17 @@ function savePass(){
       $("#error").show();
       return;
     }
+
     $.ajax({
-        url: '../api/users/passwordUpdate',
-        data: JSON.stringify({password: pass}),
-        type: 'POST',
+        url: './api/users/password',
+        data: JSON.stringify({password: pass, oldPassword: oldPass}),
+        type: 'PUT',
         contentType:'application/json',
         success: function(result) {
-            window.location.href = "../?msg=Password updated successfully";
+            window.location.href="./?msg=Password updated succesfully";
         },
         error: function(data) {
-            $("#errormsg").show().html(data.responseText);
+        	$("#errormsg").show().html(data.responseText);
         }   
     }); 
 }

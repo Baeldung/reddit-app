@@ -44,7 +44,7 @@ border-color: #ddd;
     </span>
 </div>
 
-<div class="col-sm-12"><a href="changePassword" class="btn btn-primary">Change Password</a></div>
+<div class="col-sm-12"><a href="updatePassword" class="btn btn-primary">Update your Password</a></div>
 <br/><br/> 
 <hr/> 
 <br/><br/> 
