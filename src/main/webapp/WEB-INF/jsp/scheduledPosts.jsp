@@ -67,7 +67,7 @@ $(document).ready(function() {
         "searching":false,
         "columnDefs": [
                        { "name": "title",   "targets": 0},
-                       { "name": "date",  "targets": 1 },
+                       { "name": "submissionDate",  "targets": 1 },
                        { "targets": 2, "data": "status","width":"20%","orderable": false,
                            "render": function ( data, type, full, meta ) {
                         	   console.log(meta);
