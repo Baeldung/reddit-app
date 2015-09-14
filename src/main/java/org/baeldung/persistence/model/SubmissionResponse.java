@@ -100,7 +100,7 @@ public class SubmissionResponse implements IEntity {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Attempt No ").append(attemptNumber).append(" : ").append(content);
+        builder.append("Attempt No ").append(attemptNumber).append(": ").append(content);
         return builder.toString();
     }
 

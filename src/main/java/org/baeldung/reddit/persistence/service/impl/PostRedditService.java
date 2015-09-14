@@ -153,7 +153,9 @@ public class PostRedditService implements IPostRedditService {
             post.setSent(true);
             post.setSubmissionsResponse(addAttemptResponse(post, "Submitted to Reddit"));
             post.setRedditID(node.get("json").get("data").get("id").asText());
-            post.setNoOfAttempts(post.getNoOfAttempts() - 1);
+            if (post.getNoOfAttempts() > 0) {
+                post.setNoOfAttempts(post.getNoOfAttempts() - 1);
+            }
             postReopsitory.save(post);
 
             logger.info("Successfully sent post = " + post.toString());

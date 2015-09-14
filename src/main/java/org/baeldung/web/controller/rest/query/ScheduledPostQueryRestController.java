@@ -74,7 +74,11 @@ class ScheduledPostQueryRestController {
         postDto.setSubmissionDate(post.getSubmissionDate(), getCurrentUser().getPreference().getTimezone());
         final List<SubmissionResponse> response = post.getSubmissionsResponse();
         if ((response != null) && (response.size() > 0)) {
-            postDto.setStatus(response.get(response.size() - 1).toString().substring(0, 30));
+            if (post.getMinScoreRequired() == 0) { // resubmit options not activated - only one attempt
+                postDto.setStatus(response.get(0).getContent());
+            } else {
+                postDto.setStatus(response.get(response.size() - 1).toString().substring(0, 30));
+            }
             final List<SubmissionResponseDto> responsedto = post.getSubmissionsResponse().stream().map(res -> generateResponseDto(res)).collect(Collectors.toList());
             postDto.setDetailedStatus(responsedto);
         } else {

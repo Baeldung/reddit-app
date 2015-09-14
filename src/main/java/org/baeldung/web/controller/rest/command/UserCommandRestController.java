@@ -36,7 +36,7 @@ public class UserCommandRestController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void register(final HttpServletRequest request, @RequestBody final UserRegisterCommandDto userDto) {
-        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "") + request.getContextPath();
         userService.registerNewUser(userDto.getUsername(), userDto.getEmail(), userDto.getPassword(), appUrl);
     }
 
@@ -56,7 +56,7 @@ public class UserCommandRestController {
     @RequestMapping(value = "/passwordReset", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void triggerResetPassword(final HttpServletRequest request, @RequestBody final UserTriggerResetPasswordCommandDto userDto) {
-        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        final String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "") + request.getContextPath();
         userService.resetPassword(userDto.getEmail(), appUrl);
     }
 
