@@ -347,6 +347,15 @@
             </exclusions>
         </dependency>
 
+        <!-- Gatling -->
+
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>2.1.7</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -468,6 +477,24 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
+                <!-- Gatling -->
+                <plugin>
+                  <groupId>io.gatling</groupId>
+                  <artifactId>gatling-maven-plugin</artifactId>
+                  <version>2.1.7</version>
+                  <configuration>
+                    <simulationsFolder>src/test/gatling</simulationsFolder>
+                  </configuration>
+                  <executions>
+                    <execution>
+                      <goals>
+                        <goal>execute</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
