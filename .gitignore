@@ -1,6 +1,5 @@
 /bin/
 /target/
-!/target/gatling
 
 src/main/resources/*-production.properties
 
