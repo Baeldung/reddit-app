@@ -3,11 +3,14 @@ package org.baeldung.web.controller.rest.query;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.baeldung.persistence.model.MyFeed;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.FeedArticle;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IMyFeedQueryService;
+import org.baeldung.web.PagingInfo;
 import org.baeldung.web.dto.query.FeedQueryDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +35,12 @@ class MyFeedQueryRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<FeedQueryDto> getFeedsList() {
-        final List<MyFeed> feeds = myFeedService.getFeedsByUser(getCurrentUser());
+    public List<FeedQueryDto> getFeedsList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
+            @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "name") final String sort, final HttpServletResponse response) {
+        final User user = getCurrentUser();
+        final PagingInfo pagingInfo = new PagingInfo(page, size, myFeedService.countFeedsByUser(user));
+        response.addHeader("PAGING_INFO", pagingInfo.toString());
+        final List<MyFeed> feeds = myFeedService.getFeedsByUser(user, page, size, sortDir, sort);
         return feeds.stream().map(feed -> convertToDto(feed)).collect(Collectors.toList());
     }
 

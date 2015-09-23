@@ -12,6 +12,8 @@ public class PreferenceDto implements Dto {
 
     private boolean sendReplies;
 
+    private boolean sendEmailReplies;
+
     private int noOfAttempts;
 
     private int timeInterval;
@@ -118,6 +120,14 @@ public class PreferenceDto implements Dto {
 
     public void setTimezone(final String timezone) {
         this.timezone = timezone;
+    }
+
+    public boolean isSendEmailReplies() {
+        return sendEmailReplies;
+    }
+
+    public void setSendEmailReplies(final boolean sendEmailReplies) {
+        this.sendEmailReplies = sendEmailReplies;
     }
 
 }

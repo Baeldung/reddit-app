@@ -5,7 +5,10 @@
 <link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div th:include="header"/>
@@ -27,19 +30,46 @@
 
 </table>
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 /*<![CDATA[*/
            
-$(function(){
-	$.get("api/myFeeds", function(data){
-        $.each(data, function( index, site ) {
-            $('.table').append('<tr><td>'+site.name+'</td><td>'+site.url+
-              '</td><td><a href="#" class="btn btn-danger" onclick="confirmDelete('+site.id+
-              ') ">Delete</a> </td></tr>');
-        });
-    });
-});
+$(document).ready(function() {
+    $('table').dataTable( {
+        "processing": true,
+        "searching":false,
+        "columnDefs": [
+                       { "name": "name",   "targets": 0},
+                       { "name": "url",  "targets": 1},
+                       { "targets": 2, "data": "id",
+                    	    "render": function ( data, type, full, meta ) {
+                    	        return '<a href="#" class="btn btn-danger" onclick="confirmDelete('+data
+                                +') ">Delete</a>';
+                    	      }}
+                     ],
+                     "columns": [
+                                 { "data": "name" },
+                                 { "data": "url" }
+                             ],
+        "serverSide": true,
+        "ajax": function(data, callback, settings) {
+            $.get('api/myFeeds', {
+                size: data.length,
+                page: (data.start/data.length),
+                sortDir: data.order[0].dir,
+                sort: data.columns[data.order[0].column].name
+            }, function(res,textStatus, request) {
+            	var pagingInfo = request.getResponseHeader('PAGING_INFO');
+            	var total = pagingInfo.split(",")[0].split("=")[1];
+                callback({
+                    recordsTotal: total,
+                    recordsFiltered: total,
+                    data: res
+                });
+            });
+        }
+    } );
+} );           
+           
 
 function confirmDelete(id) {
     if (confirm("Do you really want to delete this site?") == true) {

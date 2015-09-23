@@ -204,6 +204,9 @@ border-color: #ddd;
 	  $("#dropdownMenu2").html(selectedTitle);
 	  title=selectedTitle;
 	  link = selectedLink;
+	  $.get("url/original?url="+selectedLink, function(data){
+		  link = data;
+	  });
   }
   
   function load(){

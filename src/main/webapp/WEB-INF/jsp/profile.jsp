@@ -69,6 +69,14 @@ border-color: #ddd;
 </span> 
 </div>
 <br/><br/>
+
+<div>
+<label  class="col-sm-3">Send replies to my email</label>  
+<span class="col-sm-9"> 
+<input type="checkbox" name="sendEmailReplies" value="true"/>
+</span> 
+</div>
+<br/><br/>
 <hr/>
     <div>
         <h2 class="col-sm-12">Default Resubmit Options</h2>

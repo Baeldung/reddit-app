@@ -61,35 +61,35 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
 
     @ExceptionHandler({ InvalidDateException.class })
     public ResponseEntity<Object> handleInvalidDate(final RuntimeException ex, final WebRequest request) {
-        logger.error("400 Status Code", ex);
+        logger.error("400 Status Code " + ex.getLocalizedMessage());
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ InvalidOldPasswordException.class })
     public ResponseEntity<Object> handleInvalidOldPassword(final RuntimeException ex, final WebRequest request) {
-        logger.error("400 Status Code", ex);
+        logger.error("400 Status Code" + ex.getLocalizedMessage());
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ InvalidResubmitOptionsException.class })
     public ResponseEntity<Object> handleInvalidResubmitOptions(final RuntimeException ex, final WebRequest request) {
-        logger.error("400 Status Code", ex);
+        logger.error("400 Status Code" + ex.getLocalizedMessage());
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ UsernameAlreadyExistsException.class })
     public ResponseEntity<Object> handleUsernameAlreadyExists(final RuntimeException ex, final WebRequest request) {
-        logger.error("400 Status Code", ex);
+        logger.error("400 Status Code" + ex.getLocalizedMessage());
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ UserNotFoundException.class })
     public ResponseEntity<Object> handleUserNotFound(final RuntimeException ex, final WebRequest request) {
-        logger.error("400 Status Code", ex);
+        logger.error("400 Status Code" + ex.getLocalizedMessage());
         final String bodyOfResponse = ex.getLocalizedMessage();
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

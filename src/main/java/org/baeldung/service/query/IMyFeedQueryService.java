@@ -8,7 +8,9 @@ import org.baeldung.reddit.util.FeedArticle;
 
 public interface IMyFeedQueryService {
 
-    List<MyFeed> getFeedsByUser(final User user);
+    List<MyFeed> getFeedsByUser(final User user, int page, int size, String sortDir, String sort);
+
+    long countFeedsByUser(User user);
 
     MyFeed findFeedById(final Long feedId);
 

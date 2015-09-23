@@ -71,7 +71,7 @@ public class RedditConfig {
             details.setAccessTokenUri(redditProperties.getAccessTokenUri());
             details.setUserAuthorizationUri(redditProperties.getUserAuthorizationUri());
             details.setTokenName("oauth_token");
-            details.setScope(Arrays.asList("identity", "read", "submit", "edit"));
+            details.setScope(Arrays.asList("identity", "read", "submit", "edit", "privatemessages"));
             details.setGrantType("authorization_code");
             details.setPreEstablishedRedirectUri(redditProperties.getRedirectUri());
             details.setUseCurrentUri(false);

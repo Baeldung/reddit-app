@@ -13,9 +13,13 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.DispatcherServlet;
 
+@EnableScheduling
+@EnableAsync
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
@@ -25,14 +29,23 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean dispatcherServletRegistration() {
+    public ServletRegistrationBean generalServlet() {
         final ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet(), "/");
         final Map<String, String> params = new HashMap<String, String>();
         params.put("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
         params.put("contextConfigLocation", "org.baeldung.config");
         registration.setInitParameters(params);
+        registration.setName("GeneralServlet");
         registration.setLoadOnStartup(1);
         return registration;
+    }
+
+    @Bean
+    public ServletRegistrationBean apiServlet() {
+        final ServletRegistrationBean servlet = new ServletRegistrationBean(dispatcherServlet(), "/api/");
+        servlet.setName("ApiServlet");
+        servlet.setLoadOnStartup(1);
+        return servlet;
     }
 
     @Override

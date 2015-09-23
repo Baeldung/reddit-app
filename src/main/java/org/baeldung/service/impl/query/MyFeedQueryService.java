@@ -14,6 +14,9 @@ import org.baeldung.web.exceptions.FeedServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -32,8 +35,15 @@ public class MyFeedQueryService implements IMyFeedQueryService {
     // API
 
     @Override
-    public List<MyFeed> getFeedsByUser(final User user) {
-        return myFeedRepository.findByUser(user);
+    public List<MyFeed> getFeedsByUser(final User user, final int page, final int size, final String sortDir, final String sort) {
+        final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
+        final Page<MyFeed> feeds = myFeedRepository.findByUser(user, pageReq);
+        return feeds.getContent();
+    }
+
+    @Override
+    public long countFeedsByUser(final User user) {
+        return myFeedRepository.countByUser(user);
     }
 
     @Override
