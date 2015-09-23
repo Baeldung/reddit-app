@@ -4,5 +4,5 @@ import org.baeldung.persistence.model.Preference;
 
 public interface INotificationRedditService {
 
-	void checkAndNotify(Preference preference);
+    void checkAndNotify(Preference preference);
 }
