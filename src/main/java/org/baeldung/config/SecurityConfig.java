@@ -39,17 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
-		http.anonymous().disable().csrf().disable().authorizeRequests()
-				.antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
-			        .antMatchers("/adminHome","/users").hasAuthority("USER_READ_PRIVILEGE")
-				.and()
-				.formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
-				.failureUrl("/?error").usernameParameter("username").passwordParameter("password")
-				.successHandler(successHandler)
-				.and()
-				.logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
-		                .and()
-		                .sessionManagement().invalidSessionUrl("/?invalidSession=true").sessionFixation().none();
-		// @formatter:on
+        http.anonymous().disable().csrf().disable().authorizeRequests()
+    	    .antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
+            .antMatchers("/adminHome","/users").hasAuthority("USER_READ_PRIVILEGE")
+            .and()
+	    .formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
+            .failureUrl("/?error").usernameParameter("username").passwordParameter("password")
+            .successHandler(successHandler)
+            .and()
+            .logout().invalidateHttpSession(false).deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
+            .and()
+            .sessionManagement().invalidSessionUrl("/?invalidSession=true").sessionFixation().none().maximumSessions(1).maxSessionsPreventsLogin(true);
+        // @formatter:on
     }
 }
