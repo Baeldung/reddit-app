@@ -14,7 +14,7 @@
 <div class="alert alert-info" th:if="${param.containsKey('msg')}" th:text="${param.msg[0]}">
 
 </div>
-        <h1>Welcome, <small><a href="profile" sec:authentication="principal.username">Bob</a></small></h1>
+        <h1>Welcome, <a href="profile" sec:authentication="principal.username">Bob</a></h1>
         <br/>
         <div th:if="${#authentication.principal.user.accessToken == null}">
         <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>

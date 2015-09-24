@@ -21,7 +21,7 @@
   </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
-        <h1>Welcome, <small><span sec:authentication="principal.username">Bob</span></small></h1>
+        <h1>Welcome, <span sec:authentication="principal.username">Bob</span></h1>
         <br/>
         <a href="users" class="btn btn-primary">Display Users List</a>
 

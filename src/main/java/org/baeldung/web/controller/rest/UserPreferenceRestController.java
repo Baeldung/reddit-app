@@ -39,6 +39,7 @@ class UserPreferenceRestController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody final PreferenceDto prefDto) {
         final Preference pref = modelMapper.map(prefDto, Preference.class);
+        pref.setEmail(preferenceReopsitory.findOne(pref.getId()).getEmail());
         preferenceReopsitory.save(pref);
         getCurrentUser().setPreference(pref);
     }

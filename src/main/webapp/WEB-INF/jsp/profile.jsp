@@ -9,6 +9,7 @@
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script th:src="@{/resources/datetime-picker.js}"></script>
 <script th:src="@{/resources/validator1.js}"></script>
 <script th:src="@{/resources/timezones.full.js}"></script>
@@ -28,7 +29,7 @@ border-color: #ddd;
 <div th:include="header"/>
 
 <div class="container">
-<h1>Profile Page</h1>
+<h1>Profile <a href="updatePassword" class="btn btn-primary pull-right">Update your Password</a></h1>
 <br/><br/>
 <div id="available" class="alert alert-info"></div>
 <br/><br/>
@@ -36,21 +37,6 @@ border-color: #ddd;
 <div class="row">
 <input type="hidden" name="id"/>
 
-<div class="form-group">
-    <label class="col-sm-3">Email</label>
-    <span class="col-sm-9">
-    <input name="email" type="email" placeholder="your email" class="form-control" required="required"/>
-    <span class="help-block">Provide your email to receive notifications when your scheduled posts are submitted</span>
-    </span>
-</div>
-
-<div class="col-sm-12"><a href="updatePassword" class="btn btn-primary">Update your Password</a></div>
-<br/><br/> 
-<hr/> 
-<br/><br/> 
-
-<h1>Edit Default Preferences</h1>
-<br/><br/> 
 <div class="form-group">
     <label class="col-sm-3">Timezone</label>
     <span class="col-sm-9"><select id="timezone" name="timezone" class="form-control"></select></span>

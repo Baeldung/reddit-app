@@ -6,8 +6,6 @@ public class PreferenceDto implements Dto {
 
     private Long id;
 
-    private String email;
-
     private String subreddit;
 
     private boolean sendReplies;
@@ -40,14 +38,6 @@ public class PreferenceDto implements Dto {
 
     public void setId(final Long id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
     }
 
     public String getSubreddit() {

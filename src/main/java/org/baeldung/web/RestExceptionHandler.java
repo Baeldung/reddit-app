@@ -13,6 +13,7 @@ import org.baeldung.web.exceptions.UsernameAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.client.resource.UserApprovalRequiredException;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
@@ -121,6 +122,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
     public ResponseEntity<Object> handleFeed(final RuntimeException ex, final WebRequest request) {
         logger.error("500 Status Code", ex);
         final String bodyOfResponse = ex.getLocalizedMessage();
+        return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ MailAuthenticationException.class })
+    public ResponseEntity<Object> handleMail(final RuntimeException ex, final WebRequest request) {
+        logger.error("500 Status Code", ex);
+        final String bodyOfResponse = "Mail Configuration Problem";
         return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
