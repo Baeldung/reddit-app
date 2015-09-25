@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.baeldung.reddit.util.Dto;
-import org.baeldung.web.SubmissionResponseDto;
+import org.baeldung.web.controller.rest.SubmissionResponseDto;
 
 public class ScheduledPostQueryDto implements Dto {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");

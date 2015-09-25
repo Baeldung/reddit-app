@@ -1,4 +1,4 @@
-package org.baeldung.web.controller;
+package org.baeldung.web.controller.general;
 
 import org.baeldung.service.TokenState;
 import org.baeldung.service.query.IUserQueryService;

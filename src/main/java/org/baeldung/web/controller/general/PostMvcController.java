@@ -1,4 +1,4 @@
-package org.baeldung.web.controller;
+package org.baeldung.web.controller.general;
 
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;

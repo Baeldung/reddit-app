@@ -1,4 +1,4 @@
-package org.baeldung.web.controller;
+package org.baeldung.web.controller.general;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

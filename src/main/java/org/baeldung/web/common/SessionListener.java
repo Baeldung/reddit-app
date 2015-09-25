@@ -1,4 +1,4 @@
-package org.baeldung.web;
+package org.baeldung.web.common;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;

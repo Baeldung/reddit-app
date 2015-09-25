@@ -10,7 +10,7 @@ import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.FeedArticle;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IMyFeedQueryService;
-import org.baeldung.web.PagingInfo;
+import org.baeldung.web.controller.rest.PagingInfo;
 import org.baeldung.web.dto.query.FeedQueryDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

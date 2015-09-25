@@ -4,7 +4,6 @@ import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
-import org.baeldung.web.PreferenceDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

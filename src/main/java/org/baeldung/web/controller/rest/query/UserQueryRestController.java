@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.baeldung.persistence.model.User;
 import org.baeldung.service.query.IScheduledPostQueryService;
 import org.baeldung.service.query.IUserQueryService;
-import org.baeldung.web.PagingInfo;
+import org.baeldung.web.controller.rest.PagingInfo;
 import org.baeldung.web.dto.query.UserQueryDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

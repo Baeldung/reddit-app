@@ -2,7 +2,7 @@ package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
 
-import org.baeldung.web.PreferenceDto;
+import org.baeldung.web.controller.rest.PreferenceDto;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

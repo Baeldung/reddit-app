@@ -1,4 +1,4 @@
-package org.baeldung.web;
+package org.baeldung.web.controller.rest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
