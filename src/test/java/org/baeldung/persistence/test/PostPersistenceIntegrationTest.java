@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Post;

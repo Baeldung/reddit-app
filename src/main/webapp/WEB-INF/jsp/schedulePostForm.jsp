@@ -7,13 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/datetime-picker.css}"/>
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script th:src="@{/resources/datetime-picker.js}"></script>
-<script th:src="@{/resources/validator1.js}"></script>
-<script th:src="@{/resources/moment.min.js}"></script>
-<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
+
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -78,6 +72,12 @@ border-color: #ddd;
 <div>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
 <div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script th:src="@{/resources/datetime-picker.js}"></script>
+<script th:src="@{/resources/validator1.js}"></script>
+<script th:src="@{/resources/moment.min.js}"></script>
+<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
@@ -191,9 +191,6 @@ border-color: #ddd;
 	      $.each(data, function( index, article ) {
 	          $("#articleList").append('<li><a href="#" onclick="chooseArticle(\''+article.title+'\',\''+article.link+'\')"><b>'+article.title+'</b> <small>'+new Date(article.publishDate).toUTCString()+'</small></li>')
 	      });
-	 }).fail(function(error){
-		 console.log(error);
-		 showAlertMessage(error.responseText);
 	 });
   }
   
@@ -269,10 +266,7 @@ function schedulePost(){
     contentType:'application/json',
     success: function(result) {
         window.location.href="scheduledPosts";
-    },
-    error: function(error) {
-    	showAlertMessage(error.responseText);
-    }   
+    }  
 }); 
 }
 /*]]>*/  

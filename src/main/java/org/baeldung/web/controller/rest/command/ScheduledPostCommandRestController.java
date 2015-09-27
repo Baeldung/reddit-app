@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api/scheduledPosts")
+@RequestMapping(value = "/scheduledPosts")
 class ScheduledPostCommandRestController {
 
     @Autowired

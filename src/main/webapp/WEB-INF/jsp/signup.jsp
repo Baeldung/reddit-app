@@ -4,11 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Schedule to Reddit</title>
 <link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script th:src="@{/resources/validator.js}"></script>
 
 <style type="text/css">
 .btn.disabled{
@@ -24,33 +20,9 @@ border-color: #ddd;
 
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="./">Schedule to Reddit</a>
-    </div>
-    
-     <p class="navbar-text navbar-right">
-        <a href="./">Login</a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </p>
-    
-  </div><!-- /.container-fluid -->
-</nav>
 
+<div th:include="header (menuType=loginOnly)"></div>
 
-<div id="errorAlert" class="alert alert-danger" style="display:none;margin:10px;">
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  <span aria-hidden="true">x</span>
-</button>
-<span id="alertContent"></span>
-</div>
-
-<div id="loading-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;background-color:rgba(230,230,230,0.5);display:none;z-index:2000;">
-<div id="loading-image" style="position:absolute;left:45%;top:45%;">
-<img th:src="@{/resources/spin.gif}"/>
-</div>
-</div>
 
 <div class="container">
 <h1>Sign up</h1>
@@ -91,6 +63,7 @@ border-color: #ddd;
     </div>
   </div>
 </form>
+<script th:src="@{/resources/validator.js}"></script>
 <script>
 $("#submitBut").click(function(event) {
     event.preventDefault();
@@ -111,21 +84,6 @@ function register(){
         showAlertMessage("Error: "+ error.responseText);}
     }); 
 }
-
-function showAlertMessage(msg){
-    $("#alertContent").html(msg);
-    $("#errorAlert").show();
-}
-
-$(document).ajaxStart(function() {
-    $("#loading-layer").show();
-    $("#errorAlert").hide();
-    $(".btn").attr("disabled", true);
-});
-$(document).ajaxComplete(function() {
-    $("#loading-layer").hide();
-    $(".btn").removeAttr("disabled");
-});
 </script>
 </div>		
 </body>

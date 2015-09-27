@@ -5,22 +5,45 @@
       <a class="navbar-brand" th:href="@{/}">Schedule to Reddit</a>
     </div>
     
-     <p class="navbar-text navbar-right">Logged in as 
-        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
-        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
-    </p>
+    <div th:switch="${menuType}">
     
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a th:href="@{/feeds}">My RSS Feeds</a></li>
-        <li><a th:href="@{/scheduledPosts}">My Scheduled Posts</a></li>
-        <li><a th:href="@{/post}">Post to Reddit</a></li>
-        <li><a th:href="@{/postSchedule}">Schedule Post to Reddit</a></li>
-      </ul>
-      
-    </div><!-- /.navbar-collapse -->
+    	<div th:case="signupOnly" class="navbar-text navbar-right">
+	        <a th:href="@{/signup}">Sign up</a>
+	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </div>
+	    
+	    <div th:case="loginOnly" class="navbar-text navbar-right">
+	        <a th:href="@{/}">Login</a>
+	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </div>
+	    
+	    <div th:case="profileOnly" class="navbar-text navbar-right">Logged in as 
+	        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
+	        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
+	    </div>
+	    
+	    <div th:case="*">
+		    <p class="navbar-text navbar-right">Logged in as 
+		        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
+		        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
+		    </p>
+		        
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li><a th:href="@{/feeds}">My RSS Feeds</a></li>
+		        <li><a th:href="@{/scheduledPosts}">My Scheduled Posts</a></li>
+		        <li><a th:href="@{/post}">Post to Reddit</a></li>
+		        <li><a th:href="@{/postSchedule}">Schedule Post to Reddit</a></li>
+		      </ul>
+		      
+		    </div><!-- /.navbar-collapse -->
+	    
+	    </div>
+    </div>
+    
   </div><!-- /.container-fluid -->
 </nav>
+
 
 <div id="errorAlert" class="alert alert-danger" style="display:none;margin:10px;">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -34,6 +57,7 @@
 <img th:src="@{/resources/spin.gif}"/>
 </div>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 $(document).ajaxStart(function() {
     $("#loading-layer").show();
@@ -43,6 +67,10 @@ $(document).ajaxStart(function() {
 $(document).ajaxComplete(function() {
 	$("#loading-layer").hide();
     $(".btn").removeAttr("disabled");
+});
+
+$(document).ajaxError(function(event, jqXHR, ajaxSettings, error) {
+	showAlertMessage(jqXHR.responseJSON.message);
 });
 
 function showAlertMessage(msg){

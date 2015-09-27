@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.config.root;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@ComponentScan({ "org.baeldung.reddit.persistence", "org.baeldung.reddit.web" })
+@ComponentScan({ "org.baeldung.reddit.persistence" })
 public class RedditConfig {
 
     @Bean
@@ -34,8 +34,8 @@ public class RedditConfig {
         list.add(new UserAgentInterceptor());
         final OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(reddit);
         restTemplate.setInterceptors(list);
-        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+        final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                new ClientCredentialsAccessTokenProvider()));
         restTemplate.setAccessTokenProvider(accessTokenProvider);
         return restTemplate;
     }
@@ -84,8 +84,8 @@ public class RedditConfig {
             final List<ClientHttpRequestInterceptor> list = new ArrayList<ClientHttpRequestInterceptor>();
             list.add(new UserAgentInterceptor());
             template.setInterceptors(list);
-            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-                    Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+            final AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(new MyAuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(), new ResourceOwnerPasswordAccessTokenProvider(),
+                    new ClientCredentialsAccessTokenProvider()));
             template.setAccessTokenProvider(accessTokenProvider);
             return template;
         }

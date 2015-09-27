@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/api/users/roles")
+@RequestMapping(value = "/users/roles")
 public class RoleQueryRestController {
 
     @Autowired

@@ -6,9 +6,7 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-<script th:src="@{/resources/validator1.js}"></script>
+
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -75,6 +73,8 @@ border-color: #ddd;
 
 </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script th:src="@{/resources/validator1.js}"></script>
 <script>
   $(function() {
     $( "#sr" ).autocomplete({
@@ -90,7 +90,7 @@ border-color: #ddd;
   });
   
   function loadPref(){
-      $.get("user/preference", function (data){
+      $.get("api/user/preference", function (data){
     	  $('*[name="subreddit"]').val(data.subreddit);
     	  if(data.sendReplies == true){
               $('*[name="sendReplies"]')[0].checked=true;

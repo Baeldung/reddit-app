@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "/users")
 public class UserCommandRestController {
 
     @Autowired

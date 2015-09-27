@@ -7,12 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/datetime-picker.css}" />
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script th:src="@{/resources/datetime-picker.js}"></script>
-<script th:src="@{/resources/validator1.js}"></script>
-<script th:src="@{/resources/timezones.full.js}"></script>
+
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -27,6 +22,12 @@ border-color: #ddd;
 </head>
 <body>
 <div th:include="header"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script th:src="@{/resources/datetime-picker.js}"></script>
+<script th:src="@{/resources/validator1.js}"></script>
+<script th:src="@{/resources/timezones.full.js}"></script>
 
 <div class="container">
 <h1>Profile <a href="updatePassword" class="btn btn-primary pull-right">Update your Password</a></h1>
@@ -78,7 +79,8 @@ border-color: #ddd;
 <a th:if="${#authentication.name == null}" th:href="/user/authReddit" class="btn btn-primary">Authenticate Reddit</a>
 
 </div>
-</body>
+
+
 <script>
 /*<![CDATA[*/
 
@@ -136,10 +138,9 @@ function editPref(){
     }).done(function() {
         window.location.href = "./";
     })
-    .fail(function(error) {
-    	showAlertMessage(error.responseText);
-    }); 
+    
 }
 /*]]>*/  
 </script>
+</body>
 </html>

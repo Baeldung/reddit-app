@@ -5,9 +5,7 @@
 <link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script th:src="@{/resources/validator1.js}"></script>
 <style type="text/css">
 .btn.disabled{
 background-color: #ddd;
@@ -44,6 +42,7 @@ border-color: #ddd;
 </div>
 </form>
 </div>
+<script th:src="@{/resources/validator1.js}"></script>
 <script>
 $("#submitBut").click(function(event) {
 	event.preventDefault();
@@ -61,10 +60,7 @@ function addSite(){
 	    contentType:'application/json',
 	    success: function(result) {
 	        window.location.href="feeds";
-	    },
-	    error: function(error) {
-	    	showAlertMessage(error.responseText);
-	    }   
+	    } 
 	 }); 
 }
 </script>

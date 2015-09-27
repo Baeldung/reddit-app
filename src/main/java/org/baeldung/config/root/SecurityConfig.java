@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.config.root;
 
 import org.baeldung.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
         http.anonymous().disable().csrf().disable().authorizeRequests()
-    	    .antMatchers("/redditLogin","/home", "/post", "/postSchedule", "/posts").authenticated()
+    	    .antMatchers("/api/*","/feedForm","/profile","/scheduledPosts","/feeds","/changePassword","/updatePassword").authenticated()
             .antMatchers("/adminHome","/users").hasAuthority("USER_READ_PRIVILEGE")
-            .and()
+        .and()
 	    .formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
             .failureUrl("/?error").usernameParameter("username").passwordParameter("password")
             .successHandler(successHandler)

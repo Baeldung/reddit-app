@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api/user/preference")
+@RequestMapping(value = "/user/preference")
 class UserPreferenceRestController {
 
     @Autowired

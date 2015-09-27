@@ -1,6 +1,6 @@
 package org.baeldung.persistence.test;
 
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

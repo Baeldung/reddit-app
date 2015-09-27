@@ -7,12 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 <link rel="stylesheet" th:href="@{/resources/datetime-picker.css}" />
 <link rel="stylesheet" th:href="@{/resources/autocomplete.css}"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-<script th:src="@{/resources/datetime-picker.js}"></script>
-<script th:src="@{/resources/validator1.js}"></script>
-<script th:src="@{/resources/moment.min.js}"></script>
-<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
+
 <style type="text/css">
  .btn.disabled{
 background-color: #ddd;
@@ -78,6 +73,11 @@ border-color: #ddd;
 <br/>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
 <div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script th:src="@{/resources/datetime-picker.js}"></script>
+<script th:src="@{/resources/validator1.js}"></script>
+<script th:src="@{/resources/moment.min.js}"></script>
+<script th:src="@{/resources/moment-timezone-with-data.js}"></script>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(function(){
@@ -195,9 +195,6 @@ function editPost(){
     }).done(function() {
     	window.location.href="../scheduledPosts";
     })
-    .fail(function(error) {
-    	showAlertMessage(error.responseText);
-    }); 
 }
 /*]]>*/  
 </script>

@@ -1,7 +1,7 @@
 package org.baeldung.persistence.test;
 
 import org.baeldung.common.AbstractPersistenceIntegrationTest;
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.baeldung.persistence.EntityFixtureFactory;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.User;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/api/myFeeds")
+@RequestMapping(value = "/myFeeds")
 class MyFeedCommandRestController {
 
     @Autowired

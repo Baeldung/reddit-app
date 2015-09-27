@@ -4,7 +4,6 @@
 <link rel="shortcut icon" type="image/png" th:href="@{/resources/favicon.png}"/>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </head>
 <body>
 <div th:include="header"/>
@@ -32,7 +31,6 @@
             </div>
             
         </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
 function savePass(){
 	var oldPass = $("#oldpass").val();
@@ -55,10 +53,7 @@ function savePass(){
         contentType:'application/json',
         success: function(result) {
             window.location.href="./?msg=Password updated succesfully";
-        },
-        error: function(data) {
-        	$("#errormsg").show().html(data.responseText);
-        }   
+        }  
     }); 
 }
 </script>  

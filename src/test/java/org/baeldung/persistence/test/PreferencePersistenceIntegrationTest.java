@@ -3,7 +3,7 @@ package org.baeldung.persistence.test;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import org.baeldung.common.AbstractPersistenceIntegrationTest;
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.model.Preference;
 import org.junit.Test;

@@ -8,18 +8,9 @@
 
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" th:href="@{/adminHome}">Schedule to Reddit</a>
-    </div>
-    
-     <p class="navbar-text navbar-right">Logged in as 
-        <b><span sec:authentication="principal.username">Bob</span></b>&nbsp;&nbsp;&nbsp;
-        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
-    </p>
-  </div><!-- /.container-fluid -->
-</nav>
+
+<div th:include="header (menuType=profileOnly)"></div>
+
 <div class="container">
         <h1>Welcome, <span sec:authentication="principal.username">Bob</span></h1>
         <br/>

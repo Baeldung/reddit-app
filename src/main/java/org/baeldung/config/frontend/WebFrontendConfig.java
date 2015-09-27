@@ -1,9 +1,8 @@
-package org.baeldung.config;
+package org.baeldung.config.frontend;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +20,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "org.baeldung.web" })
-public class WebConfig extends WebMvcConfigurerAdapter {
+@ComponentScan({ "org.baeldung.web.controller.general" })
+public class WebFrontendConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -37,11 +36,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -50,6 +44,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         super.addViewControllers(registry);
+        registry.addViewController("/index");
         registry.addViewController("/home");
         registry.addViewController("/adminHome");
         registry.addViewController("/signup");

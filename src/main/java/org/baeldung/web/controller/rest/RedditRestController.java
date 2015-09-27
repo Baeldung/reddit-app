@@ -1,4 +1,4 @@
-package org.baeldung.reddit.web.controller;
+package org.baeldung.web.controller.rest;
 
 import java.util.List;
 
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/api")
 class RedditRestController {
 
     @Autowired

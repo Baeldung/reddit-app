@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.baeldung.persistence.SetupData;
 import org.baeldung.persistence.model.Privilege;
 import org.baeldung.persistence.model.Role;

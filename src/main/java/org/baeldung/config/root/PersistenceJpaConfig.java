@@ -1,8 +1,10 @@
-package org.baeldung.config;
+package org.baeldung.config.root;
 
 import java.util.Properties;
 
 import javax.sql.DataSource;
+
+import liquibase.integration.spring.SpringLiquibase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +21,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
 @EnableTransactionManagement

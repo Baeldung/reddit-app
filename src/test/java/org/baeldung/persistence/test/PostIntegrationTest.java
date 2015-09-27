@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import java.util.Date;
 
 import org.baeldung.common.AbstractPersistenceIntegrationTest;
-import org.baeldung.config.PersistenceJpaConfig;
+import org.baeldung.config.root.PersistenceJpaConfig;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.dao.UserRepository;
 import org.baeldung.persistence.model.Post;

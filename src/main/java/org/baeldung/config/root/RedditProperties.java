@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.config.root;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

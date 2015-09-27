@@ -1,4 +1,4 @@
-package org.baeldung.config;
+package org.baeldung.config.root;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,28 +24,27 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class Application extends SpringBootServletInitializer {
 
     @Bean
-    public DispatcherServlet dispatcherServlet() {
-        return new DispatcherServlet();
-    }
-
-    @Bean
-    public ServletRegistrationBean generalServlet() {
-        final ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet(), "/");
+    public ServletRegistrationBean frontendServlet() {
+        final ServletRegistrationBean registration = new ServletRegistrationBean(new DispatcherServlet(), "/*");
         final Map<String, String> params = new HashMap<String, String>();
         params.put("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
-        params.put("contextConfigLocation", "org.baeldung.config");
+        params.put("contextConfigLocation", "org.baeldung.config.frontend");
         registration.setInitParameters(params);
-        registration.setName("GeneralServlet");
+        registration.setName("FrontendServlet");
         registration.setLoadOnStartup(1);
         return registration;
     }
 
     @Bean
     public ServletRegistrationBean apiServlet() {
-        final ServletRegistrationBean servlet = new ServletRegistrationBean(dispatcherServlet(), "/api/");
-        servlet.setName("ApiServlet");
-        servlet.setLoadOnStartup(1);
-        return servlet;
+        final ServletRegistrationBean registration = new ServletRegistrationBean(new DispatcherServlet(), "/api/*");
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+        params.put("contextConfigLocation", "org.baeldung.config.api");
+        registration.setInitParameters(params);
+        registration.setName("ApiServlet");
+        registration.setLoadOnStartup(2);
+        return registration;
     }
 
     @Override
