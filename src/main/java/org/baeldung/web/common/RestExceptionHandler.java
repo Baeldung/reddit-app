@@ -47,8 +47,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
     @ExceptionHandler({ HttpClientErrorException.class })
     public ResponseEntity<Object> handleHttpClientErrorException(final HttpClientErrorException ex, final WebRequest request) {
         logger.error("400 Status Code", ex);
-        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        final ApiError apiError = new ApiError(ex.getStatusCode(), ex);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), ex.getStatusCode());
     }
 
     @ExceptionHandler({ InvalidDateException.class })
@@ -100,7 +100,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    // HttpClientErrorException
     // 500
 
     @ExceptionHandler({ UserApprovalRequiredException.class, UserRedirectRequiredException.class })
