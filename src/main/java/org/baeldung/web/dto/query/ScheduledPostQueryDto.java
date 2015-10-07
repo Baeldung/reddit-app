@@ -39,6 +39,10 @@ public class ScheduledPostQueryDto implements Dto {
 
     private List<SubmissionResponseDto> detailedStatus;
 
+    private String postRedditUrl;
+
+    private boolean isOld;
+
     public ScheduledPostQueryDto() {
         super();
     }
@@ -162,14 +166,32 @@ public class ScheduledPostQueryDto implements Dto {
         this.detailedStatus = detailedStatus;
     }
 
-    //
+    public String getPostRedditUrl() {
+        return postRedditUrl;
+    }
+
+    public void setPostRedditUrl(final String postRedditUrl) {
+        this.postRedditUrl = postRedditUrl;
+    }
+
+    public boolean isOld() {
+        return isOld;
+    }
+
+    public void setOld(final boolean isOld) {
+        this.isOld = isOld;
+    }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("ScheduledPostDto [title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", submissionDate=").append(date).append(", noOfAttempts=").append(noOfAttempts).append(", deleteAfterLastAttempt=")
-                .append(deleteAfterLastAttempt).append("]");
+        builder.append("ScheduledPostQueryDto [id=").append(id).append(", title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", sendReplies=").append(sendReplies).append(", date=").append(date)
+                .append(", noOfAttempts=").append(noOfAttempts).append(", timeInterval=").append(timeInterval).append(", minScoreRequired=").append(minScoreRequired).append(", minTotalVotes=").append(minTotalVotes).append(", keepIfHasComments=")
+                .append(keepIfHasComments).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append(", status=").append(status).append(", detailedStatus=").append(detailedStatus).append(", postRedditUrl=").append(postRedditUrl)
+                .append(", isOld=").append(isOld).append("]");
         return builder.toString();
     }
+
+    //
 
 }

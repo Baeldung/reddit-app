@@ -47,9 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .failureUrl("/?error").usernameParameter("username").passwordParameter("password")
             .successHandler(successHandler)
             .and()
-            .logout().invalidateHttpSession(false).deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
+            .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
             .and()
-            .sessionManagement().invalidSessionUrl("/?invalidSession=true").sessionFixation().none().maximumSessions(1).maxSessionsPreventsLogin(true);
+            .sessionManagement().sessionFixation().none().maximumSessions(1).maxSessionsPreventsLogin(true);
         // @formatter:on
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -58,6 +59,7 @@ public class Application extends SpringBootServletInitializer {
         super.onStartup(servletContext);
         servletContext.addListener(new SessionListener());
         servletContext.addListener(new RequestContextListener());
+        servletContext.addListener(new HttpSessionEventPublisher());
     }
 
     public static void main(final String... args) {

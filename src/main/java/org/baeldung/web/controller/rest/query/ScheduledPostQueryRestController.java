@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/scheduledPosts")
 class ScheduledPostQueryRestController {
+    private final static String POST_URL_TEMPLATE = "http://www.reddit.com/r/%s/comments/%s";
 
     @Autowired
     private IScheduledPostQueryService scheduledPostService;
@@ -72,6 +73,7 @@ class ScheduledPostQueryRestController {
     private ScheduledPostQueryDto convertToDto(final Post post) {
         final ScheduledPostQueryDto postDto = modelMapper.map(post, ScheduledPostQueryDto.class);
         postDto.setSubmissionDate(post.getSubmissionDate(), getCurrentUser().getPreference().getTimezone());
+
         final List<SubmissionResponse> response = post.getSubmissionsResponse();
         if ((response != null) && (response.size() > 0)) {
             if (post.getMinScoreRequired() == 0) { // resubmit options not activated - only one attempt
@@ -85,6 +87,10 @@ class ScheduledPostQueryRestController {
             postDto.setStatus("Not sent yet");
             postDto.setDetailedStatus(Collections.emptyList());
         }
+
+        postDto.setOld(post.isSent() && (post.getNoOfAttempts() < 1));
+        postDto.setPostRedditUrl((post.getRedditID() == null) ? "#" : String.format(POST_URL_TEMPLATE, post.getSubreddit(), post.getRedditID()));
+
         return postDto;
     }
 

@@ -18,8 +18,9 @@
 <tr>
 <th>Post title</th>
 <th>Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</th>
-<th>Status</th>
 <th>Resubmit Attempts left</th>
+<th>Status</th>
+<th>Post URL</th>
 <th>Actions</th>
 </tr>
 </thead>
@@ -69,25 +70,37 @@ $(document).ready(function() {
         "columnDefs": [
                        { "name": "title",   "targets": 0},
                        { "name": "submissionDate",  "targets": 1 },
-                       { "targets": 2, "data": "status","width":"20%","orderable": false,
+                       { "name": "noOfAttempts",  "targets": 2,"width":"5%"},
+                       { "targets": 3, "data": "status","width":"20%","orderable": false,
                            "render": function ( data, type, full, meta ) {
                         	   console.log(meta);
                                return data+' <a href="#" onclick="showDetailedStatus('+meta.row+')">More Details</a>';
                              }
                        },
-                       { "name": "noOfAttempts",  "targets": 3},
-                       { "targets": 4, "data": "id",
+                       { "targets": 4, "data": "postRedditUrl",
+                   	    "render": function ( data, type, full, meta ) {
+                   	    	if(data != "#"){
+                       	        return '<a class="btn btn-primary" href="'+data+'">Go to Reddit</a>';
+                   	    	}
+                   	    	else{
+                   	    		return 'No URL Available';
+                   	    	}
+                   	      }
+                       },
+                       { "targets": 5, "data": "id",
                     	    "render": function ( data, type, full, meta ) {
                     	        return '<a class="btn btn-warning" href="editPost/'+data+
                                 '">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
                                 +') ">Delete</a>';
-                    	      }}
+                    	      }
+                       }
                      ],
                      "columns": [
                                  { "data": "title" },
                                  { "data": "date" },
+                                 { "data": "noOfAttempts" },
                                  { "data": "status" },
-                                 { "data": "noOfAttempts" }
+                                 { "data": "postRedditUrl" }
                              ],
         "serverSide": true,
         "ajax": function(data, callback, settings) {
@@ -106,6 +119,12 @@ $(document).ready(function() {
                     data: res
                 });
             });
+        },
+        "createdRow": function ( row, data, index ) {
+            if ( data.old ) {
+                $('td', row).addClass('active');
+                console.log("hkhkhkhk");
+            }
         }
     } );
 } );
