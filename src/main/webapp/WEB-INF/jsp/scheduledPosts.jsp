@@ -66,7 +66,7 @@ $(document).ready(function() {
     $('#myposts').dataTable( {
         "processing": true,
         "searching":false,
-        "order": [[1,'asc']],
+        "order": [[1,'desc']],
         "columnDefs": [
                        { "name": "title",   "targets": 0},
                        { "name": "submissionDate",  "targets": 1 },
