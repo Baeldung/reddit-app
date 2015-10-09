@@ -8,13 +8,13 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.baeldung.web.dto.command.FeedAddCommandDto;
-import org.baeldung.web.dto.query.FeedQueryDto;
+import org.baeldung.web.dto.query.FeedDto;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.jayway.restassured.response.Response;
 
-public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
+public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
 
     // test
 
@@ -29,7 +29,7 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
 
     @Test
     public void whenGettingSiteArticles_thenCorrect() throws ParseException, IOException {
-        final FeedQueryDto feed = newDto();
+        final FeedDto feed = newDto();
         final Response response = givenAuth().get(urlPrefix + "/api/myFeeds/articles?id=" + feed.getId());
 
         assertEquals(200, response.statusCode());
@@ -38,7 +38,7 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
 
     @Test
     public void whenAddingNewSite_thenCorrect() throws ParseException, IOException {
-        final FeedQueryDto feed = newDto();
+        final FeedDto feed = newDto();
 
         final Response response = givenAuth().get(urlPrefix + "/api/myFeeds");
 
@@ -47,7 +47,7 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
 
     @Test
     public void whenDeletingSite_thenDeleted() throws ParseException, IOException {
-        final FeedQueryDto feed = newDto();
+        final FeedDto feed = newDto();
         final Response response = givenAuth().delete(urlPrefix + "/api/myFeeds/" + feed.getId());
 
         assertEquals(204, response.statusCode());
@@ -56,12 +56,12 @@ public class MyFeedLiveTest extends AbstractLiveTest<FeedQueryDto> {
     //
 
     @Override
-    protected FeedQueryDto newDto() throws ParseException, IOException {
+    protected FeedDto newDto() throws ParseException, IOException {
         final FeedAddCommandDto feed = new FeedAddCommandDto("baeldung", "http://www.baeldung.com/feed/");
 
         final Response response = withRequestBody(givenAuth(), feed).post(urlPrefix + "/api/myFeeds");
 
-        return objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).reader().forType(FeedQueryDto.class).readValue(response.asString());
+        return objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).reader().forType(FeedDto.class).readValue(response.asString());
     }
 
 }

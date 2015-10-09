@@ -8,20 +8,20 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
-import org.baeldung.web.dto.query.ScheduledPostQueryDto;
+import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 
-public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostQueryDto> {
+public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
     private static final String DATE = "2016-01-01 00:00";
 
     // test
 
     @Test
     public void whenScheduleANewPost_thenCreated() throws ParseException, IOException {
-        final ScheduledPostQueryDto post = new ScheduledPostQueryDto();
+        final ScheduledPostDto post = new ScheduledPostDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
@@ -31,7 +31,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostQueryDt
         final Response response = withRequestBody(givenAuth, post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final ScheduledPostQueryDto result = objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
+        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
@@ -47,7 +47,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostQueryDt
 
     @Test
     public void whenUpdatingScheduledPost_thenUpdated() throws ParseException, IOException {
-        final ScheduledPostQueryDto post = newDto();
+        final ScheduledPostDto post = newDto();
 
         post.setTitle("new title");
         Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).put(urlPrefix + "/api/scheduledPosts/" + post.getId());
@@ -59,7 +59,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostQueryDt
 
     @Test
     public void whenDeletingScheduledPost_thenDeleted() throws ParseException, IOException {
-        final ScheduledPostQueryDto post = newDto();
+        final ScheduledPostDto post = newDto();
         final Response response = givenAuth().delete(urlPrefix + "/api/scheduledPosts/" + post.getId());
 
         assertEquals(204, response.statusCode());
@@ -108,14 +108,14 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostQueryDt
     //
 
     @Override
-    protected ScheduledPostQueryDto newDto() throws ParseException, IOException {
-        final ScheduledPostQueryDto post = new ScheduledPostQueryDto();
+    protected ScheduledPostDto newDto() throws ParseException, IOException {
+        final ScheduledPostDto post = new ScheduledPostDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
         post.setDate(DATE);
         final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
-        return objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
+        return objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
     }
 
 }

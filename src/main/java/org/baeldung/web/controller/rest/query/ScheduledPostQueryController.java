@@ -14,7 +14,7 @@ import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IScheduledPostQueryService;
 import org.baeldung.web.controller.rest.PagingInfo;
 import org.baeldung.web.controller.rest.SubmissionResponseDto;
-import org.baeldung.web.dto.query.ScheduledPostQueryDto;
+import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/scheduledPosts")
-class ScheduledPostQueryRestController {
+class ScheduledPostQueryController {
     private final static String POST_URL_TEMPLATE = "http://www.reddit.com/r/%s/comments/%s";
 
     @Autowired
@@ -36,7 +36,7 @@ class ScheduledPostQueryRestController {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ScheduledPostQueryRestController() {
+    public ScheduledPostQueryController() {
         super();
     }
 
@@ -44,7 +44,7 @@ class ScheduledPostQueryRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public final List<ScheduledPostQueryDto> getScheduledPosts(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
+    public final List<ScheduledPostDto> getScheduledPosts(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "title") final String sort, final HttpServletResponse response) {
         final User user = getCurrentUser();
         final PagingInfo pagingInfo = new PagingInfo(page, size, scheduledPostService.countScheduledPostsByUser(user));
@@ -55,7 +55,7 @@ class ScheduledPostQueryRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public final ScheduledPostQueryDto getPost(@PathVariable("id") final Long id) {
+    public final ScheduledPostDto getPost(@PathVariable("id") final Long id) {
         return convertToDto(scheduledPostService.getPostById(id));
     }
 
@@ -70,8 +70,8 @@ class ScheduledPostQueryRestController {
 
     //
 
-    private ScheduledPostQueryDto convertToDto(final Post post) {
-        final ScheduledPostQueryDto postDto = modelMapper.map(post, ScheduledPostQueryDto.class);
+    private ScheduledPostDto convertToDto(final Post post) {
+        final ScheduledPostDto postDto = modelMapper.map(post, ScheduledPostDto.class);
         postDto.setSubmissionDate(post.getSubmissionDate(), getCurrentUser().getPreference().getTimezone());
 
         final List<SubmissionResponse> response = post.getSubmissionsResponse();

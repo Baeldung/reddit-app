@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/users")
-public class UserQueryRestController {
+public class UserQueryController {
 
     @Autowired
     private IUserQueryService userService;

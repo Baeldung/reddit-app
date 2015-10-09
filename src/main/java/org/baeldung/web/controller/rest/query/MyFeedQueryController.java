@@ -11,7 +11,7 @@ import org.baeldung.reddit.util.FeedArticle;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.query.IMyFeedQueryService;
 import org.baeldung.web.controller.rest.PagingInfo;
-import org.baeldung.web.dto.query.FeedQueryDto;
+import org.baeldung.web.dto.query.FeedDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/myFeeds")
-class MyFeedQueryRestController {
+class MyFeedQueryController {
 
     @Autowired
     private IMyFeedQueryService myFeedService;
@@ -35,7 +35,7 @@ class MyFeedQueryRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<FeedQueryDto> getFeedsList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
+    public List<FeedDto> getFeedsList(@RequestParam(value = "page", required = false, defaultValue = "0") final int page, @RequestParam(value = "size", required = false, defaultValue = "10") final int size,
             @RequestParam(value = "sortDir", required = false, defaultValue = "asc") final String sortDir, @RequestParam(value = "sort", required = false, defaultValue = "name") final String sort, final HttpServletResponse response) {
         final User user = getCurrentUser();
         final PagingInfo pagingInfo = new PagingInfo(page, size, myFeedService.countFeedsByUser(user));
@@ -52,8 +52,8 @@ class MyFeedQueryRestController {
 
     //
 
-    private FeedQueryDto convertToDto(final MyFeed feed) {
-        return modelMapper.map(feed, FeedQueryDto.class);
+    private FeedDto convertToDto(final MyFeed feed) {
+        return modelMapper.map(feed, FeedDto.class);
     }
 
     private User getCurrentUser() {

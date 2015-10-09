@@ -5,7 +5,7 @@ import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.command.IMyFeedCommanndService;
 import org.baeldung.web.dto.command.FeedAddCommandDto;
-import org.baeldung.web.dto.query.FeedQueryDto;
+import org.baeldung.web.dto.query.FeedDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/myFeeds")
-class MyFeedCommandRestController {
+class MyFeedCommandController {
 
     @Autowired
     private IMyFeedCommanndService myFeedService;
@@ -33,7 +33,7 @@ class MyFeedCommandRestController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public FeedQueryDto addFeed(@RequestBody final FeedAddCommandDto feedDto) {
+    public FeedDto addFeed(@RequestBody final FeedAddCommandDto feedDto) {
         final MyFeed feed = convertToEntity(feedDto);
         feed.setUser(getCurrentUser());
         return convertToQueryDto(myFeedService.addFeed(feed));
@@ -47,8 +47,8 @@ class MyFeedCommandRestController {
 
     //
 
-    private FeedQueryDto convertToQueryDto(final MyFeed feed) {
-        return modelMapper.map(feed, FeedQueryDto.class);
+    private FeedDto convertToQueryDto(final MyFeed feed) {
+        return modelMapper.map(feed, FeedDto.class);
     }
 
     private MyFeed convertToEntity(final FeedAddCommandDto feed) {

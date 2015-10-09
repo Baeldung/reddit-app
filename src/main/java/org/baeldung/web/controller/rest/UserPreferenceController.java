@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping(value = "/user/preference")
-class UserPreferenceRestController {
+class UserPreferenceController {
 
     @Autowired
     private PreferenceRepository preferenceReopsitory;

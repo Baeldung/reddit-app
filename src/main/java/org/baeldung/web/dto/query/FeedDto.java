@@ -3,14 +3,14 @@ package org.baeldung.web.dto.query;
 import org.baeldung.persistence.model.User;
 import org.baeldung.reddit.util.Dto;
 
-public class FeedQueryDto implements Dto {
+public class FeedDto implements Dto {
 
     private Long id;
     private String name;
     private String url;
     private User user;
 
-    public FeedQueryDto() {
+    public FeedDto() {
         super();
     }
 

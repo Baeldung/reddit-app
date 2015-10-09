@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import org.baeldung.web.dto.command.ScheduledPostAddCommandDto;
-import org.baeldung.web.dto.query.ScheduledPostQueryDto;
+import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
@@ -25,7 +25,7 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final ScheduledPostQueryDto result = objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
+        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 
@@ -82,7 +82,7 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
-        final ScheduledPostQueryDto result = objectMapper.reader().forType(ScheduledPostQueryDto.class).readValue(response.asString());
+        final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());
     }
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/posts")
-class PostRedditRestController {
+class PostRedditController {
 
     @Autowired
     private IRedditService redditService;
