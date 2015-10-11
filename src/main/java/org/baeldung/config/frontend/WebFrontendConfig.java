@@ -53,6 +53,7 @@ public class WebFrontendConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/profile");
         registry.addViewController("/scheduledPosts");
         registry.addViewController("/feeds");
+        registry.addViewController("/feeds2");
         registry.addViewController("/users");
         registry.addViewController("/changePassword");
         registry.addViewController("/forgetPassword");
