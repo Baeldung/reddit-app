@@ -70,4 +70,9 @@ public class RedditTemplate {
         return redditRestTemplate.getAccessToken();
     }
 
+    public void setAccessToken(final OAuth2AccessToken token) {
+        rateLimiter.acquire();
+        redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
+    }
+
 }

@@ -44,6 +44,12 @@ public class RedditMvcController {
         }
     }
 
+    @RequestMapping("/redditReconnect")
+    public final String redditReconnect() {
+        redditTemplate.setAccessToken(null);
+        return "redirect:redditLogin";
+    }
+
     @RequestMapping("/post")
     public final String showSubmissionForm(final Model model) {
         if (getCurrentUser().getAccessToken() == null) {

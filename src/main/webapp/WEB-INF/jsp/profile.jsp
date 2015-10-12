@@ -30,7 +30,11 @@ border-color: #ddd;
 <script th:src="@{/resources/timezones.full.js}"></script>
 
 <div class="container">
-<h1>Profile <a href="updatePassword" class="btn btn-primary pull-right">Update your Password</a></h1>
+<h1>Profile 
+<a th:href="@{/updatePassword}" class="btn btn-primary pull-right">Update your Password</a>
+<span class="pull-right">&nbsp;</span>
+<a th:href="@{/redditReconnect}" class="btn btn-primary pull-right">Reconnect to Reddit</a>
+</h1>
 <br/><br/>
 <div id="available" class="alert alert-info"></div>
 <br/><br/>
