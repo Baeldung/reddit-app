@@ -70,7 +70,12 @@ $(document).ajaxComplete(function() {
 });
 
 $(document).ajaxError(function(event, jqXHR, ajaxSettings, error) {
-	showAlertMessage(jqXHR.responseJSON.message);
+	if(jqXHR.responseJSON.message){
+		showAlertMessage(jqXHR.responseJSON.message);
+	}else{
+		showAlertMessage("Sorry, error occurred");
+	}
+	
 });
 
 function showAlertMessage(msg){
