@@ -27,6 +27,9 @@
 </div>
 <h1>My RSS Feeds</h1>
 <br/>
+<div ng-show="loading" style="position:absolute;left:0;top:0;width:100%;height:100%;background-color:rgba(230,230,230,0.5);z-index:2000;">
+<img style="position:absolute;left:45%;top:45%;" th:src="@{/resources/spin.gif}"/>
+</div>
 <a href="#" ng-click="addNewFeed()" class="btn btn-primary">Add New RSS Feed</a>
 <br/>
 <br/>
@@ -54,6 +57,7 @@ Feed Url <input ng-model="feed.url" class="form-control" required="required"/>
 	<button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="save()">Save</button>
 </div>
 </script>
+
 </div>
 </body>
 </html>

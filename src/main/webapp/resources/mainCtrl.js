@@ -3,6 +3,7 @@ app.config(['$httpProvider', function ($httpProvider) {
 	$httpProvider.interceptors.push(function ($q,$rootScope) {
 	    return {
 	        'responseError': function (responseError) {
+	        	$rootScope.loading = false;
 	            $rootScope.message = responseError.data.message;
 	            return $q.reject(responseError);
 	        }
@@ -10,11 +11,13 @@ app.config(['$httpProvider', function ($httpProvider) {
 	});
 }]);
 
-app.controller('mainCtrl', function($scope,NgTableParams,$resource,ngDialog) {
+app.controller('mainCtrl', function($scope,NgTableParams,$resource,ngDialog,$rootScope) {
+	$rootScope.loading = false;
 	$scope.feed = {name:"New feed", url: ""};
     $scope.feeds = $resource("api/myFeeds/:feedId",{feedId:'@id'},{
         'update': { method:'PUT' }
     });
+    
     $scope.tableParams = new NgTableParams({}, {
       getData: function(params) {
     	  var queryParams = {page:params.page()-1 , size:params.count()};
@@ -56,6 +59,7 @@ app.controller('mainCtrl', function($scope,NgTableParams,$resource,ngDialog) {
     
 	$scope.save = function(){
 		ngDialog.close('ngdialog1');
+		$rootScope.loading = true;
 		if(! $scope.feed.id){
 			$scope.createFeed();
 		}else{
@@ -66,12 +70,14 @@ app.controller('mainCtrl', function($scope,NgTableParams,$resource,ngDialog) {
 	$scope.createFeed = function(){
 		$scope.feeds.save($scope.feed, function(){
 			$scope.tableParams.reload();
+			$rootScope.loading = false;
 		});
 	}
 	
 	$scope.updateFeed = function(){
 		$scope.feeds.update($scope.feed, function(){
 			$scope.tableParams.reload();
+			$rootScope.loading = false;
 		});
 	}
 	
