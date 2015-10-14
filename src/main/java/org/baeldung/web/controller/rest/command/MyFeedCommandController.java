@@ -5,6 +5,7 @@ import org.baeldung.persistence.model.User;
 import org.baeldung.security.UserPrincipal;
 import org.baeldung.service.command.IMyFeedCommanndService;
 import org.baeldung.web.dto.command.FeedAddCommandDto;
+import org.baeldung.web.dto.command.FeedUpdateCommandDto;
 import org.baeldung.web.dto.query.FeedDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,14 @@ class MyFeedCommandController {
         final MyFeed feed = convertToEntity(feedDto);
         feed.setUser(getCurrentUser());
         return convertToQueryDto(myFeedService.addFeed(feed));
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public final void updateFeed(@RequestBody final FeedUpdateCommandDto feedDto) {
+        final MyFeed feed = modelMapper.map(feedDto, MyFeed.class);
+        feed.setUser(getCurrentUser());
+        myFeedService.updateFeed(feed);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

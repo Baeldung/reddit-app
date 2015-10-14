@@ -1,8 +1,20 @@
-var app = angular.module('myApp', ["ngTable","ngResource"]);
-app.controller('mainCtrl', function($scope,NgTableParams,$resource) {
+var app = angular.module('myApp', ["ngTable","ngResource","ngDialog"]);
+app.config(['$httpProvider', function ($httpProvider) {
+	$httpProvider.interceptors.push(function ($q,$rootScope) {
+	    return {
+	        'responseError': function (responseError) {
+	            $rootScope.message = responseError.data.message;
+	            return $q.reject(responseError);
+	        }
+	    };
+	});
+}]);
 
-
-    $scope.feed = $resource("api/myFeeds/:feedId",{feedId:'@id'});
+app.controller('mainCtrl', function($scope,NgTableParams,$resource,ngDialog) {
+	$scope.feed = {name:"New feed", url: ""};
+    $scope.feeds = $resource("api/myFeeds/:feedId",{feedId:'@id'},{
+        'update': { method:'PUT' }
+    });
     $scope.tableParams = new NgTableParams({}, {
       getData: function(params) {
     	  var queryParams = {page:params.page()-1 , size:params.count()};
@@ -11,7 +23,7 @@ app.controller('mainCtrl', function($scope,NgTableParams,$resource) {
         	  queryParams["sort"] = sortingProp[0];
         	  queryParams["sortDir"] = params.sorting()[sortingProp[0]];
           }
-        return $scope.feed.query(queryParams, function(data, headers) {
+        return $scope.feeds.query(queryParams, function(data, headers) {
           var totalRecords = headers("PAGING_INFO").split(",")[0].split("=")[1];
           params.total(totalRecords);
           console.log(params.total());
@@ -22,12 +34,48 @@ app.controller('mainCtrl', function($scope,NgTableParams,$resource) {
     
 	$scope.confirmDelete = function(id){
 		if (confirm("Do you really want to delete this site?") == true) {
-			$scope.feed.delete({feedId:id}, function(){
+			$scope.feeds.delete({feedId:id}, function(){
 				$scope.tableParams.reload();
 			});
 			
     	} 
 	}
+	
+	$scope.addNewFeed = function(){
+		$scope.feed = {name:"New Feed", url: ""};
+		ngDialog.open({ template: 'templateId',	scope: $scope, className: 'ngdialog-theme-default' });
+	}
+	
+	$scope.editFeed = function(row){
+		$scope.feed.id = row.id;
+		$scope.feed.name = row.name;
+		$scope.feed.url = row.url;
+		
+		ngDialog.open({ template: 'templateId',	scope: $scope, className: 'ngdialog-theme-default' });
+	}
     
+	$scope.save = function(){
+		ngDialog.close('ngdialog1');
+		if(! $scope.feed.id){
+			$scope.createFeed();
+		}else{
+			$scope.updateFeed();
+		}
+	}
+	
+	$scope.createFeed = function(){
+		$scope.feeds.save($scope.feed, function(){
+			$scope.tableParams.reload();
+		});
+	}
+	
+	$scope.updateFeed = function(){
+		$scope.feeds.update($scope.feed, function(){
+			$scope.tableParams.reload();
+		});
+	}
+	
+	
+
     
 });

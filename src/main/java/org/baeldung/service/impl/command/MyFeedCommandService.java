@@ -38,6 +38,14 @@ class MyFeedCommandService implements IMyFeedCommanndService {
     }
 
     @Override
+    public void updateFeed(final MyFeed feed) {
+        if (!isValidFeedUrl(feed.getUrl())) {
+            throw new FeedServerException("Invalid Feed Url");
+        }
+        myFeedRepository.save(feed);
+    }
+
+    @Override
     public void deleteFeedById(final Long feedId) {
         myFeedRepository.delete(feedId);
     }
