@@ -77,7 +77,7 @@ border-color: #ddd;
 
 <br/>
 <label class="col-sm-3">Submission Date (<span id="timezone" sec:authentication="principal.user.preference.timezone">UTC</span>)</label>
-<div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
+<div class="col-sm-5"><input name="date" class="form-control" readonly="readonly"/></div><div class="col-sm-4"><a class="btn btn-default" id="pickerbtn" onclick="togglePicker()" style="font-size:16px;padding:8px 12px"><i class="glyphicon glyphicon-calendar"></i></a></div>
 
     <script type="text/javascript">
     /*<![CDATA[*/
@@ -133,6 +133,11 @@ border-color: #ddd;
           if(data.minScoreRequired == 0){
               $('input[name="resubmitOptionsActivated"]')[0].checked=false;
               $("#resubmit").hide();
+          }
+          if(data.old){
+        	  $("input").attr("disabled","disabled");
+        	  $("select").attr("disabled","disabled");
+        	  $("#pickerbtn").hide();
           }
       });
   }

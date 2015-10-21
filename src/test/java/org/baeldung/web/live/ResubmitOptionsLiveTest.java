@@ -34,7 +34,8 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         final ScheduledPostAddCommandDto post = createPost();
         post.setNoOfAttempts(0);
         post.setMinScoreRequired(5);
-        post.setTimeInterval(60);
+        post.setCheckAfterInterval(60);
+        post.setSubmitAfterInterval(60);
         post.setResubmitOptionsActivated(true);
 
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
@@ -48,7 +49,8 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         final ScheduledPostAddCommandDto post = createPost();
         post.setMinScoreRequired(0);
         post.setNoOfAttempts(3);
-        post.setTimeInterval(60);
+        post.setCheckAfterInterval(60);
+        post.setSubmitAfterInterval(60);
         post.setResubmitOptionsActivated(true);
 
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
@@ -60,7 +62,8 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
     @Test
     public void givenResubmitOptionsActivated_whenScheduleANewPostWithZeroTimeInterval_thenInvalid() throws ParseException, IOException {
         final ScheduledPostAddCommandDto post = createPost();
-        post.setTimeInterval(0);
+        post.setCheckAfterInterval(0);
+        post.setSubmitAfterInterval(0);
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
         post.setResubmitOptionsActivated(true);
@@ -76,7 +79,8 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         final ScheduledPostAddCommandDto post = createPost();
         post.setMinScoreRequired(5);
         post.setNoOfAttempts(3);
-        post.setTimeInterval(60);
+        post.setCheckAfterInterval(60);
+        post.setSubmitAfterInterval(60);
         post.setResubmitOptionsActivated(true);
 
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");

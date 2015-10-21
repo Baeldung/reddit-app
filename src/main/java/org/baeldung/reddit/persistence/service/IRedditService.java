@@ -14,4 +14,6 @@ public interface IRedditService {
     void connectReddit(final boolean needsCaptcha, final OAuth2AccessToken token);
 
     String checkIfAlreadySubmittedfinal(final String url, final String subreddit);
+
+    boolean isCurrentUserAccessTokenValid();
 }

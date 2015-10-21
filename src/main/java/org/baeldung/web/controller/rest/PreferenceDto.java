@@ -14,7 +14,9 @@ public class PreferenceDto implements Dto {
 
     private int noOfAttempts;
 
-    private int timeInterval;
+    private int checkAfterInterval;
+
+    private int submitAfterInterval;
 
     private int minScoreRequired;
 
@@ -64,12 +66,20 @@ public class PreferenceDto implements Dto {
         this.noOfAttempts = noOfAttempts;
     }
 
-    public int getTimeInterval() {
-        return timeInterval;
+    public int getCheckAfterInterval() {
+        return checkAfterInterval;
     }
 
-    public void setTimeInterval(final int timeInterval) {
-        this.timeInterval = timeInterval;
+    public void setCheckAfterInterval(final int checkAfterInterval) {
+        this.checkAfterInterval = checkAfterInterval;
+    }
+
+    public int getSubmitAfterInterval() {
+        return submitAfterInterval;
+    }
+
+    public void setSubmitAfterInterval(final int submitAfterInterval) {
+        this.submitAfterInterval = submitAfterInterval;
     }
 
     public int getMinScoreRequired() {

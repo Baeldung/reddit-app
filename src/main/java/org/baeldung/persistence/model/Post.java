@@ -49,7 +49,9 @@ public class Post implements IEntity {
 
     private int noOfAttempts;
 
-    private int timeInterval;
+    private int checkAfterInterval;
+
+    private int submitAfterInterval;
 
     private int minScoreRequired;
 
@@ -160,12 +162,20 @@ public class Post implements IEntity {
         this.noOfAttempts = noOfAttempts;
     }
 
-    public int getTimeInterval() {
-        return timeInterval;
+    public int getCheckAfterInterval() {
+        return checkAfterInterval;
     }
 
-    public void setTimeInterval(final int timeInterval) {
-        this.timeInterval = timeInterval;
+    public void setCheckAfterInterval(final int checkAfterInterval) {
+        this.checkAfterInterval = checkAfterInterval;
+    }
+
+    public int getSubmitAfterInterval() {
+        return submitAfterInterval;
+    }
+
+    public void setSubmitAfterInterval(final int submitAfterInterval) {
+        this.submitAfterInterval = submitAfterInterval;
     }
 
     public int getMinScoreRequired() {
@@ -225,7 +235,8 @@ public class Post implements IEntity {
         result = (prime * result) + ((submissionDate == null) ? 0 : submissionDate.hashCode());
         result = (prime * result) + ((submissionsResponse == null) ? 0 : submissionsResponse.hashCode());
         result = (prime * result) + ((subreddit == null) ? 0 : subreddit.hashCode());
-        result = (prime * result) + timeInterval;
+        result = (prime * result) + checkAfterInterval;
+        result = (prime * result) + submitAfterInterval;
         result = (prime * result) + ((title == null) ? 0 : title.hashCode());
         result = (prime * result) + ((url == null) ? 0 : url.hashCode());
         result = (prime * result) + ((user == null) ? 0 : user.hashCode());
@@ -287,7 +298,10 @@ public class Post implements IEntity {
         } else if (!subreddit.equals(other.subreddit)) {
             return false;
         }
-        if (timeInterval != other.timeInterval) {
+        if (checkAfterInterval != other.checkAfterInterval) {
+            return false;
+        }
+        if (submitAfterInterval != other.submitAfterInterval) {
             return false;
         }
         if (title == null) {

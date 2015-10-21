@@ -74,6 +74,26 @@ class RedditService implements IRedditService {
         return node.get("data").get("children").toString();
     }
 
+    @Override
+    public boolean isCurrentUserAccessTokenValid() {
+        final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User currentUser = userPrincipal.getUser();
+        if (currentUser.getAccessToken() == null) {
+            return false;
+        }
+        try {
+            redditTemplate.needsCaptcha();
+        } catch (final Exception e) {
+            redditTemplate.setAccessToken(null);
+            currentUser.setAccessToken(null);
+            currentUser.setRefreshToken(null);
+            currentUser.setTokenExpiration(null);
+            userRepository.save(currentUser);
+            return false;
+        }
+        return true;
+    }
+
     // === private
 
     private final MultiValueMap<String, String> constructParams(final PostDto postDto) {

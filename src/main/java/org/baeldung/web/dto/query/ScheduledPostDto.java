@@ -25,7 +25,9 @@ public class ScheduledPostDto implements Dto {
 
     private int noOfAttempts;
 
-    private int timeInterval;
+    private int checkAfterInterval;
+
+    private int submitAfterInterval;
 
     private int minScoreRequired;
 
@@ -118,14 +120,6 @@ public class ScheduledPostDto implements Dto {
         this.noOfAttempts = noOfAttempts;
     }
 
-    public int getTimeInterval() {
-        return timeInterval;
-    }
-
-    public void setTimeInterval(final int timeInterval) {
-        this.timeInterval = timeInterval;
-    }
-
     public int getMinScoreRequired() {
         return minScoreRequired;
     }
@@ -182,16 +176,31 @@ public class ScheduledPostDto implements Dto {
         this.isOld = isOld;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("ScheduledPostQueryDto [id=").append(id).append(", title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", sendReplies=").append(sendReplies).append(", date=").append(date)
-                .append(", noOfAttempts=").append(noOfAttempts).append(", timeInterval=").append(timeInterval).append(", minScoreRequired=").append(minScoreRequired).append(", minTotalVotes=").append(minTotalVotes).append(", keepIfHasComments=")
-                .append(keepIfHasComments).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append(", status=").append(status).append(", detailedStatus=").append(detailedStatus).append(", postRedditUrl=").append(postRedditUrl)
-                .append(", isOld=").append(isOld).append("]");
-        return builder.toString();
+    public int getCheckAfterInterval() {
+        return checkAfterInterval;
+    }
+
+    public void setCheckAfterInterval(final int checkAfterInterval) {
+        this.checkAfterInterval = checkAfterInterval;
+    }
+
+    public int getSubmitAfterInterval() {
+        return submitAfterInterval;
+    }
+
+    public void setSubmitAfterInterval(final int submitAfterInterval) {
+        this.submitAfterInterval = submitAfterInterval;
     }
 
     //
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("ScheduledPostDto [id=").append(id).append(", title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", sendReplies=").append(sendReplies).append(", date=").append(date)
+                .append(", noOfAttempts=").append(noOfAttempts).append(", checkAfterInterval=").append(checkAfterInterval).append(", submitAfterInterval=").append(submitAfterInterval).append(", minScoreRequired=").append(minScoreRequired)
+                .append(", minTotalVotes=").append(minTotalVotes).append(", keepIfHasComments=").append(keepIfHasComments).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append(", status=").append(status).append(", detailedStatus=")
+                .append(detailedStatus).append(", postRedditUrl=").append(postRedditUrl).append(", isOld=").append(isOld).append("]");
+        return builder.toString();
+    }
 
 }

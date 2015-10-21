@@ -1,6 +1,5 @@
 package org.baeldung.service.impl.command;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,7 +25,7 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
     //
 
     @Override
-    public Post schedulePost(final User user, final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
+    public Post schedulePost(final User user, final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) {
         Preconditions.checkArgument(post.getMinScoreRequired() >= 0, "Minimum Score can not be negative");
         Preconditions.checkArgument(post.getMinTotalVotes() >= 0, "Minimum Total votes can not be negative");
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
@@ -43,7 +42,7 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
     }
 
     @Override
-    public void updatePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) throws ParseException {
+    public void updatePost(final boolean isSuperUser, final Post post, final boolean resubmitOptionsActivated) {
         Preconditions.checkArgument(post.getMinScoreRequired() >= 0, "Minimum Score can not be negative");
         Preconditions.checkArgument(post.getMinTotalVotes() >= 0, "Minimum Total votes can not be negative");
 
@@ -73,7 +72,7 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
     //
 
     private boolean checkIfValidResubmitOptions(final Post post) {
-        if (checkIfAllNonZero(post.getNoOfAttempts(), post.getTimeInterval(), post.getMinScoreRequired())) {
+        if (checkIfAllNonZero(post.getNoOfAttempts(), post.getCheckAfterInterval(), post.getSubmitAfterInterval(), post.getMinScoreRequired())) {
             return true;
         } else {
             return false;

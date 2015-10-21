@@ -12,5 +12,5 @@ public interface IPostRedditService {
 
     PostScores getPostScores(final Post post);
 
-    void deletePost(final Post post);
+    void deletePost(final String redditId);
 }

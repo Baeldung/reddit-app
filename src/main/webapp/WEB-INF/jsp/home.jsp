@@ -16,7 +16,7 @@
 </div>
         <h1>Welcome, <a href="profile" sec:authentication="principal.username">Bob</a></h1>
         <br/>
-        <div th:if="${#authentication.principal.user.accessToken == null}">
+        <div id="connect" style="display:none">
         <a href="redditLogin" class="btn btn-primary">Connect your Account to Reddit</a>
         <br/> <br/>
         </div>
@@ -25,5 +25,13 @@
         <a href="post" class="btn btn-primary">Post to Reddit</a>
         <a href="postSchedule" class="btn btn-primary">Schedule Post to Reddit</a>
 </div>
+
+<script>
+$.get("api/isAccessTokenValid", function(data){
+	if(!data){
+		$("#connect").show();
+	}
+});
+</script>
 </body>
 </html>

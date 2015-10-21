@@ -23,4 +23,10 @@ class RedditController {
         return redditService.searchSubreddit(term);
     }
 
+    @RequestMapping(value = "/isAccessTokenValid")
+    @ResponseBody
+    public boolean isAccessTokenValid() {
+        return redditService.isCurrentUserAccessTokenValid();
+    }
+
 }

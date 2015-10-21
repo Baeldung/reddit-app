@@ -84,17 +84,11 @@ public class PostRedditService implements IPostRedditService {
     }
 
     @Override
-    public void deletePost(final Post post) {
-        logger.info("Deleting post with id = {}", post.getRedditID());
-
-        final User user = post.getUser();
-        final DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(user.getAccessToken());
-        token.setRefreshToken(new DefaultOAuth2RefreshToken((user.getRefreshToken())));
-        token.setExpiration(user.getTokenExpiration());
-        redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
-
+    public void deletePost(final String redditId) {
+        logger.info("Deleting post with id = {}", redditId);
+        //
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
-        param.add("id", "t3_" + post.getRedditID());
+        param.add("id", "t3_" + redditId);
         final JsonNode node = redditRestTemplate.postForObject("https://oauth.reddit.com/api/del.json", param, JsonNode.class);
 
         logger.info("Deleting post response = {}", node.toString());
@@ -121,14 +115,7 @@ public class PostRedditService implements IPostRedditService {
     // === private methods
 
     private void submitPostInternal(final Post post) {
-        final User user = post.getUser();
-        final DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(user.getAccessToken());
-        token.setRefreshToken(new DefaultOAuth2RefreshToken((user.getRefreshToken())));
-        token.setExpiration(user.getTokenExpiration());
-        redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
-        //
-        final UsernamePasswordAuthenticationToken userAuthToken = new UsernamePasswordAuthenticationToken(user.getUsername(), token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(userAuthToken);
+        oauth2Authenticate(post.getUser());
         //
         final MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
         param.add(RedditApiConstants.TITLE, post.getTitle());
@@ -171,34 +158,36 @@ public class PostRedditService implements IPostRedditService {
     }
 
     private void checkAndReSubmitInternal(final Post post) {
-        if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
+        if (didIntervalPass(post.getSubmissionDate(), post.getCheckAfterInterval())) {
             logger.info("Checking and Resubmitting post = {}", post.toString());
             final PostScores postScores = getPostScores(post);
             if (didPostGoalFail(post, postScores)) {
-                deletePost(post);
+                oauth2Authenticate(post.getUser());
+                deletePost(post.getRedditID());
                 resetPost(post, getFailReason(post, postScores));
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
+                post.setSubmissionsResponse(updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores)));
                 postReopsitory.save(post);
             }
         }
     }
 
     private void checkAndDeleteInternal(final Post post) {
-        if (didIntervalPass(post.getSubmissionDate(), post.getTimeInterval())) {
+        if (didIntervalPass(post.getSubmissionDate(), post.getCheckAfterInterval())) {
             logger.info("Checking and deleting post = {}", post.toString());
             final PostScores postScores = getPostScores(post);
             if (didPostGoalFail(post, postScores)) {
-                deletePost(post);
-                updateLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores));
+                oauth2Authenticate(post.getUser());
+                deletePost(post.getRedditID());
+                post.setSubmissionsResponse(updateLastAttemptResponse(post, "Deleted from reddit, consumed all attempts without reaching score " + getFailReason(post, postScores)));
                 post.setRedditID(null);
                 postReopsitory.save(post);
             } else {
                 post.setNoOfAttempts(0);
                 post.setRedditID(null);
-                updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores));
+                post.setSubmissionsResponse(updateLastAttemptResponse(post, "Post reached target score successfully " + getSuccessReason(post, postScores)));
                 postReopsitory.save(post);
             }
         }
@@ -213,11 +202,12 @@ public class PostRedditService implements IPostRedditService {
 
     private void resetPost(final Post post, final String failReason) {
         long time = new Date().getTime();
-        time += TimeUnit.MILLISECONDS.convert(post.getTimeInterval(), TimeUnit.MINUTES);
+        time += TimeUnit.MILLISECONDS.convert(post.getSubmitAfterInterval(), TimeUnit.MINUTES);
         post.setRedditID(null);
         post.setSubmissionDate(new Date(time));
         post.setSent(false);
-        updateLastAttemptResponse(post, "Deleted from Reddit, to be resubmitted " + failReason);
+        post.setSubmissionsResponse(updateLastAttemptResponse(post, "Deleted from Reddit, to be resubmitted " + failReason));
+
         postReopsitory.save(post);
     }
 
@@ -265,11 +255,32 @@ public class PostRedditService implements IPostRedditService {
         return fullResponse;
     }
 
-    private void updateLastAttemptResponse(final Post post, final String response) {
+    private List<SubmissionResponse> updateLastAttemptResponse(final Post post, final String response) {
+        final List<SubmissionResponse> fullResponse = post.getSubmissionsResponse();
         final int attemptNo = post.getSubmissionsResponse().size();
-        final SubmissionResponse oldResponse = submissionResponseReopsitory.findOneByPostAndAttemptNumber(post, attemptNo);
+        SubmissionResponse oldResponse = null;
+        for (int i = attemptNo - 1; i > -1; i--) {
+            if (fullResponse.get(i).getAttemptNumber() == attemptNo) {
+                oldResponse = fullResponse.get(i);
+                fullResponse.remove(i);
+                break;
+            }
+        }
         oldResponse.setContent(response);
         oldResponse.setScoreCheckDate(new Date());
-        submissionResponseReopsitory.save(oldResponse);
+        oldResponse = submissionResponseReopsitory.save(oldResponse);
+        fullResponse.add(oldResponse);
+        return fullResponse;
+    }
+
+    private void oauth2Authenticate(final User user) {
+        final DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(user.getAccessToken());
+        token.setRefreshToken(new DefaultOAuth2RefreshToken((user.getRefreshToken())));
+        token.setExpiration(user.getTokenExpiration());
+        redditRestTemplate.getOAuth2ClientContext().setAccessToken(token);
+        //
+        final UsernamePasswordAuthenticationToken userAuthToken = new UsernamePasswordAuthenticationToken(user.getUsername(), token.getValue(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(userAuthToken);
+        System.out.println(userAuthToken.isAuthenticated());
     }
 }

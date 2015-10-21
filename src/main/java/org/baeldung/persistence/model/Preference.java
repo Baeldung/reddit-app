@@ -21,7 +21,9 @@ public class Preference implements IEntity {
 
     private int noOfAttempts;
 
-    private int timeInterval;
+    private int checkAfterInterval;
+
+    private int submitAfterInterval;
 
     private int minScoreRequired;
 
@@ -84,12 +86,20 @@ public class Preference implements IEntity {
         this.noOfAttempts = noOfAttempts;
     }
 
-    public int getTimeInterval() {
-        return timeInterval;
+    public int getCheckAfterInterval() {
+        return checkAfterInterval;
     }
 
-    public void setTimeInterval(final int timeInterval) {
-        this.timeInterval = timeInterval;
+    public void setCheckAfterInterval(final int checkAfterInterval) {
+        this.checkAfterInterval = checkAfterInterval;
+    }
+
+    public int getSubmitAfterInterval() {
+        return submitAfterInterval;
+    }
+
+    public void setSubmitAfterInterval(final int submitAfterInterval) {
+        this.submitAfterInterval = submitAfterInterval;
     }
 
     public int getMinScoreRequired() {
@@ -132,37 +142,32 @@ public class Preference implements IEntity {
         this.timezone = timezone;
     }
 
-    //
-
     public boolean isSendEmailReplies() {
         return sendEmailReplies;
     }
 
-    public void setSendEmailReplies(boolean sendEmailReplies) {
+    public void setSendEmailReplies(final boolean sendEmailReplies) {
         this.sendEmailReplies = sendEmailReplies;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Preference [id=").append(id).append(", email=").append(email).append(", subreddit=").append(subreddit).append(", sendReplies=").append(sendReplies).append(", noOfAttempts=").append(noOfAttempts).append(", timeInterval=")
-                .append(timeInterval).append(", minScoreRequired=").append(minScoreRequired).append(", timezone=").append(timezone).append("]");
-        return builder.toString();
-    }
+    //
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = (prime * result) + checkAfterInterval;
         result = (prime * result) + (deleteAfterLastAttempt ? 1231 : 1237);
         result = (prime * result) + ((email == null) ? 0 : email.hashCode());
+        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
         result = (prime * result) + (keepIfHasComments ? 1231 : 1237);
         result = (prime * result) + minScoreRequired;
         result = (prime * result) + minTotalVotes;
         result = (prime * result) + noOfAttempts;
+        result = (prime * result) + (sendEmailReplies ? 1231 : 1237);
         result = (prime * result) + (sendReplies ? 1231 : 1237);
+        result = (prime * result) + submitAfterInterval;
         result = (prime * result) + ((subreddit == null) ? 0 : subreddit.hashCode());
-        result = (prime * result) + timeInterval;
         result = (prime * result) + ((timezone == null) ? 0 : timezone.hashCode());
         return result;
     }
@@ -179,6 +184,9 @@ public class Preference implements IEntity {
             return false;
         }
         final Preference other = (Preference) obj;
+        if (checkAfterInterval != other.checkAfterInterval) {
+            return false;
+        }
         if (deleteAfterLastAttempt != other.deleteAfterLastAttempt) {
             return false;
         }
@@ -187,6 +195,13 @@ public class Preference implements IEntity {
                 return false;
             }
         } else if (!email.equals(other.email)) {
+            return false;
+        }
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
             return false;
         }
         if (keepIfHasComments != other.keepIfHasComments) {
@@ -201,7 +216,13 @@ public class Preference implements IEntity {
         if (noOfAttempts != other.noOfAttempts) {
             return false;
         }
+        if (sendEmailReplies != other.sendEmailReplies) {
+            return false;
+        }
         if (sendReplies != other.sendReplies) {
+            return false;
+        }
+        if (submitAfterInterval != other.submitAfterInterval) {
             return false;
         }
         if (subreddit == null) {
@@ -209,9 +230,6 @@ public class Preference implements IEntity {
                 return false;
             }
         } else if (!subreddit.equals(other.subreddit)) {
-            return false;
-        }
-        if (timeInterval != other.timeInterval) {
             return false;
         }
         if (timezone == null) {
@@ -222,6 +240,15 @@ public class Preference implements IEntity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Preference [id=").append(id).append(", email=").append(email).append(", subreddit=").append(subreddit).append(", sendReplies=").append(sendReplies).append(", noOfAttempts=").append(noOfAttempts).append(", checkAfterInterval=")
+                .append(checkAfterInterval).append(", submitAfterInterval=").append(submitAfterInterval).append(", minScoreRequired=").append(minScoreRequired).append(", minTotalVotes=").append(minTotalVotes).append(", keepIfHasComments=")
+                .append(keepIfHasComments).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append(", timezone=").append(timezone).append(", sendEmailReplies=").append(sendEmailReplies).append("]");
+        return builder.toString();
     }
 
 }
