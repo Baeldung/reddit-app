@@ -10,6 +10,7 @@ import org.baeldung.web.dto.query.FeedDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,14 +41,16 @@ class MyFeedCommandController {
         return convertToQueryDto(myFeedService.addFeed(feed));
     }
 
+    @PreAuthorize("@resourceSecurityService.isRssFeedOwner(#feedDto.id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public final void updateFeed(@RequestBody final FeedUpdateCommandDto feedDto) {
+    public void updateFeed(@RequestBody final FeedUpdateCommandDto feedDto) {
         final MyFeed feed = modelMapper.map(feedDto, MyFeed.class);
         feed.setUser(getCurrentUser());
         myFeedService.updateFeed(feed);
     }
 
+    @PreAuthorize("@resourceSecurityService.isRssFeedOwner(#id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFeed(@PathVariable("id") final Long id) {

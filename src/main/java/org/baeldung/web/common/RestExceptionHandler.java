@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailAuthenticationException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.client.resource.UserApprovalRequiredException;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
@@ -42,6 +44,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
         logger.error("403 Status Code", ex);
         final ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, ex);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({ AuthenticationCredentialsNotFoundException.class, AccessDeniedException.class })
+    public String handleAccessDeniedException(final Exception ex, final WebRequest request) {
+        logger.error("403 Status Code", ex);
+        final String response = "Error Occurred - Forbidden: " + ex.getMessage();
+        return "redirect:/submissionResponse?msg=" + response;
     }
 
     @ExceptionHandler({ HttpClientErrorException.class })

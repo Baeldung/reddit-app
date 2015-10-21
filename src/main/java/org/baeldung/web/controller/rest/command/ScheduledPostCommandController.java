@@ -14,6 +14,7 @@ import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,22 +43,24 @@ class ScheduledPostCommandController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public final ScheduledPostDto schedule(final HttpServletRequest request, @RequestBody final ScheduledPostAddCommandDto postDto) throws ParseException {
+    public ScheduledPostDto schedule(final HttpServletRequest request, @RequestBody final ScheduledPostAddCommandDto postDto) throws ParseException {
         final Post post = convertToEntity(postDto);
         final Post postCreated = scheduledPostService.schedulePost(getCurrentUser(), request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, postDto.isResubmitOptionsActivated());
         return convertToDto(postCreated);
     }
 
+    @PreAuthorize("@resourceSecurityService.isPostOwner(#postDto.id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public final void updatePost(final HttpServletRequest request, @RequestBody final ScheduledPostUpdateCommandDto postDto) throws ParseException {
+    public void updatePost(final HttpServletRequest request, @RequestBody final ScheduledPostUpdateCommandDto postDto) throws ParseException {
         final Post post = convertToEntity(postDto);
         scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, postDto.isResubmitOptionsActivated());
     }
 
+    @PreAuthorize("@resourceSecurityService.isPostOwner(#id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public final void deletePost(@PathVariable("id") final Long id) {
+    public void deletePost(@PathVariable("id") final Long id) {
         scheduledPostService.deletePostById(id);
     }
 
