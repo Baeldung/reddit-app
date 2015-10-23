@@ -7,7 +7,6 @@ import org.baeldung.service.OnRegistrationCompleteEvent;
 import org.baeldung.service.command.IUserCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
