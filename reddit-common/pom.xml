@@ -3,7 +3,6 @@
     <artifactId>reddit-common</artifactId>
 
     <name>reddit-common</name>
-    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.baeldung</groupId>

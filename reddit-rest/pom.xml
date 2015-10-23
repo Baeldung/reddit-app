@@ -3,7 +3,7 @@
     <artifactId>reddit-rest</artifactId>
 
     <name>reddit-rest</name>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.baeldung</groupId>

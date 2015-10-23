@@ -19,9 +19,6 @@ public class RegistrationListener implements ApplicationListener<org.baeldung.se
     private IUserCommandService userService;
 
     @Autowired
-    private MessageSource messages;
-
-    @Autowired
     private JavaMailSender mailSender;
 
     @Autowired

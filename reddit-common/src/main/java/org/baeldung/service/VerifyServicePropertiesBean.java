@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyServicePropertiesBean implements PriorityOrdered, BeanFactoryPostProcessor {
 
-    private static String[] requiredProperties = new String[] {// @formatter:off
+    private static String[] requiredProperties = new String[] { // @formatter:off
         "smtp.host", "smtp.port", "smtp.protocol", "smtp.username", "smtp.password", "support.email",
         "jdbc.driverClassName", "jdbc.url", "jdbc.user", "jdbc.pass", "init-db", "hibernate.dialect", "hibernate.show_sql", "hibernate.hbm2ddl.auto",
         "reddit.clientID","reddit.clientSecret","reddit.accessTokenUri", "reddit.userAuthorizationUri","reddit.redirectUri"
