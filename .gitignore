@@ -1,11 +1,15 @@
-/bin/
-/target/
+*/bin/
+*/target/
 
-src/main/resources/*-production.properties
+*/src/main/resources/*-production.properties
 
-src/main/resources/*-staging.properties
+*/src/main/resources/*-staging.properties
 
-src/main/resources/reddit-local.properties
+*/src/main/resources/reddit-local.properties
 
-src/main/resources/users.csv
+*/src/main/resources/users.csv
 
+
+reddit-ui/src/main/resources/setupData/users.csv
+
+reddit-ui/src/main/resources/email.properties
