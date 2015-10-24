@@ -146,14 +146,6 @@
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
         </dependency>
 
-        <!-- rome -->
-
-        <dependency>
-            <groupId>com.rometools</groupId>
-            <artifactId>rome</artifactId>
-            <version>1.5.0</version>
-        </dependency>
-
         <!-- model mapper -->
 
         <dependency>
@@ -196,32 +188,7 @@
             <version>1.1.0.Final</version>
         </dependency>
 
-        <!-- marshalling -->
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-csv</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.4.8</version>
-        </dependency>
-
-        <!-- util -->
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
+        
 
         <!-- logging -->
 
