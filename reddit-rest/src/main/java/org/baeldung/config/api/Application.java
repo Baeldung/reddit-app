@@ -1,4 +1,4 @@
-package org.baeldung.config.frontend;
+package org.baeldung.config.api;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +25,15 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
-    // DateTimeFormatter newSdf = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
     @Bean
-    public ServletRegistrationBean frontendServlet() {
-        final ServletRegistrationBean registration = new ServletRegistrationBean(new DispatcherServlet(), "/*");
+    public ServletRegistrationBean apiServlet() {
+        final ServletRegistrationBean registration = new ServletRegistrationBean(new DispatcherServlet(), "/api/*");
         final Map<String, String> params = new HashMap<String, String>();
         params.put("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
-        params.put("contextConfigLocation", "org.baeldung.config.frontend");
+        params.put("contextConfigLocation", "org.baeldung.config.api");
         registration.setInitParameters(params);
-        registration.setName("FrontendServlet");
+        registration.setName("ApiServlet");
         registration.setLoadOnStartup(1);
         return registration;
     }

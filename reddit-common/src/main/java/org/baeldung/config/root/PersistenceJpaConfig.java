@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import liquibase.integration.spring.SpringLiquibase;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -67,13 +69,13 @@ public class PersistenceJpaConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    // @Bean
-    // public SpringLiquibase liquibase() {
-    // final SpringLiquibase liquibase = new SpringLiquibase();
-    // liquibase.setChangeLog("classpath:liquibase-changeLog.xml");
-    // liquibase.setDataSource(dataSource());
-    // return liquibase;
-    // }
+    @Bean
+    public SpringLiquibase liquibase() {
+        final SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:liquibase-changeLog.xml");
+        liquibase.setDataSource(dataSource());
+        return liquibase;
+    }
 
     @Bean
     public PasswordEncoder encoder() {
