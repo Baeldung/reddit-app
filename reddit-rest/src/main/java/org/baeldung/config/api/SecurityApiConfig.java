@@ -1,7 +1,10 @@
-package org.baeldung.config.root;
+package org.baeldung.config.api;
 
+import org.baeldung.security.MyRememberMeTokenService;
 import org.baeldung.security.MyUserDetailsService;
+import org.baeldung.security.RememberMePersistentTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,11 +14,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan({ "org.baeldung.security" })
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityApiConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService userDetailsService;
@@ -25,6 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationSuccessHandler successHandler;
+
+    @Autowired
+    private RememberMePersistentTokenRepository tokenRepository;
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -39,17 +46,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
-        http.anonymous().disable().csrf().disable().authorizeRequests()
-    	    .antMatchers("/api/*","/feedForm","/profile","/scheduledPosts","/feeds","/changePassword","/updatePassword").authenticated()
-            .antMatchers("/adminHome","/users").hasAuthority("USER_READ_PRIVILEGE")
+        http.csrf().disable().authorizeRequests()
+    	    .antMatchers("/users*").authenticated()
+    	    .antMatchers("/loginn*").anonymous()
         .and()
-	    .formLogin().loginPage("/").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/home")
-            .failureUrl("/?error").usernameParameter("username").passwordParameter("password")
-            .successHandler(successHandler)
-            .and()
-            .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/")
-            .and()
-            .sessionManagement().sessionFixation().none().maximumSessions(1).maxSessionsPreventsLogin(true);
+	    .formLogin().loginPage("/loginn")
+	    .and()
+            .rememberMe().userDetailsService(userDetailsService).rememberMeServices(rememberMeService())
+
+;//            .and()
+//            .sessionManagement().sessionFixation().none().maximumSessions(1).maxSessionsPreventsLogin(true);
         // @formatter:on
+    }
+
+    @Bean
+    public RememberMeServices rememberMeService() {
+        final MyRememberMeTokenService service = new MyRememberMeTokenService("mykey", userDetailsService, tokenRepository);
+        service.setAlwaysRemember(true);
+        return service;
     }
 }

@@ -80,7 +80,7 @@ $(function(){
                              ],
         "serverSide": true,
         "ajax": function(data, callback, settings) {
-            $.get('api/users', {
+            $.get('/reddit-rest/users', {
                 size: data.length,
                 page: (data.start/data.length),
                 sortDir: data.order[0].dir,
