@@ -17,6 +17,7 @@
         <module>reddit-common</module>
         <module>reddit-rest</module>
         <module>reddit-ui</module>
+        <module>reddit-web</module>
     </modules>
 
     <build>

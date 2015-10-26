@@ -3,7 +3,6 @@
     <artifactId>reddit-ui</artifactId>
 
     <name>reddit-ui</name>
-    <packaging>war</packaging>
 
     <parent>
         <groupId>org.baeldung</groupId>
