@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class ScheduledPostUpdateCommandDto extends ScheduledPostCommandDto {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private Long id;
 
     public ScheduledPostUpdateCommandDto() {

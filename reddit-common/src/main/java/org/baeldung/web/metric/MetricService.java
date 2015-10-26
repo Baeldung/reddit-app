@@ -15,7 +15,7 @@ public class MetricService implements IMetricService {
     private final Map<String, HashMap<Integer, Integer>> metricMap;
     private final Map<Integer, Integer> statusMetric;
     private final Map<String, HashMap<Integer, Integer>> timeMap;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public MetricService() {
         super();

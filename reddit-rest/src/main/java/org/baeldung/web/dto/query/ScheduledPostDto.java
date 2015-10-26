@@ -9,7 +9,7 @@ import org.baeldung.reddit.util.Dto;
 import org.baeldung.web.controller.rest.SubmissionResponseDto;
 
 public class ScheduledPostDto implements Dto {
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private Long id;
 

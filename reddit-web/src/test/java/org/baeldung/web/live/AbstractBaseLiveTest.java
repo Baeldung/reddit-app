@@ -22,7 +22,7 @@ import com.jayway.restassured.specification.RequestSpecification;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class }, loader = AnnotationConfigContextLoader.class)
 public abstract class AbstractBaseLiveTest {
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static final SessionFilter sessionFilter = new SessionFilter();
 
     private static boolean isAuthenticated;

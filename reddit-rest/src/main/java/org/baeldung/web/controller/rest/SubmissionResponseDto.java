@@ -8,7 +8,7 @@ import org.baeldung.reddit.util.Dto;
 
 public class SubmissionResponseDto implements Dto {
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private int attemptNumber;
 
@@ -54,10 +54,6 @@ public class SubmissionResponseDto implements Dto {
 
     public void setLocalScoreCheckDate(final String localScoreCheckDate) {
         this.localScoreCheckDate = localScoreCheckDate;
-    }
-
-    public static SimpleDateFormat getDateformat() {
-        return dateFormat;
     }
 
     public void setLocalSubmissionDate(final Date date, final String timezone) {

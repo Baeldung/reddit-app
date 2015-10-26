@@ -38,7 +38,7 @@ public class PostPersistenceIntegrationTest {
 
     private User userJohn, userTom;
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     // fixtures
 
