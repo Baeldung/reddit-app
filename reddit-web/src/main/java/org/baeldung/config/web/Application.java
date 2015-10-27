@@ -3,7 +3,6 @@ package org.baeldung.config.web;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.catalina.security.SecurityConfig;
 import org.baeldung.config.api.WebApiConfig;
 import org.baeldung.config.frontend.ThymeleafConfig;
 import org.baeldung.config.frontend.WebFrontendConfig;
@@ -48,7 +47,7 @@ public class Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
-        application.sources(Application.class, CommonConfig.class, PersistenceJpaConfig.class, RedditConfig.class, SecurityConfig.class, ServiceConfig.class, WebGeneralConfig.class);
+        application.sources(Application.class, CommonConfig.class, PersistenceJpaConfig.class, RedditConfig.class, ServiceConfig.class, WebGeneralConfig.class);
         return application;
     }
 
