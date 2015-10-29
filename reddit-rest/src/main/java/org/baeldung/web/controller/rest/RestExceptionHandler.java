@@ -1,9 +1,10 @@
-package org.baeldung.web.common;
+package org.baeldung.web.controller.rest;
 
 import java.io.Serializable;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.baeldung.web.common.ApiError;
 import org.baeldung.web.exceptions.FeedServerException;
 import org.baeldung.web.exceptions.InvalidDateException;
 import org.baeldung.web.exceptions.InvalidOldPasswordException;
@@ -36,7 +37,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
     }
 
     // API
-
     // 4xx
 
     @ExceptionHandler({ OAuth2AccessDeniedException.class })
@@ -47,10 +47,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler impleme
     }
 
     @ExceptionHandler({ AuthenticationCredentialsNotFoundException.class, AccessDeniedException.class })
-    public String handleAccessDeniedException(final Exception ex, final WebRequest request) {
+    public ResponseEntity<Object> handleAccessDeniedException(final Exception ex, final WebRequest request) {
         logger.error("403 Status Code", ex);
-        final String response = "Error Occurred - Forbidden: " + ex.getMessage();
-        return "redirect:/submissionResponse?msg=" + response;
+        final ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, ex);
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({ HttpClientErrorException.class })

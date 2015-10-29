@@ -89,9 +89,16 @@ $(document).ready(function() {
                        },
                        { "targets": 5, "data": "id",
                     	    "render": function ( data, type, full, meta ) {
-                    	        return '<a class="btn btn-warning" href="editPost/'+data+
+                    	    	if(full.old){
+                    	    		return '<a class="btn btn-default" href="scheduledPost/'+data+
+                                    '">Details</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
+                                    +') ">Delete</a>'
+                    	    	}
+                    	    	else{
+                    	        return '<a class="btn btn-warning" href="scheduledPost/'+data+
                                 '">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
                                 +') ">Delete</a>';
+                    	    	}
                     	      }
                        }
                      ],
@@ -123,7 +130,6 @@ $(document).ready(function() {
         "createdRow": function ( row, data, index ) {
             if ( data.old ) {
                 $('td', row).addClass('active');
-                console.log("hkhkhkhk");
             }
         }
     } );

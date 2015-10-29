@@ -29,7 +29,7 @@ public class PostMvcController {
     }
 
     @PreAuthorize("@resourceSecurityService.isPostOwner(#id)")
-    @RequestMapping(value = "/editPost/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/scheduledPost/{id}", method = RequestMethod.GET)
     public String showEditPostForm(@PathVariable("id") final Long id) {
         return "editPostForm";
     }

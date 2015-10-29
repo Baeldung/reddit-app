@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import org.baeldung.web.dto.command.ScheduledPostAddCommandDto;
 import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
@@ -21,14 +22,14 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
 
     @Test
     public void whenScheduleANewPost_thenCreated() throws ParseException, IOException {
-        final ScheduledPostDto post = new ScheduledPostDto();
+        final ScheduledPostAddCommandDto post = new ScheduledPostAddCommandDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
         post.setDate(DATE);
 
         final RequestSpecification givenAuth = givenAuth();
-        final Response response = withRequestBody(givenAuth, post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
+        final Response response = withRequestBody(givenAuth, post).post(urlPrefix + "/api/scheduledPosts");
 
         assertEquals(201, response.statusCode());
         final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
@@ -50,7 +51,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
         final ScheduledPostDto post = newDto();
 
         post.setTitle("new title");
-        Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).put(urlPrefix + "/api/scheduledPosts/" + post.getId());
+        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId());
 
         assertEquals(200, response.statusCode());
         response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getId());
@@ -109,13 +110,13 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
 
     @Override
     protected ScheduledPostDto newDto() throws ParseException, IOException {
-        final ScheduledPostDto post = new ScheduledPostDto();
+        final ScheduledPostAddCommandDto post = new ScheduledPostAddCommandDto();
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
         post.setDate(DATE);
-        final Response response = withRequestBody(givenAuth(), post).queryParams("resubmitOptionsActivated", false).post(urlPrefix + "/api/scheduledPosts");
+        post.setResubmitOptionsActivated(false);
+        final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
         return objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
     }
-
 }
