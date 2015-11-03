@@ -104,7 +104,6 @@ border-color: #ddd;
 function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
     var sr = $("input[name='subreddit']").val();
-    console.log(url);
     if(url.length >2 && sr.length > 2){
         $.get("api/posts",{url: url, sr: sr}, function(data){
         	var result = JSON.parse(data);
@@ -132,7 +131,6 @@ $("#submitBut").click(function(event) {
 function submitPost(){
     var data = {};
     $('form').serializeArray().map(function(x){data[x.name] = x.value;});
-    console.log(JSON.stringify(data));
     $.ajax({
         url: "api/posts",
         data: JSON.stringify(data),
@@ -148,7 +146,6 @@ function submitPost(){
         }
     })
     .fail(function(error) {
-    	console.log(error);
     	showAlertMessage(error.responseText);
     }); 
 }

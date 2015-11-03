@@ -150,7 +150,6 @@ border-color: #ddd;
 function checkIfAlreadySubmitted(){
     var url = $("input[name='url']").val();
     var sr = $("input[name='sr']").val();
-    console.log(url);
     if(url.length >2 && sr.length > 2){
         $.post("../api/checkIfAlreadySubmitted",{url: url, sr: sr}, function(data){
             var result = JSON.parse(data);
@@ -191,7 +190,6 @@ function editPost(){
 	var id = $("#id").val();
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
-    console.log(JSON.stringify(data));
 
 	$.ajax({
         url: "../api/scheduledPosts/"+id,

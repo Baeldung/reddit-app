@@ -132,7 +132,6 @@ $("#submitBut").click(function(event) {
 function editPref(){
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
-    console.log(JSON.stringify(data));
 	$.ajax({
         url: "api/user/preference/"+$('input[name="id"]').val(),
         data: JSON.stringify(data),

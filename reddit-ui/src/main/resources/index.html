@@ -12,7 +12,8 @@
 
 <div class="container">
 <h1>Schedule to Reddit</h1>
-
+<p class="text-muted">Schedule to Reddit Detailed Description Goes Here</p>
+<br/>
 <br/><br/>
 <div class="alert alert-info" th:if="${param.containsKey('msg')}" th:text="${param.msg[0]}">
 
@@ -23,6 +24,7 @@ Invalid username or password
 <div class="alert alert-warning" th:if="${param.containsKey('invalidSession')}">
 Session timeout
 </div>
+
 <form method="post" th:action="@{/j_spring_security_check}" class="form-horizontal col-sm-6">
   <div class="form-group">
     <label for="username" class="control-label col-sm-3">Username</label>

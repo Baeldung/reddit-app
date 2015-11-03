@@ -52,7 +52,6 @@ $("#submitBut").click(function(event) {
 function addSite(){
 	 var data = {};
 	    $('form').serializeArray().map(function(x){data[x.name] = x.value;});
-	    console.log(JSON.stringify(data));
 	 $.ajax({
 	    url: 'api/myFeeds',
 	    data: JSON.stringify(data),

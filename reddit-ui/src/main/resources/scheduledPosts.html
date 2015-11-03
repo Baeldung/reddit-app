@@ -73,7 +73,6 @@ $(document).ready(function() {
                        { "name": "noOfAttempts",  "targets": 2,"width":"5%"},
                        { "targets": 3, "data": "status","width":"20%","orderable": false,
                            "render": function ( data, type, full, meta ) {
-                        	   console.log(meta);
                                return data+' <a href="#" onclick="showDetailedStatus('+meta.row+')">More Details</a>';
                              }
                        },
