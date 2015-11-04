@@ -45,7 +45,7 @@ public class RegistrationListener implements ApplicationListener<org.baeldung.se
         final String recipientAddress = user.getPreference().getEmail();
         final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/users/regitrationConfirmation?token=" + token;
-        final String message = "Confirm registration";
+        final String message = "Please confirm your registration to ToReddit: ";
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
