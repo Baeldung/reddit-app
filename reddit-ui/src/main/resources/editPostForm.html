@@ -32,7 +32,7 @@ border-color: #ddd;
 <h1>Edit Scheduled Post</h1>
 <form method="post" role="form" data-toggle="validator">
 <div class="row">
-<input type="hidden" id="id" name="id"/>
+<input type="hidden" id="uuid" name="uuid"/>
 <input type="hidden" name="submissionResponse" />
 <input type="hidden" name="redditID" />
 <input type="hidden" name="Sent"/>
@@ -43,7 +43,7 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <div class="form-group">
-    <label class="col-sm-3">Url</label>
+    <label class="col-sm-3">URL</label>
     <span class="col-sm-9"><input name="url" type="url" placeholder="url" class="form-control"  required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>  
@@ -81,10 +81,10 @@ border-color: #ddd;
 
     <script type="text/javascript">
     /*<![CDATA[*/
-        $(function(){
+        /* $(function(){
             $('*[name=date]').appendDtpicker({"inline": true});
             $('*[name=date]').handleDtpicker('hide');
-        });
+        }); */
         var toggle = "show";
         function togglePicker(){
             $('*[name=date]').handleDtpicker(toggle);
@@ -130,10 +130,17 @@ border-color: #ddd;
                   $('*[name="'+key+'"]').val(value);
               }
           });
+          
+          $('*[name=date]').appendDtpicker({"inline": true});
+          $('*[name=date]').handleDtpicker('hide');
+          
           if(data.minScoreRequired == 0){
               $('input[name="resubmitOptionsActivated"]')[0].checked=false;
               $("#resubmit").hide();
+          }else{
+        	  initExtaCheckBoxes();
           }
+          
           if(data.old){
         	  $("input").attr("disabled","disabled");
         	  $("select").attr("disabled","disabled");
@@ -171,6 +178,7 @@ function checkIfAlreadySubmitted(){
 $('input[name="resubmitOptionsActivated"]').change(function() {
   if($(this)[0].checked){
       $("#resubmit").show();
+      initExtaCheckBoxes();
   }else{
       resetResubmitOptions();
       $("#resubmit").hide();
@@ -187,7 +195,7 @@ $("#submitBut").click(function(event) {
 });
 
 function editPost(){
-	var id = $("#id").val();
+	var id = $("#uuid").val();
     var data = {};
 	$('form').serializeArray().map(function(x){data[x.name] = x.value;});
 

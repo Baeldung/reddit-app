@@ -42,7 +42,7 @@ border-color: #ddd;
 </div>
 <br/><br/>
 <div class="form-group">
-    <label class="col-sm-3">Url</label>
+    <label class="col-sm-3">URL</label>
     <span class="col-sm-9"><input name="url" type="url" placeholder="url" class="form-control" required="required" data-minlength="3"/></span>
 </div>
 <br/><br/>  
@@ -168,6 +168,8 @@ border-color: #ddd;
           if(data.minScoreRequired == 0){
         	  $('input[name="resubmitOptionsActivated"]')[0].checked=false;
         	  $("#resubmit").hide();
+          } else{
+        	  initExtaCheckBoxes();
           }
       });
   }
@@ -239,6 +241,7 @@ function checkIfAlreadySubmitted(){
 $('input[name="resubmitOptionsActivated"]').change(function() {
   if($(this)[0].checked){
 	  $("#resubmit").show();
+	  initExtaCheckBoxes();
   }else{
 	  resetResubmitOptions();
 	  $("#resubmit").hide();

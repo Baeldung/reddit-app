@@ -61,7 +61,7 @@ $(function(){
         "searching":false,
         "columnDefs": [
                        { "name": "username",   "targets": 0},
-                       { "name": "scheduledPostsCount",   "targets": 1,"orderable": false},
+                       { "name": "scheduledPostsCount",   "targets": 1},
                        { "targets": 2, "data": "roles","width":"20%","orderable": false,
                            "render": function ( data, type, full, meta ) {
                                return extractRolesName(data);
@@ -95,6 +95,11 @@ $(function(){
                     data: res
                 });
             });
+        },
+        "createdRow": function ( row, data, index ) {
+            if (!data.enabled) {
+                $('td', row).addClass('active');
+            }
         }
     } );
 });

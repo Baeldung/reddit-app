@@ -86,17 +86,17 @@ $(document).ready(function() {
                    	    	}
                    	      }
                        },
-                       { "targets": 5, "data": "id",
+                       { "targets": 5, "data": "uuid",
                     	    "render": function ( data, type, full, meta ) {
                     	    	if(full.old){
                     	    		return '<a class="btn btn-default" href="scheduledPost/'+data+
-                                    '">Details</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
-                                    +') ">Delete</a>'
+                                    '">Details</a> <a href="#" class="btn btn-danger" onclick="confirmDelete(\''+data
+                                    +'\') ">Delete</a>'
                     	    	}
                     	    	else{
                     	        return '<a class="btn btn-warning" href="scheduledPost/'+data+
-                                '">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete('+data
-                                +') ">Delete</a>';
+                                '">Edit</a> <a href="#" class="btn btn-danger" onclick="confirmDelete(\''+data
+                                +'\') ">Delete</a>';
                     	    	}
                     	      }
                        }

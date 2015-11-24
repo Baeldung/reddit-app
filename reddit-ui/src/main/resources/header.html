@@ -8,24 +8,24 @@
     <div th:switch="${menuType}">
     
     	<div th:case="signupOnly" class="navbar-text navbar-right">
-	        <a th:href="@{/signup}">Sign up</a>
+	        <a th:href="@{/signup}">Sign Up</a>
 	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
 	    <div th:case="loginOnly" class="navbar-text navbar-right">
-	        <a th:href="@{/}">Login</a>
+	        <a th:href="@{/}">Log In</a>
 	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
 	    <div th:case="profileOnly" class="navbar-text navbar-right">Logged in as 
 	        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
-	        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
+	        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
 	    <div th:case="*">
 		    <p class="navbar-text navbar-right">Logged in as 
 		        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
-		        <a th:href="@{/logout}">Logout</a>&nbsp;&nbsp;&nbsp;
+		        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 		    </p>
 		        
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -57,8 +57,12 @@
 <img th:src="@{/resources/spin.gif}"/>
 </div>
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script th:src="@{/resources/jquery.min.js}"></script>
 <script>
+$.ajaxSetup({
+    timeout: 3000
+});
+
 $(document).ajaxStart(function() {
     $("#loading-layer").show();
     $("#errorAlert").hide();
@@ -73,7 +77,7 @@ $(document).ajaxError(function(event, jqXHR, ajaxSettings, error) {
 	if(jqXHR.responseJSON.message){
 		showAlertMessage(jqXHR.responseJSON.message);
 	}else{
-		showAlertMessage("Sorry, error occurred");
+		showAlertMessage("Sorry, Error Occurred");
 	}
 	
 });
