@@ -37,6 +37,12 @@ public class UserQueryService implements IUserQueryService {
 
     @Override
     @Transactional
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional
     public List<User> getUsersList(final int page, final int size, final String sortDir, final String sort) {
         final PageRequest pageReq = new PageRequest(page, size, Sort.Direction.fromString(sortDir), sort);
         return userRepository.findAll(pageReq).getContent();
@@ -45,12 +51,12 @@ public class UserQueryService implements IUserQueryService {
     @Override
     public TokenState checkPasswordResetToken(final long userId, final String token) {
         final PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);
-        if ((passToken == null) || (passToken.getUser().getId() != userId)) {
+        if (passToken == null || passToken.getUser().getId() != userId) {
             return TokenState.INVALID;
         }
 
         final Calendar cal = Calendar.getInstance();
-        if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+        if (passToken.getExpiryDate().getTime() - cal.getTime().getTime() <= 0) {
             return TokenState.EXPIRED;
         }
 
@@ -68,7 +74,7 @@ public class UserQueryService implements IUserQueryService {
         }
 
         final Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+        if (verificationToken.getExpiryDate().getTime() - cal.getTime().getTime() <= 0) {
             return TokenState.EXPIRED;
         }
 
