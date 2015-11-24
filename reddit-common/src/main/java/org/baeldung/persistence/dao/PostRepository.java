@@ -25,4 +25,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Long countByUser(final User user);
 
+    Post findByUuid(String uuid);
+
+    Long deleteByUuid(String uuid);
+
+    List<Post> findByUuidIsNull();
+
 }

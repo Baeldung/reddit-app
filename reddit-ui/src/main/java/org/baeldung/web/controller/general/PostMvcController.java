@@ -28,9 +28,9 @@ public class PostMvcController {
         return "schedulePostForm";
     }
 
-    @PreAuthorize("@resourceSecurityService.isPostOwner(#id)")
-    @RequestMapping(value = "/scheduledPost/{id}", method = RequestMethod.GET)
-    public String showEditPostForm(@PathVariable("id") final Long id) {
+    @PreAuthorize("@resourceSecurityService.isPostOwner(#uuid)")
+    @RequestMapping(value = "/scheduledPost/{uuid}", method = RequestMethod.GET)
+    public String showEditPostForm(@PathVariable("uuid") final String uuid) {
         return "editPostForm";
     }
 

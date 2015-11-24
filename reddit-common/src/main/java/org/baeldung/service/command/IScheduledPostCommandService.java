@@ -8,6 +8,6 @@ public interface IScheduledPostCommandService {
 
     void updatePost(final boolean isSuperUser, final Post post, boolean resubmitOptionsActivated);
 
-    void deletePostById(Long id);
+    void deletePostByUuid(String uuid);
 
 }

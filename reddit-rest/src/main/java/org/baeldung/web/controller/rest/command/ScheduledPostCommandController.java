@@ -49,19 +49,19 @@ class ScheduledPostCommandController {
         return convertToDto(postCreated);
     }
 
-    @PreAuthorize("@resourceSecurityService.isPostOwner(#postDto.id)")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("@resourceSecurityService.isPostOwner(#postDto.uuid)")
+    @RequestMapping(value = "/{uuid}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(final HttpServletRequest request, @RequestBody final ScheduledPostUpdateCommandDto postDto) throws ParseException {
         final Post post = convertToEntity(postDto);
         scheduledPostService.updatePost(request.isUserInRole("POST_UNLIMITED_PRIVILEGE"), post, postDto.isResubmitOptionsActivated());
     }
 
-    @PreAuthorize("@resourceSecurityService.isPostOwner(#id)")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("@resourceSecurityService.isPostOwner(#uuid)")
+    @RequestMapping(value = "/{uuid}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable("id") final Long id) {
-        scheduledPostService.deletePostById(id);
+    public void deletePost(@PathVariable("uuid") final String uuid) {
+        scheduledPostService.deletePostByUuid(uuid);
     }
 
     //

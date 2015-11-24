@@ -24,6 +24,7 @@ public class Setup {
     private void setupData() {
         setupRolesAndPrivileges();
         setupUsers();
+        updateOldPosts();
     }
 
     private void setupRolesAndPrivileges() {
@@ -43,6 +44,10 @@ public class Setup {
         for (final User user : users) {
             setupService.setupUser(user);
         }
+    }
+
+    private void updateOldPosts() {
+        setupService.generateUuidForOldPosts();
     }
 
 }

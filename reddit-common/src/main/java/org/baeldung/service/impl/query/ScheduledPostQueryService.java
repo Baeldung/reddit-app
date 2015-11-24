@@ -32,8 +32,8 @@ public class ScheduledPostQueryService implements IScheduledPostQueryService {
     }
 
     @Override
-    public Post getPostById(final Long id) {
-        return postRepository.findOne(id);
+    public Post getPostByUuid(final String uuid) {
+        return postRepository.findByUuid(uuid);
     }
 
     @Override

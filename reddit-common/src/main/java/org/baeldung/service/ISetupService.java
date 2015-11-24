@@ -11,4 +11,6 @@ public interface ISetupService {
 
     void setupRole(Role role);
 
+    void generateUuidForOldPosts();
+
 }

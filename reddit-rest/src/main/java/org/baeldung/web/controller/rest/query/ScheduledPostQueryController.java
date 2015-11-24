@@ -50,13 +50,14 @@ class ScheduledPostQueryController {
         final PagingInfo pagingInfo = new PagingInfo(page, size, scheduledPostService.countScheduledPostsByUser(user));
         response.addHeader("PAGING_INFO", pagingInfo.toString());
         final List<Post> posts = scheduledPostService.getPostsList(user, page, size, sortDir, sort);
+        System.out.println(posts);
         return posts.stream().map(post -> convertToDto(post)).collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
     @ResponseBody
-    public final ScheduledPostDto getPost(@PathVariable("id") final Long id) {
-        return convertToDto(scheduledPostService.getPostById(id));
+    public final ScheduledPostDto getPost(@PathVariable("uuid") final String uuid) {
+        return convertToDto(scheduledPostService.getPostByUuid(uuid));
     }
 
     @RequestMapping(value = "/available")
@@ -75,7 +76,7 @@ class ScheduledPostQueryController {
         postDto.setSubmissionDate(post.getSubmissionDate(), getCurrentUser().getPreference().getTimezone());
 
         final List<SubmissionResponse> response = post.getSubmissionsResponse();
-        if ((response != null) && (response.size() > 0)) {
+        if (response != null && response.size() > 0) {
             if (post.getMinScoreRequired() == 0) { // resubmit options not activated - only one attempt
                 postDto.setStatus(response.get(0).getContent());
             } else {
@@ -88,8 +89,8 @@ class ScheduledPostQueryController {
             postDto.setDetailedStatus(Collections.emptyList());
         }
 
-        postDto.setOld(post.isSent() && (post.getNoOfAttempts() < 1));
-        postDto.setPostRedditUrl((post.getRedditID() == null) ? "#" : String.format(POST_URL_TEMPLATE, post.getSubreddit(), post.getRedditID()));
+        postDto.setOld(post.isSent() && post.getNoOfAttempts() < 1);
+        postDto.setPostRedditUrl(post.getRedditID() == null ? "#" : String.format(POST_URL_TEMPLATE, post.getSubreddit(), post.getRedditID()));
 
         return postDto;
     }

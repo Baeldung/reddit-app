@@ -11,7 +11,7 @@ import org.baeldung.web.controller.rest.SubmissionResponseDto;
 public class ScheduledPostDto implements Dto {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    private Long id;
+    private String uuid;
 
     private String title;
 
@@ -51,12 +51,12 @@ public class ScheduledPostDto implements Dto {
 
     //
 
-    public Long getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getTitle() {
@@ -196,7 +196,7 @@ public class ScheduledPostDto implements Dto {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("ScheduledPostDto [id=").append(id).append(", title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", sendReplies=").append(sendReplies).append(", date=").append(date)
+        builder.append("ScheduledPostDto [uuid=").append(uuid).append(", title=").append(title).append(", subreddit=").append(subreddit).append(", url=").append(url).append(", sendReplies=").append(sendReplies).append(", date=").append(date)
                 .append(", noOfAttempts=").append(noOfAttempts).append(", checkAfterInterval=").append(checkAfterInterval).append(", submitAfterInterval=").append(submitAfterInterval).append(", minScoreRequired=").append(minScoreRequired)
                 .append(", minTotalVotes=").append(minTotalVotes).append(", keepIfHasComments=").append(keepIfHasComments).append(", deleteAfterLastAttempt=").append(deleteAfterLastAttempt).append(", status=").append(status).append(", detailedStatus=")
                 .append(detailedStatus).append(", postRedditUrl=").append(postRedditUrl).append(", isOld=").append(isOld).append("]");

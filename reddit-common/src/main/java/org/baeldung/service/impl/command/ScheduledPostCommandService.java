@@ -3,6 +3,8 @@ package org.baeldung.service.impl.command;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang.time.DateUtils;
 import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.model.Post;
@@ -46,7 +48,7 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
         Preconditions.checkArgument(post.getMinScoreRequired() >= 0, "Minimum Score can not be negative");
         Preconditions.checkArgument(post.getMinTotalVotes() >= 0, "Minimum Total votes can not be negative");
 
-        final Post oldPost = postRepository.findOne(post.getId());
+        final Post oldPost = postRepository.findByUuid(post.getUuid());
 
         if (resubmitOptionsActivated && !checkIfValidResubmitOptions(post)) {
             throw new InvalidResubmitOptionsException("Invalid Resubmit Options");
@@ -57,6 +59,7 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
         if (!(isSuperUser || checkIfCanSchedule(oldPost.getUser(), post.getSubmissionDate()))) {
             throw new InvalidDateException("Scheduling Date exceeds daily limit");
         }
+        post.setId(oldPost.getId());
         post.setRedditID(oldPost.getRedditID());
         post.setSent(oldPost.isSent());
         post.setSubmissionsResponse(post.getSubmissionsResponse());
@@ -65,8 +68,9 @@ public class ScheduledPostCommandService implements IScheduledPostCommandService
     }
 
     @Override
-    public void deletePostById(final Long id) {
-        postRepository.delete(id);
+    @Transactional
+    public void deletePostByUuid(final String uuid) {
+        postRepository.deleteByUuid(uuid);
     }
 
     //

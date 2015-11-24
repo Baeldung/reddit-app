@@ -18,10 +18,10 @@ public class ResourceSecurityService {
     @Autowired
     private MyFeedRepository feedRepository;
 
-    public boolean isPostOwner(final Long postId) {
+    public boolean isPostOwner(final String uuid) {
         final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userPrincipal.getUser();
-        final Post post = postRepository.findOne(postId);
+        final Post post = postRepository.findByUuid(uuid);
         return post.getUser().getId() == user.getId();
     }
 

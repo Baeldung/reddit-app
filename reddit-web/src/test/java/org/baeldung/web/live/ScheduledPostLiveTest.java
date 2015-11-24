@@ -51,17 +51,17 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
         final ScheduledPostDto post = newDto();
 
         post.setTitle("new title");
-        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getId());
+        Response response = withRequestBody(givenAuth(), post).put(urlPrefix + "/api/scheduledPosts/" + post.getUuid());
 
         assertEquals(200, response.statusCode());
-        response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getId());
+        response = givenAuth().get(urlPrefix + "/api/scheduledPosts/" + post.getUuid());
         assertTrue(response.asString().contains(post.getTitle()));
     }
 
     @Test
     public void whenDeletingScheduledPost_thenDeleted() throws ParseException, IOException {
         final ScheduledPostDto post = newDto();
-        final Response response = givenAuth().delete(urlPrefix + "/api/scheduledPosts/" + post.getId());
+        final Response response = givenAuth().delete(urlPrefix + "/api/scheduledPosts/" + post.getUuid());
 
         assertEquals(204, response.statusCode());
     }

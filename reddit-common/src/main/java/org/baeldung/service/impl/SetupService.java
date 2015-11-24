@@ -1,13 +1,17 @@
 package org.baeldung.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.UUID;
 
+import org.baeldung.persistence.dao.PostRepository;
 import org.baeldung.persistence.dao.PreferenceRepository;
 import org.baeldung.persistence.dao.PrivilegeRepository;
 import org.baeldung.persistence.dao.RoleRepository;
 import org.baeldung.persistence.dao.UserRepository;
+import org.baeldung.persistence.model.Post;
 import org.baeldung.persistence.model.Preference;
 import org.baeldung.persistence.model.Privilege;
 import org.baeldung.persistence.model.Role;
@@ -38,6 +42,9 @@ public class SetupService implements ISetupService {
 
     @Autowired
     private PrivilegeRepository privilegeRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     @Transactional
@@ -92,6 +99,17 @@ public class SetupService implements ISetupService {
         pref.setTimezone(TimeZone.getDefault().getID());
         pref.setEmail(user.getUsername() + "@test.com");
         return preferenceRepository.save(pref);
+    }
+
+    @Override
+    @Transactional
+    public void generateUuidForOldPosts() {
+        final List<Post> posts = postRepository.findByUuidIsNull();
+        for (final Post post : posts) {
+            post.setUuid(UUID.randomUUID().toString());
+            postRepository.save(post);
+        }
+
     }
 
 }

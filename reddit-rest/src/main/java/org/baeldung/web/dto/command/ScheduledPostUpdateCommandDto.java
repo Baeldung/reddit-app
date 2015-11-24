@@ -7,7 +7,7 @@ import java.util.TimeZone;
 
 public class ScheduledPostUpdateCommandDto extends ScheduledPostCommandDto {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private Long id;
+    private String uuid;
 
     public ScheduledPostUpdateCommandDto() {
         super();
@@ -15,12 +15,12 @@ public class ScheduledPostUpdateCommandDto extends ScheduledPostCommandDto {
 
     //
 
-    public Long getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Date getSubmissionDateConverted(final String timezone) throws ParseException {
