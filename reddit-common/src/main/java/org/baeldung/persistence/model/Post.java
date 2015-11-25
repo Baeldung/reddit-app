@@ -268,76 +268,99 @@ public class Post implements IEntity {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         final Post other = (Post) obj;
-        if (checkAfterInterval != other.checkAfterInterval)
+        if (checkAfterInterval != other.checkAfterInterval) {
             return false;
-        if (deleteAfterLastAttempt != other.deleteAfterLastAttempt)
+        }
+        if (deleteAfterLastAttempt != other.deleteAfterLastAttempt) {
             return false;
+        }
         if (id == null) {
-            if (other.id != null)
+            if (other.id != null) {
                 return false;
-        } else if (!id.equals(other.id))
+            }
+        } else if (!id.equals(other.id)) {
             return false;
-        if (isSent != other.isSent)
+        }
+        if (isSent != other.isSent) {
             return false;
-        if (keepIfHasComments != other.keepIfHasComments)
+        }
+        if (keepIfHasComments != other.keepIfHasComments) {
             return false;
-        if (minScoreRequired != other.minScoreRequired)
+        }
+        if (minScoreRequired != other.minScoreRequired) {
             return false;
-        if (minTotalVotes != other.minTotalVotes)
+        }
+        if (minTotalVotes != other.minTotalVotes) {
             return false;
-        if (noOfAttempts != other.noOfAttempts)
+        }
+        if (noOfAttempts != other.noOfAttempts) {
             return false;
+        }
         if (redditID == null) {
-            if (other.redditID != null)
+            if (other.redditID != null) {
                 return false;
-        } else if (!redditID.equals(other.redditID))
+            }
+        } else if (!redditID.equals(other.redditID)) {
             return false;
-        if (sendReplies != other.sendReplies)
+        }
+        if (sendReplies != other.sendReplies) {
             return false;
+        }
         if (submissionDate == null) {
-            if (other.submissionDate != null)
+            if (other.submissionDate != null) {
                 return false;
-        } else if (!submissionDate.equals(other.submissionDate))
+            }
+        } else if (submissionDate.getTime() - other.submissionDate.getTime() != 0) {
             return false;
-        if (submissionsResponse == null) {
-            if (other.submissionsResponse != null)
-                return false;
-        } else if (!submissionsResponse.equals(other.submissionsResponse))
+        }
+        if (submitAfterInterval != other.submitAfterInterval) {
             return false;
-        if (submitAfterInterval != other.submitAfterInterval)
-            return false;
+        }
         if (subreddit == null) {
-            if (other.subreddit != null)
+            if (other.subreddit != null) {
                 return false;
-        } else if (!subreddit.equals(other.subreddit))
+            }
+        } else if (!subreddit.equals(other.subreddit)) {
             return false;
+        }
         if (title == null) {
-            if (other.title != null)
+            if (other.title != null) {
                 return false;
-        } else if (!title.equals(other.title))
+            }
+        } else if (!title.equals(other.title)) {
             return false;
+        }
         if (url == null) {
-            if (other.url != null)
+            if (other.url != null) {
                 return false;
-        } else if (!url.equals(other.url))
+            }
+        } else if (!url.equals(other.url)) {
             return false;
+        }
         if (user == null) {
-            if (other.user != null)
+            if (other.user != null) {
                 return false;
-        } else if (!user.equals(other.user))
+            }
+        } else if (!user.equals(other.user)) {
             return false;
+        }
         if (uuid == null) {
-            if (other.uuid != null)
+            if (other.uuid != null) {
                 return false;
-        } else if (!uuid.equals(other.uuid))
+            }
+        } else if (!uuid.equals(other.uuid)) {
             return false;
+        }
         return true;
     }
 
