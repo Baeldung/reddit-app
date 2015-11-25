@@ -17,13 +17,13 @@
 	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
-	    <div th:case="profileOnly" class="navbar-text navbar-right">Logged in as 
+	    <div th:case="profileOnly" class="navbar-text navbar-right"> 
 	        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
 	        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
 	    <div th:case="*">
-		    <p class="navbar-text navbar-right">Logged in as 
+		    <p class="navbar-text navbar-right">
 		        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
 		        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 		    </p>
@@ -34,10 +34,10 @@
 		        <li><a th:href="@{/scheduledPosts}">My Scheduled Posts</a></li>
 		        <li><a th:href="@{/post}">Post to Reddit</a></li>
 		        <li><a th:href="@{/postSchedule}">Schedule Post to Reddit</a></li>
+		        <li><a href="mailto:toreddit@gmail.com">Contact Us</a></li>
 		      </ul>
 		      
 		    </div><!-- /.navbar-collapse -->
-	    
 	    </div>
     </div>
     
@@ -57,6 +57,7 @@
 <img th:src="@{/resources/spin.gif}"/>
 </div>
 </div>
+
 <script th:src="@{/resources/jquery.min.js}"></script>
 <script>
 $.ajaxSetup({
