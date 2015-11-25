@@ -168,9 +168,9 @@ border-color: #ddd;
           if(data.minScoreRequired == 0){
         	  $('input[name="resubmitOptionsActivated"]')[0].checked=false;
         	  $("#resubmit").hide();
-          } else{
-        	  initExtaCheckBoxes();
-          }
+          } 
+        	initExtaCheckBoxes();
+          
       });
   }
   
@@ -241,7 +241,7 @@ function checkIfAlreadySubmitted(){
 $('input[name="resubmitOptionsActivated"]').change(function() {
   if($(this)[0].checked){
 	  $("#resubmit").show();
-	  initExtaCheckBoxes();
+	  configExtaCheckBoxes();
   }else{
 	  resetResubmitOptions();
 	  $("#resubmit").hide();

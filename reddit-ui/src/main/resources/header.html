@@ -17,13 +17,13 @@
 	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
-	    <div th:case="profileOnly" class="navbar-text navbar-right"> 
+	    <div th:case="profileOnly" class="navbar-text navbar-right"> Hi, 
 	        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
 	        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 	    </div>
 	    
 	    <div th:case="*">
-		    <p class="navbar-text navbar-right">
+		    <p class="navbar-text navbar-right"> Hi, 
 		        <b><a th:href="@{/profile}" sec:authentication="principal.username">Bob</a></b>&nbsp;&nbsp;&nbsp;
 		        <a th:href="@{/logout}">Log Out</a>&nbsp;&nbsp;&nbsp;
 		    </p>
