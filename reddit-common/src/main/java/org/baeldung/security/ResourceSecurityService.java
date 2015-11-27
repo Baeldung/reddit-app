@@ -22,13 +22,13 @@ public class ResourceSecurityService {
         final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userPrincipal.getUser();
         final Post post = postRepository.findByUuid(uuid);
-        return post.getUser().getId() == user.getId();
+        return post.getUser().getId().equals(user.getId());
     }
 
     public boolean isRssFeedOwner(final Long feedId) {
         final UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userPrincipal.getUser();
         final MyFeed feed = feedRepository.findOne(feedId);
-        return feed.getUser().getId() == user.getId();
+        return feed.getUser().getId().equals(user.getId());
     }
 }
