@@ -2,6 +2,10 @@ package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import io.restassured.RestAssured;
+import io.restassured.authentication.FormAuthConfig;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -9,10 +13,6 @@ import java.text.ParseException;
 import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.authentication.FormAuthConfig;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSpecification;
 
 public class CommandAuthorizationLiveTest extends ScheduledPostLiveTest {
 

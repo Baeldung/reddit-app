@@ -14,13 +14,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { PersistenceJpaConfig.class })
-@Transactional
-@TransactionConfiguration
+@ContextConfiguration(classes = { PersistenceJpaConfig.class }, loader = AnnotationConfigContextLoader.class)
 public class UserProfileIntegrationTest {
 
     @Autowired
@@ -37,25 +34,37 @@ public class UserProfileIntegrationTest {
 
     @Before
     public void init() {
-        prefJohn = new Preference();
-        prefJohn.setEmail("john@gmail.com");
-        prefJohn.setTimezone(timezone);
-        preferenceRepository.save(prefJohn);
+        prefJohn = preferenceRepository.findByEmail("john@gmail.com");
+        if (prefJohn == null) {
+            prefJohn = new Preference();
+            prefJohn.setEmail("john@gmail.com");
+            prefJohn.setTimezone(timezone);
+            prefJohn = preferenceRepository.save(prefJohn);
+        }
 
-        prefTom = new Preference();
-        prefTom.setEmail("tom@gmail.com");
-        prefTom.setTimezone(timezone);
-        preferenceRepository.save(prefTom);
+        prefTom = preferenceRepository.findByEmail("tom@gmail.com");
+        if (prefTom == null) {
+            prefTom = new Preference();
+            prefTom.setEmail("tom@gmail.com");
+            prefTom.setTimezone(timezone);
+            prefTom = preferenceRepository.save(prefTom);
+        }
 
-        userJohn = new User();
-        userJohn.setUsername("John");
-        userJohn.setPreference(prefJohn);
-        userRepository.save(userJohn);
+        userJohn = userRepository.findByUsername("John");
+        if (userJohn == null) {
+            userJohn = new User();
+            userJohn.setUsername("John");
+            userJohn.setPreference(prefJohn);
+            userJohn = userRepository.save(userJohn);
+        }
 
-        userTom = new User();
-        userTom.setUsername("Tom");
-        userTom.setPreference(prefTom);
-        userRepository.save(userTom);
+        userTom = userRepository.findByUsername("Tom");
+        if (userTom == null) {
+            userTom = new User();
+            userTom.setUsername("Tom");
+            userTom.setPreference(prefTom);
+            userTom = userRepository.save(userTom);
+        }
     }
 
     // tests

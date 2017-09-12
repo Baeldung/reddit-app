@@ -2,6 +2,7 @@ package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import io.restassured.response.Response;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,7 +13,6 @@ import org.baeldung.web.dto.query.FeedDto;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.jayway.restassured.response.Response;
 
 public class MyFeedLiveTest extends AbstractLiveTest<FeedDto> {
 

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>reddit-common</artifactId>
 
@@ -12,48 +13,10 @@
 
     <dependencies>
 
-        <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-        </dependency>
-
-
 
         <!-- Spring Security -->
 
@@ -72,7 +35,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>2.0.7.RELEASE</version>
         </dependency>
 
         <!-- java mail -->
@@ -81,8 +43,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
-
-
 
         <!-- rome -->
 
@@ -109,7 +69,6 @@
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>${xml-apis.version}</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
@@ -119,6 +78,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>javax.transaction-api</artifactId>
         </dependency>
 
         <!-- persistence - h2 -->
@@ -133,7 +97,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
         </dependency>
 
         <!-- persistence - liquibase -->
@@ -180,7 +143,6 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>${javax-validation.version}</version>
         </dependency>
 
         <!-- apache mahout -->
@@ -201,7 +163,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -246,11 +207,18 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit-dep</artifactId>
-            <version>${junit.version}</version>
+            <version>${junit-dep.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -264,8 +232,6 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
-
-
 
     </dependencies>
 
@@ -306,12 +272,13 @@
                     </configuration>
                 </plugin>
 
-                
-                <!-- this create jar file of code from src/test/java so modules with tests can share code -->
+
+                <!-- this create jar file of code from src/test/java so modules 
+                    with tests can share code -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>${maven-jar-plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -334,7 +301,7 @@
                         <dependency>
                             <groupId>org.liquibase.ext</groupId>
                             <artifactId>liquibase-hibernate4</artifactId>
-                            <version>3.5</version>
+                            <version>${liquibase-hibernate4.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>org.springframework</groupId>
@@ -348,14 +315,11 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-
-
             </plugins>
         </pluginManagement>
     </build>
 
     <profiles>
-
         <profile>
             <id>integration</id>
             <build>
@@ -376,10 +340,8 @@
                         </configuration>
                     </plugin>
                 </plugins>
-
             </build>
         </profile>
-
     </profiles>
 
 </project>

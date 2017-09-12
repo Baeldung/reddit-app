@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.7.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
     </parent>
         
     <modules>
@@ -66,56 +66,38 @@
 
 
     <properties>
-        <!-- Spring -->
-        <org.springframework.version>4.1.7.RELEASE</org.springframework.version>
-        <org.springframework.security.version>3.2.8.RELEASE</org.springframework.security.version>
-
-        <!-- persistence -->
-        <hibernate.version>4.3.11.Final</hibernate.version>
-        <mysql-connector-java.version>5.1.36</mysql-connector-java.version>
-        <spring-data-jpa.version>1.7.3.RELEASE</spring-data-jpa.version>
-        <liquibase.version>3.4.1</liquibase.version>
-
-        <!-- marshalling -->
-
-        <jackson.version>2.5.1</jackson.version>
-
-        <!-- logging -->
-        <org.slf4j.version>1.7.12</org.slf4j.version>
-        <logback.version>1.1.3</logback.version>
-
-        <!-- various -->
-        <hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
-
         <!-- util -->
-        <guava.version>18.0</guava.version>
-        <commons-lang3.version>3.3.2</commons-lang3.version>
-        <rome.version>1.5.0</rome.version>
-        <postgresql.version>9.4-1201-jdbc41</postgresql.version>
+        <rome.version>1.7.4</rome.version>
         <xml-apis.version>1.4.01</xml-apis.version>
         <javax-activation.version>1.1.1</javax-activation.version>
-        <javax-mail.version>1.4.1</javax-mail.version>
+        <javax-mail.version>1.4.7</javax-mail.version>
         <javax-validation.version>1.1.0.Final</javax-validation.version>
         <mahout.version>0.9</mahout.version>
-        <xstream.version>1.4.8</xstream.version>
-        <modelmapper.version>0.7.4</modelmapper.version>
-
-        <!-- testing -->
-        <org.hamcrest.version>1.3</org.hamcrest.version>
-        <junit.version>4.11</junit.version>
-        <mockito.version>1.10.19</mockito.version>
-
-        <httpcore.version>4.4</httpcore.version>
-        <httpclient.version>4.4</httpclient.version>
-
-        <rest-assured.version>2.4.0</rest-assured.version>
-
+        <xstream.version>1.4.10</xstream.version>
+        <guava.version>23.0</guava.version>
+        <modelmapper.version>0.7.8</modelmapper.version>
+        <httpcore.version>4.4.6</httpcore.version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <webapp-runner.version>7.0.57.2</webapp-runner.version>
+                        
+        <!-- persistence -->
+        <postgresql.version>9.4-1201-jdbc41</postgresql.version>
+        <liquibase.version>3.5.3</liquibase.version>
+        <liquibase-hibernate4.version>3.6</liquibase-hibernate4.version>
+        
+        <!-- test -->
+        <junit-dep.version>4.11</junit-dep.version>
+        <junit.version>4.12</junit.version>
+        <rest-assured.version>3.0.3</rest-assured.version>
+        <gatling.version>2.3.0</gatling.version>
+                        
         <!-- Maven plugins -->
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
-        <cargo-maven2-plugin.version>1.4.16</cargo-maven2-plugin.version>
-
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <cargo-maven2-plugin.version>1.6.4</cargo-maven2-plugin.version>
+        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
+        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
     </properties>
 
 </project>

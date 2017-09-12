@@ -13,3 +13,17 @@
 reddit-ui/src/main/resources/setupData/users.csv
 
 reddit-ui/src/main/resources/email.properties
+
+reddit-common/.project
+
+reddit-common/.project
+
+*.prefs
+
+reddit-common/.project
+
+reddit-rest/.project
+
+reddit-ui/.project
+
+reddit-web/.project

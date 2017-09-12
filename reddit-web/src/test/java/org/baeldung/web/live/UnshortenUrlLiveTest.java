@@ -1,12 +1,12 @@
 package org.baeldung.web.live;
 
 import static org.junit.Assert.assertTrue;
+import io.restassured.response.Response;
 
 import java.io.IOException;
 
 import org.junit.Test;
 
-import com.jayway.restassured.response.Response;
 
 public class UnshortenUrlLiveTest extends AbstractBaseLiveTest {
 

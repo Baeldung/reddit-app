@@ -3,6 +3,7 @@ package org.baeldung.web.live;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import io.restassured.response.Response;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -11,10 +12,9 @@ import org.baeldung.web.dto.command.ScheduledPostAddCommandDto;
 import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
-import com.jayway.restassured.response.Response;
 
 public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
-    private static final String DATE = "2016-01-01 00:00";
+    private static final String DATE = "2100-01-01 00:00";
 
     // tests
 
@@ -84,7 +84,7 @@ public class ResubmitOptionsLiveTest extends AbstractBaseLiveTest {
         post.setResubmitOptionsActivated(true);
 
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
-
+        System.out.println("===" + response.asString());
         assertEquals(201, response.statusCode());
         final ScheduledPostDto result = objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
         assertEquals(result.getUrl(), post.getUrl());

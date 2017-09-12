@@ -1,12 +1,12 @@
 package org.baeldung.web.live;
 
 import static org.junit.Assert.assertEquals;
+import io.restassured.response.Response;
 
 import org.baeldung.web.controller.rest.PreferenceDto;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jayway.restassured.response.Response;
 
 public class UserPreferenceLiveTest extends AbstractBaseLiveTest {
 

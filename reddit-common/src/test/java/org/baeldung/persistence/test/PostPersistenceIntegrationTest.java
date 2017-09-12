@@ -19,13 +19,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { PersistenceJpaConfig.class })
-@Transactional
-@TransactionConfiguration
 public class PostPersistenceIntegrationTest {
 
     @Autowired
@@ -44,13 +40,20 @@ public class PostPersistenceIntegrationTest {
 
     @Before
     public void init() throws ParseException {
-        userJohn = new User();
-        userJohn.setUsername("John");
-        userRepository.save(userJohn);
 
-        userTom = new User();
-        userTom.setUsername("Tom");
-        userRepository.save(userTom);
+        userJohn = userRepository.findByUsername("John");
+        if (userJohn == null) {
+            userJohn = new User();
+            userJohn.setUsername("John");
+            userRepository.save(userJohn);
+        }
+
+        userTom = userRepository.findByUsername("Tom");
+        if (userTom == null) {
+            userTom = new User();
+            userTom.setUsername("Tom");
+            userRepository.save(userTom);
+        }
 
         alreadySentPost = new Post();
         alreadySentPost.setTitle("First post title");

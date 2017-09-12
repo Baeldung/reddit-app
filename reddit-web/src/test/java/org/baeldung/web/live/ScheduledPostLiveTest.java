@@ -1,8 +1,11 @@
 package org.baeldung.web.live;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,11 +15,9 @@ import org.baeldung.web.dto.command.ScheduledPostAddCommandDto;
 import org.baeldung.web.dto.query.ScheduledPostDto;
 import org.junit.Test;
 
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSpecification;
 
 public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
-    private static final String DATE = "2016-01-01 00:00";
+    private static final String DATE = "00-01-01 00:00";
 
     // test
 
@@ -26,7 +27,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
-        post.setDate(DATE);
+        post.setDate("3" + randomNumeric(1) + DATE);
 
         final RequestSpecification givenAuth = givenAuth();
         final Response response = withRequestBody(givenAuth, post).post(urlPrefix + "/api/scheduledPosts");
@@ -114,7 +115,7 @@ public class ScheduledPostLiveTest extends AbstractLiveTest<ScheduledPostDto> {
         post.setTitle(randomAlphabetic(6));
         post.setUrl("test.com");
         post.setSubreddit(randomAlphabetic(6));
-        post.setDate(DATE);
+        post.setDate("3" + randomNumeric(1) + DATE);
         post.setResubmitOptionsActivated(false);
         final Response response = withRequestBody(givenAuth(), post).post(urlPrefix + "/api/scheduledPosts");
         return objectMapper.reader().forType(ScheduledPostDto.class).readValue(response.asString());
