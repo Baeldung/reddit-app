@@ -19,3 +19,6 @@ To run the project, you first need to modify (`src/main/resources/*.properties`)
 - [Use Liquibase to Safely Evolve Your Database Schema](http://www.baeldung.com/liquibase-refactor-schema-of-java-app)
 - [Post a Link to the Reddit API](http://www.baeldung.com/spring-security-oauth-post-to-reddit)
 - [Authenticating with Reddit OAuth2 and Spring Security](http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit)
+
+
+**NOTE**: this repository is no longer upgraded.
